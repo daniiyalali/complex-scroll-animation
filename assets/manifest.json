@@ -1,0 +1,758 @@
+{
+ "note": "All sizes in CSS px (1x, stage coords 1920x1080). Images are 2x unless noted. 2026-07-28 refresh: overlay assets replaced with shadow-free exports from the 'Scene N' source folders (kept alongside); drop shadows now applied in styles.css. 'stage' = [left, top] in stage px where the element is placed. 2026-07-28 (late): the stage went BLACK \u2014 see the --stage-bg/--fg/--chip/--device/--slab tokens at the top of styles.css. Everything inside the phone screen is still the light product UI; only stage-level furniture inverted.",
+ "assets": {
+  "drawer": {
+   "file": "drawer.webp",
+   "w": 420,
+   "h": 854,
+   "figmaNodeId": "1838:110417",
+   "scale": 2,
+   "stage": [
+    1113,
+    123
+   ],
+   "source": "Scene 10/Asset 5.2.png",
+   "note": "content-only crop (old render incl. shadow was 920x1080 @ 882,0)"
+  },
+  "emoji-grid": {
+   "file": "emoji-grid.webp",
+   "w": 355,
+   "h": 893,
+   "rb": [
+    11358,
+    93,
+    355,
+    893
+   ],
+   "bb": [
+    11358,
+    93,
+    355,
+    893
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "panel-rerank": {
+   "file": "panel-rerank.webp",
+   "w": 390,
+   "h": 887,
+   "figmaNodeId": "1838:114790",
+   "scale": 2,
+   "stage": [
+    1253,
+    97
+   ],
+   "source": "Scene 14/rerank.png"
+  },
+  "gold-card": {
+   "file": "gold-card.webp",
+   "w": 1171,
+   "h": 878,
+   "figmaNodeId": "1844:43712",
+   "scale": 2,
+   "stage": [
+    375,
+    101
+   ],
+   "source": "Scene 23/ID Wrapped.png (transparent padding cropped)"
+  },
+  "sat-ugc": {
+   "file": "sat-ugc.webp",
+   "w": 282,
+   "h": 499,
+   "figmaNodeId": "1838:121413",
+   "scale": 2,
+   "stage": [
+    1286,
+    59
+   ],
+   "source": "Scene 19/UGC.png",
+   "restingRotationDeg": 10,
+   "note": "upright export; rotation re-applied in main.js; left set so rotated edge clears the phone by the mirrored left-card gap"
+  },
+  "sat-editorial": {
+   "file": "sat-editorial.webp",
+   "w": 282,
+   "h": 504,
+   "figmaNodeId": "1838:120852",
+   "scale": 2,
+   "stage": [
+    372,
+    86
+   ],
+   "source": "Scene 19/Latest Editorial.png",
+   "restingRotationDeg": -5,
+   "note": "upright export; rotation re-applied in main.js (measured from old baked render); fan widened +-20px vs storyboard (2026-07-28)"
+  },
+  "xp-modal": {
+   "file": "xp-modal.webp",
+   "w": 358,
+   "h": 457,
+   "rb": [
+    20981,
+    312,
+    358,
+    457
+   ],
+   "bb": [
+    20981,
+    312,
+    358,
+    457
+   ],
+   "figmaNodeId": "1838:111574",
+   "scale": 2
+  },
+  "sat-video": {
+   "file": "sat-video.webp",
+   "w": 282,
+   "h": 257,
+   "figmaNodeId": "1838:121477",
+   "scale": 2,
+   "stage": [
+    1295,
+    626
+   ],
+   "source": "Scene 19/Video.png",
+   "restingRotationDeg": 16.5,
+   "note": "upright export; rotation re-applied in main.js; left set so rotated edge clears the phone by the mirrored left-card gap"
+  },
+  "sat-comment": {
+   "file": "sat-comment.webp",
+   "w": 282,
+   "h": 242,
+   "figmaNodeId": "1838:121440",
+   "scale": 2,
+   "stage": [
+    346,
+    642
+   ],
+   "source": "Scene 19/UGC Comment.png",
+   "restingRotationDeg": -16,
+   "note": "upright export; rotation re-applied in main.js (measured from old baked render); fan widened +-20px vs storyboard (2026-07-28)"
+  },
+  "toast-20": {
+   "file": "toast-20.webp",
+   "w": 440,
+   "h": 299,
+   "rb": [
+    22960,
+    64,
+    440,
+    299
+   ],
+   "bb": [
+    23045,
+    112,
+    291,
+    87
+   ],
+   "figmaNodeId": "1838:113166",
+   "scale": 2
+  },
+  "toast-30": {
+   "file": "toast-30.webp",
+   "w": 440,
+   "h": 299,
+   "rb": [
+    24980,
+    64,
+    440,
+    299
+   ],
+   "bb": [
+    25065,
+    112,
+    267,
+    87
+   ],
+   "figmaNodeId": "1838:113788",
+   "scale": 2
+  },
+  "toast-80": {
+   "file": "toast-80.webp",
+   "w": 440,
+   "h": 299,
+   "rb": [
+    27000,
+    64,
+    440,
+    299
+   ],
+   "bb": [
+    27085,
+    112,
+    267,
+    87
+   ],
+   "figmaNodeId": "1838:114592",
+   "scale": 2
+  },
+  "toast-120": {
+   "file": "toast-120.webp",
+   "w": 440,
+   "h": 299,
+   "rb": [
+    29020,
+    64,
+    440,
+    299
+   ],
+   "bb": [
+    29105,
+    112,
+    285,
+    87
+   ],
+   "figmaNodeId": "1838:115423",
+   "scale": 2
+  },
+  "picker": {
+   "file": "picker.webp",
+   "w": 729,
+   "h": 277,
+   "figmaNodeId": "1898:70619",
+   "scale": 2,
+   "stage": [
+    405,
+    337
+   ],
+   "source": "Scene 6/Reactions Dark.png + Scene 6/Reactions Light (previous picker.webp).webp",
+   "note": "DARK variant, and a COMPOSITE \u2014 regenerate with tools/make-picker-dark.py, never by exporting the node alone. The tray fill is translucent with a backdrop blur, so an isolated export bakes flat black behind it and loses the phone bleeding through the right half. RGB comes from a 2x render of the whole dark Scene 06 cropped to this export frame; alpha is borrowed from the previous light asset (identical 1458x554 canvas); the cursor the storyboard parks on the tray is healed out. Geometry is unchanged from the light asset, so #picker keeps its CSS box and the '49% 100%' pop origin."
+  },
+  "sticker-6": {
+   "file": "sticker-6.webp",
+   "w": 98,
+   "h": 205,
+   "figmaNodeId": "1844:42153",
+   "scale": 2,
+   "screenPos": [
+    310.8,
+    632.8
+   ],
+   "source": "Scene 21/Badge 06.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-8": {
+   "file": "sticker-8.webp",
+   "w": 145,
+   "h": 159.5,
+   "figmaNodeId": "1844:42155",
+   "scale": 2,
+   "screenPos": [
+    177.5,
+    540
+   ],
+   "source": "Scene 21/Badge 08.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-5": {
+   "file": "sticker-5.webp",
+   "w": 92,
+   "h": 168.5,
+   "figmaNodeId": "1844:42152",
+   "scale": 2,
+   "screenPos": [
+    19.2,
+    768.8
+   ],
+   "source": "Scene 21/Badge 05.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-4": {
+   "file": "sticker-4.webp",
+   "w": 128.5,
+   "h": 130,
+   "figmaNodeId": "1844:42151",
+   "scale": 2,
+   "screenPos": [
+    133.2,
+    779
+   ],
+   "source": "Scene 21/Badge 04.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "nav-latest": {
+   "file": "nav-latest.webp",
+   "w": 440,
+   "h": 159,
+   "rb": [
+    740,
+    64,
+    440,
+    159
+   ],
+   "bb": [
+    740,
+    64,
+    440,
+    159
+   ],
+   "figmaNodeId": "1838:87201",
+   "scale": 2
+  },
+  "nav-myc": {
+   "file": "nav-myc.webp",
+   "w": 440,
+   "h": 159,
+   "rb": [
+    12860,
+    64,
+    440,
+    159
+   ],
+   "bb": [
+    12860,
+    64,
+    440,
+    159
+   ],
+   "figmaNodeId": "1838:104877",
+   "scale": 2
+  },
+  "nav-fandom": {
+   "file": "nav-fandom.webp",
+   "w": 440,
+   "h": 159,
+   "rb": [
+    35080,
+    64,
+    440,
+    159
+   ],
+   "bb": [
+    35080,
+    64,
+    440,
+    159
+   ],
+   "figmaNodeId": "1838:120681",
+   "scale": 2
+  },
+  "sticker-2": {
+   "file": "sticker-2.webp",
+   "w": 129.5,
+   "h": 130.5,
+   "figmaNodeId": "1844:42149",
+   "scale": 2,
+   "screenPos": [
+    50,
+    555.5
+   ],
+   "source": "Scene 21/Badge 02.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-1": {
+   "file": "sticker-1.webp",
+   "w": 241.5,
+   "h": 104.5,
+   "figmaNodeId": "1844:42148",
+   "scale": 2,
+   "screenPos": [
+    -8.5,
+    688.8
+   ],
+   "source": "Scene 21/Badge 01.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-3": {
+   "file": "sticker-3.webp",
+   "w": 99,
+   "h": 94,
+   "figmaNodeId": "1844:42150",
+   "scale": 2,
+   "screenPos": [
+    242,
+    775
+   ],
+   "source": "Scene 21/Badge 03.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "sticker-7": {
+   "file": "sticker-7.webp",
+   "w": 115,
+   "h": 81,
+   "figmaNodeId": "1844:42154",
+   "scale": 2,
+   "screenPos": [
+    261,
+    860
+   ],
+   "source": "Scene 21/Badge 07.png",
+   "note": "in-screen coords; content-center aligned with old shadowed render"
+  },
+  "react-1": {
+   "file": "react-1.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    0,
+    0
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-2": {
+   "file": "react-2.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    185,
+    0
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-3": {
+   "file": "react-3.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    0,
+    185
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-4": {
+   "file": "react-4.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    185,
+    185
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-5": {
+   "file": "react-5.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    0,
+    369
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-6": {
+   "file": "react-6.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    185,
+    369
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-7": {
+   "file": "react-7.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    0,
+    554
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-8": {
+   "file": "react-8.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    185,
+    554
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-9": {
+   "file": "react-9.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    0,
+    738
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "react-10": {
+   "file": "react-10.webp",
+   "w": 155,
+   "h": 155,
+   "gridPos": [
+    185,
+    738
+   ],
+   "figmaNodeId": "1844:38061",
+   "scale": 2,
+   "source": "Scene 6 (react06-09 renumbered to match grid order)",
+   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+  },
+  "strip-latest": {
+   "tiles": [
+    {
+     "file": "strip-latest-t0.webp",
+     "cssY": 0.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-latest-t1.webp",
+     "cssY": 2048.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-latest-t2.webp",
+     "cssY": 4096.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-latest-t3.webp",
+     "cssY": 6144.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-latest-t4.webp",
+     "cssY": 8192.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-latest-t5.webp",
+     "cssY": 10240.0,
+     "cssH": 843.5
+    }
+   ],
+   "w": 440.0,
+   "h": 11083.5,
+   "scale": 2
+  },
+  "strip-myc": {
+   "tiles": [
+    {
+     "file": "strip-myc-t0.webp",
+     "cssY": 0.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-myc-t1.webp",
+     "cssY": 2048.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-myc-t2.webp",
+     "cssY": 4096.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-myc-t3.webp",
+     "cssY": 6144.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-myc-t4.webp",
+     "cssY": 8192.0,
+     "cssH": 132.5
+    }
+   ],
+   "w": 440.0,
+   "h": 8324.5,
+   "scale": 2
+  },
+  "strip-rail": {
+   "tiles": [
+    {
+     "file": "strip-rail-t0.webp",
+     "cssY": 0.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-rail-t1.webp",
+     "cssY": 2048.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-rail-t2.webp",
+     "cssY": 4096.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-rail-t3.webp",
+     "cssY": 6144.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-rail-t4.webp",
+     "cssY": 8192.0,
+     "cssH": 1650.5
+    }
+   ],
+   "w": 440.0,
+   "h": 9842.5,
+   "scale": 2
+  },
+  "strip-fandom": {
+   "tiles": [
+    {
+     "file": "strip-fandom-t0.webp",
+     "cssY": 0.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-fandom-t1.webp",
+     "cssY": 2048.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-fandom-t2.webp",
+     "cssY": 4096.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-fandom-t3.webp",
+     "cssY": 6144.0,
+     "cssH": 2048.0
+    },
+    {
+     "file": "strip-fandom-t4.webp",
+     "cssY": 8192.0,
+     "cssH": 109.5
+    }
+   ],
+   "w": 440.0,
+   "h": 8301.5,
+   "scale": 2
+  },
+  "patches-latest-s4": {
+   "patches": [],
+   "scale": 2
+  },
+  "patches-latest-s5": {
+   "patches": [],
+   "scale": 2
+  },
+  "patches-myc-s8": {
+   "patches": [],
+   "scale": 2
+  },
+  "patches-myc-s9": {
+   "patches": [],
+   "scale": 2
+  },
+  "patches-myc-s12": {
+   "patches": [],
+   "scale": 2
+  },
+  "lanyard": {
+   "file": "lanyard.webp",
+   "w": 1920,
+   "h": 1080,
+   "stage": [
+    0,
+    0
+   ],
+   "scale": 2,
+   "source": "Scene 24/image 2006.png",
+   "note": "full-bleed 3840x2160 photo"
+  },
+  "id-card": {
+   "file": "id-card.webp",
+   "w": 1000,
+   "h": 561,
+   "stage": [
+    460,
+    260
+   ],
+   "scale": 2,
+   "source": "Scene 22/COMPLEX I.D No Shadow.png",
+   "note": "single clean card drives both s22 (scale .422, y -63) and s21 (full) states"
+  },
+  "callout-icons": {
+   "files": [
+    "icon-react.svg",
+    "icon-comment.svg",
+    "icon-bookmark.svg"
+   ],
+   "source": "Scene 5",
+   "note": "callouts rebuilt as HTML/CSS in index.html/styles.css (live text + SVG icons)"
+  },
+  "quiz-frames": {
+   "files": [
+    "quiz-q1.webp",
+    "quiz-q1-sel.webp",
+    "quiz-q2.webp",
+    "quiz-q2-sel.webp",
+    "quiz-reveal.webp",
+    "quiz-badge.webp"
+   ],
+   "w": 390,
+   "h": 887,
+   "stage": [
+    1245,
+    97
+   ],
+   "scale": 2,
+   "source": "Reference Projects/4. Complex Quiz \u2014 live captures of /play (prod build, 390x887 @2x)",
+   "note": "s15 autoplay stack: Q1 -> A selected -> Q2 -> A selected -> 5/5 reveal -> First Play badge; replaces the static panel-quiz.webp (Figma 1838:115609)"
+  },
+  "callouts": {
+   "file": "(coded \u2014 inline SVG + live text in index.html)",
+   "figmaNodeId": "1844:37192 (idle, Scene 05) / 1901:71436 (Scene 5.1)",
+   "note": "Each callout carries an .idle face (Scene 05) and an .act face (the hover/pressed state from Scenes 5.1, 5.2, 5.3, 5.3-follow). Row boxes, stage px: react (339,288.90) 205.54x88 -> act (339,284.78) 218.78x96.24; comment (339,431.06) 270.54x88 -> act 274.54 wide; bookmark (339,573.21) 279.23x83.69 -> act 287.23 wide; follow (339,711.06) 279.23x80 -> FOLLOWING 312 wide. Padding 8, gap 13.54, radius 8; label 32px, Regular idle / Bold hovered (the FOLLOW pill label stays Regular). Active icon art: react = same glyph rotated -7deg; comment = mirrored bubble, 80.25x72, overhanging the 72px slot to the right; bookmark = filled; follow = plus (44x44) -> tick (44x44). Figma's auto-layout reflows the column when a row grows; we keep row positions fixed and share an icon centre between the two faces instead, so nothing moves mid-scrub."
+  },
+  "react-wall": {
+   "file": "react-wall.webp",
+   "w": 596,
+   "h": 596,
+   "figmaNodeId": "1898:70637",
+   "scale": "1.34 (800px source shown at 596)",
+   "stage": [
+    1199,
+    257
+   ],
+   "source": "Scene 6/download (2).gif",
+   "animated": {
+    "frames": 56,
+    "sourceFrames": 70,
+    "loopMs": 2330,
+    "fps": "~30"
+   },
+   "grid": {
+    "cols": 4,
+    "rows": 5,
+    "sourceCell": [
+     200,
+     160
+    ],
+    "stageCell": [
+     149,
+     119.2
+    ]
+   },
+   "note": "Animated 4x5 wall of 20 looping reactions. Rebuild with tools/make-react-wall.py (2.6 MB vs the GIF's 7.5 MB, and cleaner \u2014 the GIF's 256-colour palette dithers the gradients). Pillow coalesces identical consecutive frames 70 -> 56 and folds their durations, so the loop still totals exactly 2330 ms; the script asserts this, because Pillow's WebP READER reports per-frame durations as None and will look like data loss. Rendered through 20 clipping cells built in buildDom (one <img> each, all pointing at this one file, so one decode and all 20 stay frame-synced) which lets each cell stagger in on its own. The cells tile the image exactly, so at rest the composite is pixel-identical to the whole frame and emoji that overflow their cell (jack-in-the-box, NO sign) are not clipped. Background is opaque black \u2014 the same black as the stage \u2014 so no alpha is needed; if the stage ever stops being #000 this asset needs keying."
+  }
+ }
+}

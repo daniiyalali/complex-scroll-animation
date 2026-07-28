@@ -1,0 +1,17 @@
+# Reference apps the user drops in to capture product-true frames (e.g. the
+# 5-for-5 quiz used for the s15 panel). ~1.1 GB of third-party source and
+# node_modules — the captured frames in assets/ are what this project needs.
+Reference Projects/
+
+# Verification output from tools/scrub.py
+shots/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# The source masters in assets/Scene */ ARE tracked on purpose — tools/make-*.py
+# read them, so ignoring them would break the asset pipeline for a fresh clone.

@@ -1,0 +1,42 @@
+# Ship only what the page actually fetches: 61 files, ~10 MB.
+# (Verified by recording every request a real page load makes — not by eyeballing.)
+# The working directory is 1.1 GB, so deploying it unfiltered is not an option.
+
+# Reference apps the user drops in to capture product-true frames. Never served.
+Reference Projects/
+
+# Source masters for the exports. The built .webp next to them is what ships.
+assets/Scene */
+
+# Retired: the static 2x5 reaction grid, replaced by react-wall.webp.
+assets/react-1.webp
+assets/react-2.webp
+assets/react-3.webp
+assets/react-4.webp
+assets/react-5.webp
+assets/react-6.webp
+assets/react-7.webp
+assets/react-8.webp
+assets/react-9.webp
+assets/react-10.webp
+assets/emoji-grid.webp
+
+# Icon + cursor masters — these are inlined in index.html now, not fetched.
+assets/icon-bookmark.svg
+assets/icon-comment.svg
+assets/icon-react.svg
+assets/Cursor Dark.svg
+assets/Cursor Light.svg
+
+# Build scripts and internal notes — keep these off a public URL.
+tools/
+CLAUDE.md
+HANDOFF.md
+shots/
+
+.claude/
+.DS_Store
+**/.DS_Store
+
+# Drag-and-drop copy of the runtime files (tools/ rebuilds it). Not part of a deploy.
+complex-scroll-animation/

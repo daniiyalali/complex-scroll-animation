@@ -1,0 +1,374 @@
+/* Fandom × My Complex — scroll story */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Palette ──
+   The storyboard runs on a black stage (see the dark Scene 06 in Figma). Only
+   stage-level furniture flips: everything inside the phone screen stays the
+   light product UI it is in the exports. `--fg`/`--bg` are the Figma
+   --text/primary + --background/b1 tokens, inverted for the dark stage. */
+:root {
+  --stage-bg: #000;
+  --fg: #fff;
+  --bg: #000;
+  --chip: rgba(255, 255, 255, .10);  /* hover chip = --background/b2, inverted */
+  --device: #D7D7D7;                 /* phone frame in the dark scenes */
+  --slab: #1A1A1A;                   /* s13/s14 placeholder block (#E8E8E8, inverted) */
+}
+
+html, body {
+  background: var(--stage-bg);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+#scroll-track { width: 1px; }
+
+#viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--stage-bg);
+}
+
+/* ── Stage: 1920×1080 design space, scaled to fit ── */
+#stage {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  left: 50%;
+  top: 50%;
+  margin: -540px 0 0 -960px;
+  transform-origin: 50% 50%;
+  background: var(--stage-bg);
+  overflow: hidden;
+}
+
+#stage, #stage * { user-select: none; -webkit-user-drag: none; }
+
+img { display: block; }
+
+/* ── Phone ── */
+#phone {
+  position: absolute;
+  left: 740px;
+  top: 64px;
+  width: 440px;
+  height: 952px;
+}
+
+/* Light 12px frame, measured off the dark Scene 06 (outer box = screen ∓12px,
+   inner radius 43 → outer 55). A black bezel would vanish into the stage. */
+#bezel {
+  position: absolute;
+  inset: -12px;
+  border: 12px solid var(--device);
+  border-radius: 55px;
+  pointer-events: none;
+}
+
+#screen {
+  position: absolute;
+  inset: 0;
+  border-radius: 43px;
+  overflow: hidden;
+  background: #fff;
+  contain: strict;
+}
+
+.strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 440px;
+  will-change: transform;
+  visibility: hidden;
+}
+.strip img {
+  position: absolute;
+  left: 0;
+  width: 440px;
+}
+
+#screen-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 10; /* dims the feed AND the sticky nav */
+}
+#xp-modal { z-index: 11; }
+#stickers { position: absolute; inset: 0; z-index: 11; }
+
+#navs { position: absolute; left: 0; top: 0; width: 440px; }
+.nav {
+  position: absolute;
+  left: 0; top: 0;
+  width: 440px; height: 159px;
+  visibility: hidden;
+  will-change: transform;
+}
+
+#toasts .toast {
+  position: absolute;
+  left: 0; top: 0;
+  width: 440px; height: 299px;
+  visibility: hidden;
+  will-change: transform, opacity;
+  z-index: 12; /* toasts drop in over the sticky nav */
+}
+#navs { z-index: 8; }
+#toasts { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+
+#xp-modal {
+  position: absolute;
+  left: 41px; top: 248px;
+  width: 358px; height: 457px;
+  visibility: hidden;
+}
+
+#stickers img {
+  position: absolute;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* ── Stage-level overlays ── */
+#overlays > img, .overlay-img { position: absolute; visibility: hidden; will-change: transform, opacity; }
+
+/* ── Callouts ──
+   Coded in HTML (inline SVG + live text). Every callout holds two stacked faces:
+   `.idle` = Scene 05, `.act` = the hover / pressed state from Scenes 5.1–5.4.
+   Only their opacity is crossfaded, so nothing ever reflows mid-scrub.
+   Boxes below ARE the Figma row frames (padding 8, gap 13.54, radius 8); the two
+   faces of a callout are offset so they share one icon centre. */
+#callouts { position: absolute; inset: 0; color: var(--fg); }
+.callout {
+  position: absolute;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+.cf {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13.54px;
+  padding: 8px;
+  border-radius: 8px;
+}
+.cf.act {
+  background: var(--chip);   /* Figma --background/b2 (#f8f8f8), inverted for dark */
+  opacity: 0;
+  visibility: hidden;
+}
+.ci { flex: none; display: flex; align-items: center; justify-content: center; }
+.ci svg { display: block; }
+.cl {
+  font-size: 32px;
+  font-weight: 400;          /* Tags & Labels/32pt/Regular */
+  line-height: 38px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.cf.act .cl { font-weight: 700; }   /* Tags & Labels/32pt/Bold */
+
+#callout-react            { left: 339px; top: 288.9px;  width: 205.54px; height: 88px; }
+#callout-react    .act    { top: -4.12px; width: 218.78px; height: 96.24px; }
+#callout-react    .ci     { width: 72px; height: 72px; }
+#callout-react    .act .ci { width: 80.24px; height: 80.24px; }
+#callout-react    .act .ci svg { transform: rotate(-7deg); }   /* icon tilt, Scene 5.1 */
+
+#callout-comment          { left: 339px; top: 431.06px; width: 270.54px; height: 88px; }
+#callout-comment  .act    { width: 274.54px; }
+#callout-comment  .ci     { width: 72px; height: 72px; }
+/* the active bubble is mirrored and 8px wider — it overhangs the slot to the right */
+#callout-comment  .act .ci { justify-content: flex-start; overflow: visible; }
+
+#callout-bookmark         { left: 339px; top: 573.21px; width: 279.23px; height: 83.69px; }
+#callout-bookmark .act    { width: 287.23px; }
+#callout-bookmark .ci     { width: 67.69px; height: 67.69px; }
+
+#callout-follow           { left: 339px; top: 711.06px; width: 279.23px; height: 80px; }
+#callout-follow   .act    { width: 312px; }
+#callout-follow   .cf     {
+  gap: 14px;
+  padding: 18px 32px;
+  justify-content: center;
+  border: 4px solid currentColor;
+  border-radius: 8.98px;
+}
+#callout-follow   .ci     { width: 44px; height: 44px; }
+#callout-follow   .cl     { font-weight: 400; }   /* the pill label never goes bold */
+/* pressed state: the pill fills with the foreground, its label/tick invert,
+   and the border melts into the fill (as the black-on-black does in Figma) */
+#callout-follow   .act    { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+
+#picker { left: 405px; top: 337px; width: 729px; height: 277px; }
+
+/* Reaction wall (s6): one animated 800×800 image seen through a 4×5 grid of
+   clipping cells, so each cell staggers in on its own while all 20 share a single
+   decode and stay frame-synced. The image's background is the same black as the
+   stage, which is why the cells need no alpha. Box + cells built in main.js. */
+#emoji-grid { position: absolute; left: 1199px; top: 257px; width: 596px; height: 596px; }
+#emoji-grid .wall-cell {
+  position: absolute;
+  width: 149px;      /* 596 / 4 */
+  height: 119.2px;   /* 596 / 5 */
+  overflow: hidden;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+#emoji-grid .wall-cell img { position: absolute; width: 596px; height: 596px; }
+
+#drawer { left: 1113px; top: 123px; width: 420px; height: 854px; }
+
+#gray-panel {
+  position: absolute;
+  left: 277px; top: 97px;
+  width: 390px; height: 887px;
+  background: var(--slab);
+  border-radius: 20px;
+  visibility: hidden;
+}
+#panel-rerank { left: 1253px; top: 97px; width: 390px; height: 887px; }
+#panel-quiz {
+  left: 1245px; top: 97px;
+  width: 390px; height: 887px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+}
+#panel-quiz .qframe {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Satellites: clean upright exports; baked-in rotations re-applied in main.js.
+   z-index -1 layers them BEHIND the phone (above the stage bg) so the s19
+   explosion reads as cards flying out from behind the mockup. Fan widened
+   +20px per side vs the storyboard resting centers. */
+#sats img { position: absolute; visibility: hidden; will-change: transform, opacity; z-index: -1; }
+/* Right-card lefts are set so the ROTATED bounding edge clears the phone
+   (bezel edge x=1195) by the same gap as the mirrored left card:
+   editorial↔ugc ≈ 50px, comment↔video ≈ 69px. Rotation swings corners
+   ~(h/2)·sinθ past the CSS box — account for it when nudging these. */
+#sat-editorial { left: 372px;  top: 86px;  width: 282px; height: 504px; }
+#sat-ugc       { left: 1286px; top: 59px;  width: 282px; height: 499px; }
+#sat-comment   { left: 346px;  top: 642px; width: 282px; height: 242px; }
+#sat-video     { left: 1295px; top: 626px; width: 282px; height: 257px; }
+
+/* One clean card image serves both the small (s22) and expanded (s21) states:
+   large card box = (460,260) 1000x561; small state = scale .422, y -63 (main.js) */
+#id-card   { left: 460px; top: 260px; width: 1000px; height: 561px; }
+#gold-card { left: 375px; top: 101px; width: 1171px; height: 878px; }
+
+#lanyard {
+  position: absolute;
+  left: 0; top: 0;
+  width: 1920px; height: 1080px;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* ── Drop shadows in code (assets are now exported shadow-free) ──
+   Static filters only — never animated. Tune or delete in this block. */
+#drawer        { filter: drop-shadow(0 20px 50px rgba(0,0,0,.30)); }
+#picker        { filter: drop-shadow(0 14px 30px rgba(0,0,0,.22)); }
+#panel-rerank,
+#panel-quiz    { filter: drop-shadow(0 18px 44px rgba(0,0,0,.25)); }
+#sats img      { filter: drop-shadow(0 16px 36px rgba(0,0,0,.28)); }
+#stickers img  { filter: drop-shadow(0 5px 12px rgba(0,0,0,.35)); }
+#id-card       { filter: drop-shadow(0 24px 60px rgba(0,0,0,.35)); }
+#gold-card     { filter: drop-shadow(0 24px 60px rgba(0,0,0,.28)); }
+
+/* ── Cursor ── */
+#cursor {
+  position: absolute;
+  left: 0; top: 0;
+  visibility: hidden;
+  will-change: transform;
+  z-index: 60;
+}
+#cursor-inner { position: relative; width: 57px; height: 57px; }
+#cursor-arrow { display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+#cursor-tag {
+  position: absolute;
+  left: 47px; top: 39px;
+  background: #FF5C00;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 13px 12px;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+
+/* ── Loader / HUD / hint ── */
+#loader {
+  position: absolute;
+  inset: 0;
+  background: var(--stage-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity .6s ease;
+}
+#loader.done { opacity: 0; pointer-events: none; }
+#loader-bar {
+  width: 220px; height: 3px;
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+#loader-fill {
+  width: 0%;
+  height: 100%;
+  background: #FF5C00;
+  transition: width .25s ease;
+}
+
+#hud {
+  position: absolute;
+  top: 14px; left: 14px;
+  background: rgba(0,0,0,.75);
+  color: #7CFC9B;
+  font: 12px/1.5 ui-monospace, Menlo, monospace;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 90;
+  display: none;
+  white-space: pre;
+}
+#hud.on { display: block; }
+
+#scroll-hint {
+  position: absolute;
+  bottom: 26px; left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.45);
+  font-size: 14px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  z-index: 80;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  transition: opacity .4s ease;
+}
+#scroll-hint span { animation: hintbob 1.6s ease-in-out infinite; }
+@keyframes hintbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  #scroll-hint span { animation: none; }
+}
