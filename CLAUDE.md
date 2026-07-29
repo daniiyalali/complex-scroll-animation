@@ -24,6 +24,26 @@ A server is REQUIRED — `file://` fails silently (the page fetches
 `assets/manifest.json`). Append `?debug` for a HUD (progress %, scene label,
 scroll px).
 
+## Ship
+
+Origin is `github.com/daniiyalali/complex-scroll-animation` (**public**, `main`).
+Hosting is Vercel via its Git integration, so **every push to `main` redeploys** —
+there is no build step, `vercel.json` only sets cache headers. `.vercelignore`
+trims the 1.1 GB working directory to the 61 files the page actually fetches
+(~10 MB); it also keeps `CLAUDE.md`, `HANDOFF.md` and `tools/` off the served URL.
+
+If you change what the page loads, re-verify the deploy set the way it was
+derived in the first place — record a real page load's requests and diff them
+against what `.vercelignore` keeps, rather than trusting a regex over the source.
+
+**Toolchain on this machine**: no `node`/`npm`/`npx`, no Homebrew, no `gh`, no
+`vercel` CLI. Playwright is the **Python** package. `tools/deploy-vercel.py` is a
+stdlib-only fallback that deploys straight to Vercel's REST API with a
+`VERCEL_TOKEN`; you only need it to ship without going through GitHub. Git pushes
+need no token — the credential lives in the macOS Keychain and
+`credential.helper=osxkeychain` is already configured. Never put a token in
+`.git/config` or any tracked file.
+
 ## Files
 
 | Path | What |
@@ -33,11 +53,15 @@ scroll px).
 | `main.js` | Scene offsets (`POS`), cursor beats (`CUR`), master GSAP timeline, Lenis wiring, loader |
 | `vendor/` | gsap 3.12.5, ScrollTrigger, lenis 1.1.14 (vendored, no CDN) |
 | `assets/` | WebP assets + `manifest.json` (asset → Figma node ID / source map). Two origins: shadow-free Figma exports (masters in `assets/Scene N/`) and live captures of reference apps (s15 quiz frames) |
-| `Reference Projects/` | Full reference apps the user drops in (e.g. `4. Complex Quiz`, a Next.js prototype) — run them and capture real UI states when a scene needs product-true frames |
+| `Reference Projects/` | Full reference apps the user drops in (e.g. `4. Complex Quiz`, a Next.js prototype) — run them and capture real UI states when a scene needs product-true frames. **Gitignored** (~1.1 GB); local-only |
 | `tools/export-assets.md` | How to re-export assets when the design changes + export gotchas |
 | `tools/make-picker-dark.py` | Regenerates the s6 reaction tray (a composite — read the docstring before re-exporting it) |
 | `tools/make-react-wall.py` | Rebuilds the s6 animated reaction wall from the Scene 6 GIF |
 | `tools/scrub.py` | Playwright scrub harness: jump to any label ± offset and screenshot |
+| `tools/deploy-vercel.py` | Stdlib-only Vercel REST deploy, for when there's no CLI (needs `VERCEL_TOKEN`) |
+| `vercel.json` | Cache headers only — there is no build step |
+| `.vercelignore` | Deny-list that cuts the deploy to the ~10 MB the page fetches |
+| `.gitignore` | Keeps `Reference Projects/` and `shots/` out; `assets/Scene */` masters are tracked **on purpose** (the `make-*.py` scripts read them) |
 | `HANDOFF.md` | Current state, verification results, known quirks, next steps |
 
 ## Architecture (read this before touching main.js)
@@ -86,6 +110,7 @@ are animated (plus one small `clip-path` on the fandom nav).
 ## Tuning knobs
 
 - `PX_PER_UNIT` (main.js, currently 800) — total scroll length / overall pace.
+  At 44.7 timeline units that's a 35,760 px page.
 - Per-scene durations — the `label('sN', dur)` second argument in `buildTimeline()`.
 - `HOVER_PASS` (main.js, currently 1.0) — the whole s5 four-stop hover pass, in
   timeline units. 1 unit = `PX_PER_UNIT` px of scroll, so this is the spec'd
@@ -101,8 +126,13 @@ are animated (plus one small `clip-path` on the fandom nav).
 - Keep all placement in stage px; if a Figma node moves, update the constant, don't eyeball.
 - Asset changes: re-export shadow-free per `tools/export-assets.md` (2×, WebP), same
   filename, and **bump the `?v=` cache-buster** on that asset's URL (index.html /
-  buildDom) — browsers cache same-name images across sessions.
+  buildDom) — browsers cache same-name images across sessions. Two assets are NOT
+  plain node exports (`picker.webp`, `react-wall.webp`); rebuild those with their
+  `tools/make-*.py` script, and read the docstring first.
 - Never give a `fromTo` visible `from` values — pre-start renders show them on
   backward scrubs. Enter from hidden states only.
-- Verify with the Playwright scrub harness (see HANDOFF) — capture each label's resting
-  frame and compare against the storyboard screenshots before calling a change done.
+- Verify with `tools/scrub.py` — capture each label's resting frame and compare against
+  the storyboard screenshots before calling a change done. Reverse-scrub too: the worst
+  case (end → s2) has caught real bugs. The s6 reaction wall is the one element whose
+  frame isn't deterministic per scroll position, so judge that block by eye.
+- Pushing to `main` publishes. Verify before you push, not after.

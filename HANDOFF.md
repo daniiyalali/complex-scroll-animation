@@ -1,14 +1,17 @@
 # HANDOFF — Fandom × My Complex scroll animation
 
-_Last updated: 2026-07-28 (late night — dark stage + the Scene 5.1–5.4 hover states)_
+_Last updated: 2026-07-29 (pushed to GitHub; Vercel import is the one open step)_
 
-## Status: COMPLETE, verified scene-by-scene. Awaiting stakeholder feel-pass.
+## Status: COMPLETE and pushed. Awaiting stakeholder feel-pass.
 
 All 28 storyboard frames (24 scenes + the four 5.x hover states) are implemented,
 choreographed, and visually verified, on the black stage.
-Zero console errors; ~9.6 MB WebP payload, preloaded behind a loader. The user has
+Zero console errors; ~10 MB WebP payload, preloaded behind a loader. The user has
 flagged that transitions still feel "a bit choppy between frames" and wants
 Figma-auto-animate-style in-betweening — that finesse pass is the expected next task.
+
+Source of truth is `github.com/daniiyalali/complex-scroll-animation` (`main`).
+Hosting: import that repo at vercel.com/new — see "repo + hosting" below.
 
 ## Decisions made (with the user)
 
@@ -68,10 +71,15 @@ masters). All converted to WebP and wired in. Key outcomes:
   box (460,260) 1000×561); the s21 morph is one scale+translate tween.
 - Callouts rebuilt as HTML/CSS + `icon-*.svg` + live text ("Following" is a pure-CSS
   pill). Note: `#overlays > img` selector must NOT match the icon imgs inside `.callout`.
+  → **Superseded** by the dark-stage pass: two faces per callout and the icons are now
+  inlined SVG, so no icon `img` elements exist at all. See "dark stage + the new Scene
+  5.x hover states".
 - Sticker positions re-derived by content-center alignment (badges 3 & 7 landed on
   identical coords → method validated).
 - Emoji tiles renumbered (new react06–09 arrived in a different order; manifest
   `source` fields record the mapping).
+  → **Superseded**: the 10 static tiles were replaced by the animated `react-wall.webp`.
+  They're retired-but-kept, and flagged as such in the manifest.
 - Drawer (1113,123 · 420×854) and quiz (1245,97 · 390×887) repositioned to content
   boxes; lanyard is full-bleed 1920×1080.
 - **Cache-busting**: swapped assets are referenced as `...webp?v=2` (HTML + the
@@ -169,6 +177,53 @@ export frame, so all the CSS geometry holds), and heals out the cursor the
 storyboard parks on the tray. Cache-buster is now `?v=3`. The light asset is kept
 as `assets/Scene 6/Reactions Light (previous picker.webp).webp`.
 
+## 2026-07-29: repo + hosting
+
+Pushed to `github.com/daniiyalali/complex-scroll-animation` (`main`, initial commit
+`a9d9029`, 123 files, 38 MB of git objects). Hosting plan is Vercel's Git integration,
+so pushes redeploy; there is no build step and `vercel.json` only sets cache headers.
+
+**Open step:** import the repo at vercel.com/new. Nothing else is needed — the
+config files are already committed.
+
+What ships, and how that was established:
+- The working directory is **1.1 GB**, nearly all of it `Reference Projects/`. That is
+  gitignored, so it is local-only; a fresh clone will not have the reference apps and
+  the s15 capture workflow can't be re-run from a clone alone.
+- `assets/Scene */` masters (~28 MB) **are** tracked, deliberately — `make-react-wall.py`
+  and `make-picker-dark.py` read them, so ignoring them would break the asset pipeline
+  for anyone cloning. Largest tracked files: the 7.2 MB Scene 6 GIF, a 6.7 MB Scene 24
+  PNG. Both well inside GitHub's limits.
+- `.vercelignore` cuts the deploy to **61 files / 9.97 MB**. That set was derived by
+  recording every request a real page load makes and diffing it against what the ignore
+  file keeps — not by grepping the source. Do it that way again if you change what loads:
+  a regex over `index.html`/`main.js` misses anything built from a template literal
+  (the sticker and, formerly, the emoji srcs in `buildDom`), and would have shipped a
+  broken page.
+- It also keeps `CLAUDE.md`, `HANDOFF.md`, `tools/` and the retired assets off the
+  served URL.
+
+**Cache headers** are `max-age=86400, stale-while-revalidate=604800` on `/assets` and
+`/vendor` — deliberately NOT `immutable`. The asset convention is to overwrite the same
+filename and bump `?v=`, but several assets are referenced with no `?v=` at all (strips,
+navs, toasts, quiz frames, `xp-modal`, `id-card`), so a year-long immutable cache would
+strand a re-export.
+
+**Credentials / security:**
+- Git pushes need no token: the credential is in the macOS Keychain under host
+  `github.com` / user `daniiyalali`, and `credential.helper=osxkeychain` is configured.
+  Nothing secret is in `.git/config` — verified. If a push 403s, the stored token was
+  probably rotated; re-seed the keychain rather than putting a token in a URL.
+- The token that seeded this was pasted into a chat transcript and **should be treated
+  as leaked and rotated**.
+- **The repo is public**, so `CLAUDE.md`/`HANDOFF.md` and the Figma file key in them are
+  publicly readable. No credentials in either, but this is client work — the user may
+  want it private.
+
+`tools/deploy-vercel.py` is a stdlib-only REST-API deploy path, written because this
+machine has no node toolchain (no `node`/`npm`/`npx`, no Homebrew, no `gh`, no `vercel`).
+Unneeded once the Git integration is live, but it works and is the escape hatch.
+
 ## Verification performed (repeat after any change)
 
 1. Serve locally, then run `tools/scrub.py` (Python Playwright; there is no node on
@@ -181,8 +236,12 @@ as `assets/Scene 6/Reactions Light (previous picker.webp).webp`.
    crossfade, s17 push, s19 emergence-from-behind-phone + balanced resting fan,
    s21 morph, s24 dissolve. Reverse-scrub spot checks are clean (including the
    worst case: end → s2).
-3. FPS: scripted scroll through the heaviest section measured ~120fps average
-   (before the CSS drop-shadow filters were added — re-check on real hardware).
+3. FPS: scripted scroll s5→s8 (the heaviest block — dark tray, animated wall, callout
+   crossfades, CSS drop-shadow filters all live) measured **120 fps average, 9.4 ms
+   worst frame** in headless Chromium on 2026-07-29. Indicative only; still wants a
+   real-hardware pass.
+4. Deploy set: after any change to what the page loads, re-derive it by recording a page
+   load's requests and diffing against `.vercelignore` (see "repo + hosting").
 
 ## Known quirks / watch list
 
@@ -205,15 +264,22 @@ as `assets/Scene 6/Reactions Light (previous picker.webp).webp`.
   the manifest into main.js if double-click-to-open matters.
 - The Figma file was temporarily modified during the original export (EXPORT-* clones);
   **all were deleted** — verified zero leftovers. Re-exports will do the same dance.
-- `PX_PER_UNIT=800` (~33k px scroll) has NOT had a human trackpad feel-pass yet.
+- `PX_PER_UNIT=800` — 44.7 units, so a **35,760 px** page. Has NOT had a human trackpad
+  feel-pass yet. `HOVER_PASS` rides on the same unit, so retuning `PX_PER_UNIT` changes
+  how long the s5 hover pass takes in seconds; re-check it against the ~1.5s spec.
+- **A fresh clone can't re-run the s15 capture** — `Reference Projects/` is gitignored
+  (~1.1 GB). The captured `quiz-*.webp` frames are committed, so the page is complete;
+  only re-capturing needs the reference app back.
 
 ## Next steps (suggested)
 
 1. **In-betweening / finesse pass** (user's standing request): continuous shared-element
    transitions instead of fade-swaps — candidates: s7 tab switch, s16 rail crossfade,
    toast/panel handoffs. The single-image s21 card morph is the pattern to follow.
-2. User feel-pass on real hardware → tune `PX_PER_UNIT`, per-scene durations, Lenis lerp.
+2. User feel-pass on real hardware → tune `PX_PER_UNIT`, per-scene durations, Lenis lerp
+   (and re-check `HOVER_PASS` against the ~1.5s spec afterwards).
 3. Safari + Firefox manual check.
-4. Decide hosting (any static host works; drag the folder to Netlify/Vercel/S3).
+4. **Import the repo at vercel.com/new** — the only outstanding shipping step. Then
+   rotate the GitHub token, and decide whether the repo should stay public.
 5. Optional deferred polish: typing reveal in the comments drawer, poll-bar grow animation
    (would need answered/unanswered poll patch exports), keyboard/screen-reader affordances.

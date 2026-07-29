@@ -9,6 +9,19 @@ same filename, and **bump that asset's `?v=` cache-buster** in `index.html` (or 
 in `main.js` for emoji/sticker srcs) — browsers cache same-name images across sessions.
 Positions only change if the layout itself moves.
 
+**Two assets are NOT plain node exports.** Do not re-export them from Figma; run their
+script and read the docstring first:
+
+| Asset | Script | Why |
+|---|---|---|
+| `picker.webp` (s6 tray) | `tools/make-picker-dark.py` | Translucent + backdrop-blurred, so Figma bakes the backdrop in. An isolated export lands on flat black and loses the phone bleeding through it. |
+| `react-wall.webp` (s6 wall) | `tools/make-react-wall.py` | Animated; converted from the Scene 6 GIF, not exported as a frame. |
+
+**After any asset change**: re-verify with `tools/scrub.py`, then commit and push —
+`main` is the deploy source, so a push republishes. New filenames ship automatically
+(`.vercelignore` is a deny-list); it does name the *retired* assets explicitly, so if
+you retire something, add it there too.
+
 ## Shadow policy (2026-07-28 refresh)
 
 Assets are exported **without drop shadows**; shadows are applied in CSS (one marked
