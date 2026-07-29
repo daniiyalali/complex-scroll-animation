@@ -44,6 +44,11 @@ if "--team" in args:
 # is only for the CLI/drag-drop paths, so it is not uploaded.
 NEVER_UPLOAD = {".vercelignore"}
 
+# Belt and braces: .vercelignore also lists these, but this walk is literal and a
+# missing rule here would mean publishing the git store. Never rely on the ignore
+# file alone for the repo itself.
+NEVER_WALK = {".git", "node_modules"}
+
 
 def ignore_patterns():
     path = os.path.join(ROOT, ".vercelignore")
@@ -68,7 +73,8 @@ def collect():
     for base, dirs, files in os.walk(ROOT):
         rel_base = os.path.relpath(base, ROOT).replace(os.sep, "/")
         prefix = "" if rel_base == "." else rel_base + "/"
-        dirs[:] = [d for d in dirs if not is_ignored(prefix + d + "/", pats)]
+        dirs[:] = [d for d in dirs
+                   if d not in NEVER_WALK and not is_ignored(prefix + d + "/", pats)]
         for f in files:
             rel = prefix + f
             if rel in NEVER_UPLOAD or is_ignored(rel, pats):

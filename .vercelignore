@@ -21,6 +21,17 @@ assets/react-9.webp
 assets/react-10.webp
 assets/emoji-grid.webp
 
+# Video / staging material dropped into assets/ for scenes not built yet. Tracked in
+# git on purpose (it's source material) but never served.
+#
+# NOTE this file is a DENY-list, so anything new in assets/ ships by default — that is
+# how an unreferenced 1 MB of video nearly reached the live site on 2026-07-29. After
+# adding assets, re-derive the deploy set (record a page load's requests and diff), and
+# add anything the page does not fetch here.
+*.mp4
+*.mov
+assets/Last frameCinematic Morph Video 1.svg
+
 # Icon + cursor masters — these are inlined in index.html now, not fetched.
 assets/icon-bookmark.svg
 assets/icon-comment.svg
@@ -33,6 +44,12 @@ tools/
 CLAUDE.md
 HANDOFF.md
 shots/
+
+# Never ship the repo itself. Vercel's own CLI excludes .git implicitly, but
+# tools/deploy-vercel.py walks the directory literally — without this it would upload
+# the whole git store, .git/config included, to a public host. Caught 2026-07-29.
+.git/
+.gitignore
 
 .claude/
 .DS_Store

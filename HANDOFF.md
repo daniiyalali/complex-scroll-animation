@@ -203,6 +203,26 @@ What ships, and how that was established:
 - It also keeps `CLAUDE.md`, `HANDOFF.md`, `tools/` and the retired assets off the
   served URL.
 
+**Two ways this bit on day one — both because `.vercelignore` is a DENY-list, so
+anything new ships by default:**
+1. `git add -A` swept in three files dropped into `assets/` mid-session (a badge
+   animation mp4, a cinematic-morph SVG, a Scene 11 360° mp4 — material for scenes not
+   built yet). Harmless in git at 2 MB, but two of them sat in the *deploy* set,
+   unreferenced. Now excluded via `*.mp4` / `*.mov` and an explicit line. **Check
+   `git status` before `git add -A` — the user drops assets in while you work.**
+2. `tools/deploy-vercel.py` walks the directory literally, and `.git/` did not exist the
+   first time the walk was validated. Once the repo was created, that script would have
+   uploaded the whole git store — `.git/config` included — to a public host. Fixed in
+   both places: `.git/` is in `.vercelignore` *and* in a `NEVER_WALK` set in the script,
+   because the repo itself is too costly to leave to one ignore rule.
+
+Re-run the check after touching assets or the ignore file — it takes seconds and caught
+both of the above:
+```
+# record a real page load's requests, diff against what .vercelignore keeps
+# (the collect() in tools/deploy-vercel.py is the same walk the deploy uses)
+```
+
 **Cache headers** are `max-age=86400, stale-while-revalidate=604800` on `/assets` and
 `/vendor` — deliberately NOT `immutable`. The asset convention is to overwrite the same
 filename and bump `?v=`, but several assets are referenced with no `?v=` at all (strips,
@@ -262,6 +282,11 @@ Unneeded once the Git integration is live, but it works and is the escape hatch.
   Safari 14+, but do one manual pass.
 - **file:// doesn't work** — needs any static server (manifest fetch). Consider inlining
   the manifest into main.js if double-click-to-open matters.
+- **Unbuilt material is sitting in `assets/`** as of 2026-07-29: `Badge Packet
+  Animation.mp4`, `Last frameCinematic Morph Video 1.svg`, and `Scene 11/360-Degree
+  Animation 1.mp4`. Tracked in git, excluded from the deploy, referenced by nothing.
+  They look like the next scenes' source material (a badge reveal, a cinematic morph,
+  and a 360° spin for s11) — confirm with the user before wiring any of it in.
 - The Figma file was temporarily modified during the original export (EXPORT-* clones);
   **all were deleted** — verified zero leftovers. Re-exports will do the same dance.
 - `PX_PER_UNIT=800` — 44.7 units, so a **35,760 px** page. Has NOT had a human trackpad

@@ -35,6 +35,10 @@ trims the 1.1 GB working directory to the 61 files the page actually fetches
 If you change what the page loads, re-verify the deploy set the way it was
 derived in the first place — record a real page load's requests and diff them
 against what `.vercelignore` keeps, rather than trusting a regex over the source.
+`.vercelignore` is a **deny-list**, so anything new ships by default; that has already
+leaked unreferenced video into the deploy set once, and nearly published `.git/`.
+Also: the user drops assets into `assets/` while you work — check `git status` before
+`git add -A`.
 
 **Toolchain on this machine**: no `node`/`npm`/`npx`, no Homebrew, no `gh`, no
 `vercel` CLI. Playwright is the **Python** package. `tools/deploy-vercel.py` is a
