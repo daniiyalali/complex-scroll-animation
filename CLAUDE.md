@@ -51,6 +51,23 @@ need no token — the credential lives in the macOS Keychain and
 `credential.helper=osxkeychain` is already configured. Never put a token in
 `.git/config` or any tracked file.
 
+- **Nothing here needs Node** — this page is static and verified with Python Playwright.
+  But if a task genuinely does (2026-07-29: a Next.js section for the `/editions`
+  deck in the sibling `MYCOMPLEX-site`), you do not have to give up or install
+  anything: fetch an official standalone build into the scratchpad and put it on
+  `PATH` for that shell —
+  `curl -fsSLo node.tar.gz https://nodejs.org/dist/v22.14.0/node-v22.14.0-darwin-arm64.tar.gz`,
+  untar, `export PATH="…/bin:$PATH"`. 45 MB, no system install, gone with the
+  scratchpad. `npm` fails with `env: node: No such file or directory` until `node`
+  itself is on `PATH` — that error is the shebang, not a broken download. This is
+  what made `tsc` / `next build` / a real browser pass possible, and the browser
+  pass immediately caught a bug static review had missed.
+- **A PR without `gh`**: `git credential fill` (fed `protocol=https\nhost=github.com`)
+  returns the token git already uses to push, which can POST to
+  `api.github.com/repos/…/pulls`. It works, but it is reaching into the user's
+  credentials — **ask first** unless they have clearly asked you to complete the PR,
+  and never print or persist the token.
+
 ## Files
 
 | Path | What |

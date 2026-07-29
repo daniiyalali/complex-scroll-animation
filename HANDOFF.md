@@ -1,19 +1,24 @@
 # HANDOFF — Fandom × My Complex scroll animation
 
 _Last updated: 2026-07-29 (live product pages, a run of scene rebuilds, the new XP coin on the
-toasts, the s20 → s22 DP click, and the s22 badge gravity drop; **all local and unpushed** —
-`origin/main` is a long way behind)_
+toasts, the s20 → s22 DP click, the s22 badge gravity drop, the badges re-cut from Scene 21's
+rotated exports, the I.D. card replaced and sized to the ending video's first frame, s23 rewritten
+to wrap the card rather than swap it, and the s24 ending video)_
 
-## Status: complete and working locally, well ahead of `origin/main`.
+## Status: complete, working, and **pushed** — `origin/main` is level with local (`8e40bea`).
 
-**54.14 timeline units / 43,312 px** (re-measure rather than trust it — it moves with every span
+Every earlier revision of this file said "local and unpushed"; that stopped being true on
+2026-07-29. `main` is public and wired to Vercel, so **a push is a publication** — treat the next
+one the same way, and re-read the deploy-set rule below before making it.
+
+**53.79 timeline units / 43,032 px** (re-measure rather than trust it — it moves with every span
 change, and `window.__tl.duration()` / `window.__scrollLen` are exposed on the page).
-Deploy set **260 files / 14.93 MB** (`pages/` 221 files /
-8.56 MB, `assets/` 31 / 6.07 MB, `vendor/` 4 / 0.19 MB, root 4 / 0.11 MB). Zero console errors;
-reverse scrub `end → s2` clean. Re-derived 2026-07-29 by diffing a real page load against
-`.vercelignore`: **257 paths fetched, nothing fetched that would 404.** That diff is also what
-caught `Feedback/` shipping to a public URL (1.94 MB of internal reference renders — now denied,
-and the reason the total is down from 16.88 MB). The only files left shipping unfetched are
+Deploy set **262 files / 17.86 MB** — up from 14.93 MB because the s24 ending sprite is 2.8 MB and
+the badge/card re-cuts are larger than what they replaced. Zero console errors;
+reverse scrub `end → s2` clean. Always re-derived by diffing a real page load against
+`.vercelignore`, never a regex over the source: **nothing fetched that would 404.** That diff is
+also what caught `Feedback/` shipping to a public URL (1.94 MB of internal reference renders — now
+denied in `.vercelignore` **and** gitignored, since the repo is public). The only files left shipping unfetched are
 `vercel.json` (must — its headers are read from the deployment) and two stale
 `pages/assets/*.webp` (130 KB, referenced by no page; see the watch list).
 
@@ -485,7 +490,7 @@ second rerank swap, three times over, with no error and a plausible-looking fina
   and a 360° spin for s11) — confirm with the user before wiring any of it in.
 - The Figma file was temporarily modified during the original export (EXPORT-* clones);
   **all were deleted** — verified zero leftovers. Re-exports will do the same dance.
-- `PX_PER_UNIT=800` — 54.14 units, so a **43,312 px** page. Has NOT had a human trackpad
+- `PX_PER_UNIT=800` — 53.79 units, so a **43,032 px** page. Has NOT had a human trackpad
   feel-pass yet. `HOVER_PASS` rides on the same unit, so retuning `PX_PER_UNIT` changes
   how long the s5 hover pass takes in seconds; re-check it against the ~1.5s spec.
 - **A fresh clone can't re-run the s15 capture** — `Reference Projects/` is gitignored

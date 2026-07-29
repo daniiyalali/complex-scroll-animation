@@ -32,9 +32,12 @@ script and read the docstring first:
 |---|---|---|
 | `picker.webp` (s6 tray) | `tools/make-picker-dark.py` | Translucent + backdrop-blurred, so Figma bakes the backdrop in. An isolated export lands on flat black and loses the phone bleeding through it. |
 | `react-wall.webp` (s6 wall) | `tools/make-react-wall.py` | Animated; converted from the Scene 6 GIF, not exported as a frame. |
-| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, and positioned by their 440×299 render box rather than a content box — a rebuild has to land the pill on the same canvas or every toast shifts. |
+| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, positioned by its 440×299 render box. `download_assets` @2× has the right canvas but renders opaque (the screen's background bakes in); `get_screenshot` + `contentsOnly` is properly transparent but only ever 1×. The script combines them. toast-20's node has no shadow at all, so its shadow is spliced from toast-30's, and the pill is **centred** in the 440px screen by the script — not left at the shared x=85 the Figma nodes still use. |
 | `xp-frames.webp` (s11) | `tools/make-xp-frames.py` | A sprite grid of every frame of the Scene 11 video. The video **cannot be seeked**, so this is not optional — read the docstring before reaching for a `<video>`. |
 | `ending-frames.webp` (s24) | `tools/make-ending-frames.py` | The closing I.D. video as a full-bleed sprite grid — same reason as above, plus two of its own. Capture at `playbackRate` **0.25**: at 1× Chromium silently drops ~a third of the frames (81 of 120, unevenly). And it ships **12 fps, not 24** — a budget decision, not a quality one; `--measure` prints the table. Frame 0 must keep registering on `#id-card`/`#gold-card` or s24's crossfade breaks. |
+| `sticker-1…8.webp` (s22 badges) | `tools/make-badges.py` | The badges are **rotated 8.3–29.7°** in the design. The first exports had that rotation reset, so the page drew them upright at eyeballed positions and the pile never matched Scene 21. Source is now `assets/General/Rotated/` — pre-rotated, angle baked into the bitmap, so main.js rests them at 0°. **Positions are measured off a render of Scene 21, not read from the node** — see the rotated-node warning below. |
+| `id-card.webp` (s22/s21) | `tools/make-id-card.py` | Dual-source matte (below): 2× pixels from `assets/General/Jordan Rose ID.png`, alpha from the MCP `contentsOnly` render. Its stage box is **the first frame of the ending video**, not the Figma node box, because s24 hands over to that video frame-by-frame. |
+| `gold-card.webp` (s23) | `tools/make-gold-card.py` | Placed so the case's **inner card registers on `#id-card`'s box**, which is what lets s23 wrap the card already on screen instead of swapping one card for another. Replaced a different revision that had a white case and a different photo. |
 | fandom avatars | `tools/make-jordan-av.py` | The circle is baked into the avatar's **alpha**, not a `border-radius`. It also writes a master back into the All Hands build, so the next `make-page-assets.py` run does not revert it. |
 
 **Retired, and excluded in `.vercelignore` — do not re-export expecting them to appear:** the four
@@ -42,8 +45,6 @@ feed strips, the three nav bars, `panel-rerank.webp` (all replaced by the live `
 `drawer.webp` (s10 is coded DOM now), `xp-modal.webp` (s11 is the video sprite) and
 `lanyard.webp` (s24 is the ending video, scrubbed). They stay in
 git as source material and as the record of what the storyboard's framing was measured against.
-| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, positioned by its 440×299 render box. `download_assets` @2× has the right canvas but renders opaque (the screen's background bakes in); `get_screenshot` + `contentsOnly` is properly transparent but only ever 1×. The script combines them. toast-20's node has no shadow at all, so its shadow is spliced from toast-30's, and the pill is **centred** in the 440px screen by the script — not left at the shared x=85 the Figma nodes still use. |
-| `xp-frames.webp` (s11 popup) | `tools/make-xp-frames.py` | Frames extracted from the Scene 11 video, not a frame export. |
 
 **After any asset change**: re-verify with `tools/scrub.py`, then commit and push —
 `main` is the deploy source, so a push republishes. New filenames ship automatically
@@ -115,12 +116,24 @@ Scene-19 satellites (scene frame `1838:120893`, canvas x=48480 — **stage = can
   the upright rule**: their rotation is BAKED IN, because Figma reports only the rotated bounding
   box for them and un-rotating in PIL would resample the whole card. main.js rests them at 0°.
 
-**Getting a rotated Scene-19 card out with alpha at 2× — the dual-source matte.** Neither export
-route gives you both on its own:
+**A rotated node's `x`/`y` is NOT where it renders — do not place art from it.** Learned on the s22
+badges (2026-07-29), and it applies to every rotated node in this file. `get_metadata` gives x/y/w/h,
+and the **w/h is** genuinely the rotated bounding box — solve the rotation out of it and c²+s² closes
+to 1.000 within rounding, which is how the badge angles above were recovered. But placing the art at
+the reported x/y left six of the eight badges up to **72px** out, and only the two badges with zero
+rotation landed. The fix that works: match each piece's own art against a **render of the scene**
+(`get_screenshot` on the scene frame, e.g. Scene 21 = `1844:39703`) over opaque pixels at 1px steps.
+All eight then sit at dx=dy=0, with the match error dropping from ~80–100 to 6–25, and an independent
+check available — badge 4's bottom edge lands at 952.1 against the screen's 952. Re-measure that way
+if the design moves; the node coordinates will look plausible and be wrong.
+
+**Getting a rotated card out with alpha at 2× — the dual-source matte.** Used by the Scene-19
+satellites and by `make-id-card.py`. Neither export route gives you both on its own:
 - `download_assets(png, scale 2)` → the rotated bbox at 2×, but **fully opaque** (the transparent
   area comes back filled, so a white card cannot be keyed out of it);
 - `get_screenshot(contentsOnly: true)` → genuinely transparent, but **1× only** — `maxDimension`
-  only *caps* the render, it will not upscale past the node's natural size.
+  only *caps* the render, it will not upscale past the node's natural size (re-confirmed on the
+  I.D. card: asking for `maxDimension` 2814 on a 1407px-wide render still returns 1408×845).
 So take RGB from the first and alpha from the second, upscaling the alpha to 2× (LANCZOS). The
 card edges are straight lines, so the upscaled matte is effectively exact. Check the result on a
 mid-tone background, not on white or black — a halo hides on both.
