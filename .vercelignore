@@ -1,5 +1,6 @@
-# Ship only what the page actually fetches: 255 files, ~12.7 MB (most of it pages/).
-# (Verified by recording every request a real page load makes — not by eyeballing.)
+# Ship only what the page actually fetches: 260 files, ~14.9 MB (most of it pages/), of which
+# 257 paths are fetched by a real page load. (Verified by recording every request that load
+# makes and DIFFING it against this file, not by eyeballing. Re-measured 2026-07-29.)
 # The working directory is 1.1 GB, so deploying it unfiltered is not an option.
 
 # Reference apps the user drops in to capture product-true frames. Never served.
@@ -7,6 +8,15 @@ Reference Projects/
 
 # Source masters for the exports. The built .webp next to them is what ships.
 assets/Scene */
+
+# Same deal: raw art the user drops in, plus the Figma renders tools/make-toasts.py
+# builds the XP toasts from. Only the built toast-*.webp are fetched.
+assets/General/
+
+# Reference renders and feedback screenshots the user drops in. Internal working material
+# on a PUBLIC url — caught 2026-07-29 by diffing a real page load against this file, which
+# is the only way these get caught (see the deny-list note further down).
+Feedback/
 
 # Retired: the static 2x5 reaction grid, replaced by react-wall.webp.
 assets/react-1.webp
@@ -29,6 +39,8 @@ assets/nav-fandom.webp
 assets/nav-latest.webp
 assets/nav-myc.webp
 assets/panel-rerank.webp
+assets/drawer.webp
+assets/xp-modal.webp
 assets/strip-fandom-t0.webp
 assets/strip-fandom-t1.webp
 assets/strip-fandom-t2.webp
@@ -50,6 +62,11 @@ assets/strip-rail-t1.webp
 assets/strip-rail-t2.webp
 assets/strip-rail-t3.webp
 assets/strip-rail-t4.webp
+
+# Retired 2026-07-29: the static "worn in the real world" lanyard still that used to close s24.
+# The scene now plays the ending video frame by frame instead (assets/ending-frames.webp, built
+# by tools/make-ending-frames.py), so nothing fetches this.
+assets/lanyard.webp
 
 # Video / staging material dropped into assets/ for scenes not built yet. Tracked in
 # git on purpose (it's source material) but never served.

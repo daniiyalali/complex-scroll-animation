@@ -33,13 +33,18 @@
 
         <div id="stickers"></div>
 
-        <img class="overlay-img" id="xp-modal" src="assets/xp-modal.webp" alt="" />
+        <!-- s11: the +100 XP popup IS the Scene 11 video, shown frame by frame as the reader
+             scrolls. A sprite grid rather than a <video>: that file cannot be seeked (see
+             tools/make-xp-frames.py) and scrubbing here has to be deterministic and
+             reversible. The inner image is the whole 8x8 sheet, moved by transform so exactly
+             one cell shows; `assets/xp-modal.webp` (the old static card) is retired. -->
+        <div class="overlay-img" id="xp-modal"><img id="xp-sheet" src="assets/xp-frames.webp" alt="" /></div>
 
         <div id="toasts">
-          <img class="toast" id="toast-20"  src="assets/toast-20.webp"  alt="" />
-          <img class="toast" id="toast-30"  src="assets/toast-30.webp"  alt="" />
-          <img class="toast" id="toast-80"  src="assets/toast-80.webp"  alt="" />
-          <img class="toast" id="toast-120" src="assets/toast-120.webp" alt="" />
+          <img class="toast" id="toast-20"  src="assets/toast-20.webp?v=3"  alt="" />
+          <img class="toast" id="toast-30"  src="assets/toast-30.webp?v=3"  alt="" />
+          <img class="toast" id="toast-80"  src="assets/toast-80.webp?v=3"  alt="" />
+          <img class="toast" id="toast-120" src="assets/toast-120.webp?v=3" alt="" />
         </div>
 
       </div>
@@ -116,10 +121,41 @@
       <img class="overlay-img" id="picker" src="assets/picker.webp?v=3" alt="" />
       <div id="emoji-grid"></div>
 
-      <img class="overlay-img" id="drawer" src="assets/drawer.webp?v=2" alt="" />
+      <!-- ══ s10 comments tray ══
+           Coded, not exported. `drawer.webp` baked a pre-filled comment and its character
+           count into the composer, so the reader saw someone else's text already sitting in
+           the box, and patching over baked art was fragile — the user's call was to build the
+           whole thing, 2026-07-29. Structure and tokens are lifted from the comment component
+           in the sibling `3. Article Comments` prototype (`live-inject.js`), classes kept on
+           its `tlc-` prefix so they cannot collide with anything here. Avatars are INITIALS,
+           as that component does them, so the tray needs no image assets at all. -->
+      <div class="overlay-img" id="drawer">
+        <div class="tlc-head"><span>Comments</span><i class="tlc-x"></i></div>
+        <div class="tlc-list">
+          <!-- Zack's comment. Present from the start and revealed on the post, so a scrub can
+               reverse it; see the s10 block in main.js. -->
+          <div class="tlc-cmt cmt-mine" id="cmt-mine">
+            <span class="tlc-av" style="background:#FF5C00">Z</span>
+            <div class="tlc-main">
+              <div class="tlc-top"><span class="tlc-nm">zack</span><span class="tlc-tm">now</span></div>
+              <p class="tlc-tx" id="cmt-posted"></p>
+              <div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>0</b></span><span>Reply</span></div>
+            </div>
+          </div>
+          <div class="tlc-cmt"><span class="tlc-av" style="background:#7A5AF8">VL</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">vlonesoldier99</span><span class="tlc-tm">2h</span></div><p class="tlc-tx">MUSIC dropped and i havent left my room in 3 days this album is a religious experience</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>4.2K</b></span><span>Reply</span></div></div></div>
+          <div class="tlc-replies"><div class="tlc-cmt tlc-reply"><span class="tlc-av" style="background:#0EA5A5">OP</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">opium_dreamer</span><span class="tlc-tm">1h</span></div><p class="tlc-tx">@vlonesoldier99 bro same i called out of work twice already no regrets</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>891</b></span><span>Reply</span></div></div></div><div class="tlc-cmt tlc-reply"><span class="tlc-av" style="background:#E0508C">WH</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">wholelottared</span><span class="tlc-tm">58m</span></div><p class="tlc-tx">@vlonesoldier99 production on every track is INSANE the beats feel like theyre from another dimension</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>672</b></span><span>Reply</span></div></div></div><div class="tlc-cmt tlc-reply"><span class="tlc-av" style="background:#C2410C">DI</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">die4carti</span><span class="tlc-tm">45m</span></div><p class="tlc-tx">@vlonesoldier99 we were starving for YEARS and he delivered a whole buffet</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>1.3K</b></span><span>Reply</span></div></div></div></div>
+          <div class="tlc-cmt"><span class="tlc-av" style="background:#2563EB">CA</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">cartiszn2026</span><span class="tlc-tm">4h</span></div><p class="tlc-tx">the way he switched flows on track 5 had me floating this man cant miss</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>2.8K</b></span><span>Reply</span></div></div></div>
+          <div class="tlc-replies"><div class="tlc-cmt tlc-reply"><span class="tlc-av" style="background:#15803D">SL</span><div class="tlc-main"><div class="tlc-top"><span class="tlc-nm">slatt_nation</span><span class="tlc-tm">3h</span></div><p class="tlc-tx">@cartiszn2026 track 5 into track 6 is the greatest transition in hip hop history im crying</p><div class="tlc-acts"><span class="tlc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><b>440</b></span><span>Reply</span></div></div></div></div>
+        </div>
+        <div class="tlc-comp">
+          <div class="tlc-ta"><span id="cmt-node"></span><i id="cmt-caret"></i></div>
+          <div class="tlc-comp-foot">
+            <span class="tlc-counter" id="cmt-count">0 / 2,000</span>
+            <span class="tlc-post">Post</span>
+          </div>
+        </div>
+      </div>
 
-      <!-- s13.1: the article itself, in the slab that used to be a placeholder. The panel is
-           390x887 — the page's own authored width — so this one mounts 1:1 with NO zoom. -->
       <div id="gray-panel"><div class="page page-1x" id="page-article"><iframe
            src="pages/article.html" scrolling="no" tabindex="-1" aria-hidden="true" title=""></iframe></div></div>
       <!-- s14: the live rerank editor. Its `.s5shell` is 390x887 — exactly this slab — so it
@@ -138,17 +174,29 @@
       </div>
 
       <div id="sats">
-        <img id="sat-editorial" src="assets/sat-editorial.webp?v=2" alt="" />
+        <img id="sat-editorial" src="assets/sat-editorial.webp?v=3" alt="" />
         <img id="sat-ugc"       src="assets/sat-ugc.webp?v=2"       alt="" />
         <img id="sat-comment"   src="assets/sat-comment.webp?v=2"   alt="" />
         <img id="sat-video"     src="assets/sat-video.webp?v=2"     alt="" />
+        <!-- the two merch tiles added to Scene 19 on 2026-07-29. Unlike the other four these
+             carry their rotation BAKED IN (see styles.css), so main.js gives them a resting
+             rotation of 0. -->
+        <img id="sat-merch-left"  src="assets/sat-merch-left.webp"  alt="" />
+        <img id="sat-merch-right" src="assets/sat-merch-right.webp" alt="" />
       </div>
 
-      <img class="overlay-img" id="id-card" src="assets/id-card.webp" alt="" />
+      <img class="overlay-img" id="id-card" src="assets/id-card.webp?v=2" alt="" />
       <img class="overlay-img" id="gold-card" src="assets/gold-card.webp?v=2" alt="" />
     </div>
 
-    <img id="lanyard" src="assets/lanyard.webp?v=2" alt="" />
+    <!-- s24: the finale IS the Jordan Rose I.D. video, shown frame by frame as the reader
+         scrolls out — the encased card glows, morphs onto a real person's chest at ComplexCon
+         and pulls back over the whole floor. A sprite grid rather than a <video>, for the same
+         reasons as the s11 popup: that file cannot be reliably seeked and the scrub has to be
+         deterministic and reversible (see tools/make-ending-frames.py). Full-bleed, because
+         the source is 16:9 — exactly the stage. `assets/lanyard.webp`, the static lanyard
+         still this replaced, is retired. -->
+    <div id="ending"><img id="ending-sheet" src="assets/ending-frames.webp" alt="" /></div>
 
     <!-- ══ Cursor ══ -->
     <div id="cursor">

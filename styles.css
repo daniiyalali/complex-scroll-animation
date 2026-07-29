@@ -1,5 +1,15 @@
 /* Fandom × My Complex — scroll story */
 
+/* The product UI's own typeface. Needed by the coded s10 composer text; the live pages in
+   pages/ load it themselves from inside their frames. */
+@font-face {
+  font-family: 'Inter';
+  src: url('vendor/inter-subset.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* ── Palette ──
@@ -154,11 +164,26 @@ img { display: block; }
 #navs { z-index: 8; }
 #toasts { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
 
+/* The popup is the Scene 11 video's frames. Box is the VIDEO's aspect (1120x1504 = 0.7447),
+   not the retired card's, and it is centred where that card was: it was 358x457 at top 248,
+   centre y 476.5, so 358x480.74 starts at 236.13. The inner sheet is 8 cells wide and is
+   moved by transform, so only one frame is ever in the box. */
 #xp-modal {
   position: absolute;
-  left: 41px; top: 248px;
-  width: 358px; height: 457px;
+  left: 41px; top: 236.13px;
+  width: 358px; height: 480.74px;
   visibility: hidden;
+  overflow: hidden;
+  /* The video's frames are RGB, so the card's rounded corners are drawn against white and
+     vanish over the s10/s11 scrim — the card read as a hard square. 15.5px is the retired
+     asset's own radius, measured off its alpha channel (31px at 2x). */
+  border-radius: 15.5px;
+}
+#xp-sheet {
+  position: absolute;
+  left: 0; top: 0;
+  width: 2864px;              /* 8 cols x 358 — height follows from the sheet's aspect */
+  will-change: transform;
 }
 
 #stickers img {
@@ -308,7 +333,15 @@ img { display: block; }
   will-change: transform, opacity;
 }
 
-/* Satellites: clean upright exports; baked-in rotations re-applied in main.js.
+/* Sizes and positions RE-DERIVED 2026-07-29 from the user's Scene 31 reference (Feedback/).
+   Method: render each card in isolation (so overlapping cards cannot merge in a component pass),
+   measure its rendered bbox, and compare with the same measurement of the reference — which is at
+   1:1 stage scale, cropped 66px each side, so its phone lands exactly 440x952. Each card then gets
+   its own scale factor (they range 0.88-0.94, so the reference is NOT a uniform shrink) and is
+   centre-matched to the reference: rotation is about the centre, and main.js derives the s19
+   fly-out from the centre, so matching centres is right for both the composition and the motion.
+
+   Satellites: clean upright exports; baked-in rotations re-applied in main.js.
    z-index -1 layers them BEHIND the phone (above the stage bg) so the s19
    explosion reads as cards flying out from behind the mockup. Fan widened
    +20px per side vs the storyboard resting centers. */
@@ -317,22 +350,58 @@ img { display: block; }
    (bezel edge x=1195) by the same gap as the mirrored left card:
    editorial↔ugc ≈ 50px, comment↔video ≈ 69px. Rotation swings corners
    ~(h/2)·sinθ past the CSS box — account for it when nudging these. */
-#sat-editorial { left: 372px;  top: 86px;  width: 282px; height: 504px; }
-#sat-ugc       { left: 1286px; top: 59px;  width: 282px; height: 499px; }
-#sat-comment   { left: 346px;  top: 642px; width: 282px; height: 242px; }
-#sat-video     { left: 1295px; top: 626px; width: 282px; height: 257px; }
+/* editorial re-exported 2026-07-29 — the art changed from an article card to a poll card
+   and got 55px shorter. Its vertical CENTRE is held at the old 338, not its top: main.js
+   computes the s19 fly-out from each card's centre, so keeping the centre keeps the
+   explosion path identical. Figma node 1838:120852 no longer exists, so the size comes
+   from the export and the position from that centre. */
+#sat-editorial { left: 408.2px; top: 144.1px; width: 266.6px; height: 423.9px; }
+#sat-ugc       { left: 1261.3px; top: 110.8px; width: 248.3px; height: 439.4px; }
+#sat-comment   { left: 413.4px; top: 750.6px; width: 256.1px; height: 219.8px; }
+#sat-video     { left: 1252.1px; top: 689.9px; width: 264.8px; height: 241.3px; }
+/* The two merch tiles (Figma `2077:8910` left, `2077:8969` right, Scene 19 `1838:120893`).
+   These are the ONE exception to the upright-export rule above: their rotation is baked into
+   the art, because Figma reports only the ROTATED bounding box for them and un-rotating in
+   PIL would resample the whole card. So main.js gives them resting rotation 0.
+   Boxes are centre-matched to Figma's bbox centre — rotation is about the centre, so matching
+   it places the card exactly where the design has it, and keeps the s19 fly-out vector honest
+   (main.js derives that from each card's centre).
+   Built by the dual-source matte in tools/export-assets.md: RGB from a scale-2 download_assets
+   export (opaque), alpha from a contentsOnly screenshot (transparent, 1x). */
+#sat-merch-left  { left: 152.4px; top: 401.6px; width: 330.1px; height: 385.8px; }
+#sat-merch-right { left: 1453.2px; top: 367.9px; width: 331.6px; height: 387.3px; }
 
 /* One clean card image serves both the small (s22) and expanded (s21) states:
    large card box = (460,260) 1000x561; small state = scale .422, y -63 (main.js) */
-#id-card   { left: 460px; top: 260px; width: 1000px; height: 561px; }
-#gold-card { left: 375px; top: 101px; width: 1171px; height: 878px; }
+/* The expanded box IS the first frame of General/Jordan Rose ID Video.mp4 — the card incl.
+   its strip measures 639x396 of that 1280x720 frame and the video is exactly 16:9, so at
+   full stage it is 466.5,291 958.5x594. The video takes over frame-by-frame after the s21
+   blow-up, so this box and that frame have to coincide or the handover jumps. Rebuild the
+   art with tools/make-id-card.py. */
+#id-card   { left: 466.5px; top: 291px; width: 958.5px; height: 594px; }
+/* Placed so the case's INNER CARD lands exactly on #id-card's box (466.5,291 958.5x594),
+   which is what lets s23 wrap the card already on screen instead of swapping one card for
+   another. Derived in tools/make-gold-card.py — rebuild there, don't nudge. */
+#gold-card { left: 405.43px; top: 149.57px; width: 1092.26px; height: 786.15px; }
 
-#lanyard {
+/* ── s24 finale: the I.D. video's frames, one cell at a time ──
+   Same machinery as #xp-modal — a window over a sprite grid, the grid moved by transform so
+   exactly one frame is ever in the box — but FULL-BLEED: the source is 1280x720, exactly the
+   stage's 16:9, so it covers the whole stage with no letterbox and no aspect fudge, which is
+   also why the cells need no alpha (their own near-black background is the stage's).
+   Replaced `#lanyard`, the static still. */
+#ending {
   position: absolute;
   left: 0; top: 0;
   width: 1920px; height: 1080px;
   visibility: hidden;
-  will-change: transform, opacity;
+  overflow: hidden;
+}
+#ending-sheet {
+  position: absolute;
+  left: 0; top: 0;
+  width: 15360px;             /* 8 cols x 1920 — height follows from the sheet's aspect */
+  will-change: transform;
 }
 
 /* ── Drop shadows in code (assets are now exported shadow-free) ──
@@ -427,4 +496,107 @@ img { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   #scroll-hint span { animation: none; }
+}
+
+
+/* ══ s10 comments tray ══
+   Coded, not exported — see the note in index.html. Structure and tokens come from the
+   comment component in the sibling `3. Article Comments` prototype, kept on its `tlc-` class
+   prefix so nothing here can collide with it. Avatars are initials, so no image assets.
+   The composer's type is deliberately LARGE (28px, against the component's 14): this is a
+   demo being watched on a shared screen, and the comment being typed is the point of the
+   scene — at the product's real size it is unreadable at playback scale. User's call. */
+#drawer {
+  --tlc-line: #e1e3e5;
+  --tlc-ter: #8f959d;
+  --tlc-b3: #f0f1f2;
+  --tlc-r: 4px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #050505;
+}
+.tlc-head {
+  flex: none;
+  height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--tlc-line);
+  font: 800 15px/1 Inter, sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+/* the close glyph, drawn rather than a font character so it cannot shift with fallbacks */
+.tlc-x { position: relative; width: 15px; height: 15px; }
+.tlc-x::before, .tlc-x::after {
+  content: ''; position: absolute; left: 0; top: 7px;
+  width: 15px; height: 1.6px; background: #050505;
+}
+.tlc-x::before { transform: rotate(45deg); }
+.tlc-x::after  { transform: rotate(-45deg); }
+
+.tlc-list { flex: 1; overflow: hidden; padding: 0 18px; }
+.tlc-cmt {
+  display: flex; gap: 11px; padding: 14px 0;
+  border-bottom: 1px solid var(--tlc-line);
+}
+.tlc-cmt:last-child { border-bottom: 0; }
+.tlc-av {
+  flex: 0 0 auto;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  font: 700 13px/1 Inter, sans-serif;
+  color: #fff;
+}
+.tlc-main { min-width: 0; }
+.tlc-top { display: flex; align-items: baseline; gap: 8px; }
+.tlc-nm { font: 600 14px Inter, sans-serif; }
+.tlc-tm { font: 400 12px Inter, sans-serif; color: var(--tlc-ter); }
+.tlc-tx { font: 400 14px/1.45 Inter, sans-serif; margin-top: 3px; }
+.tlc-acts { display: flex; gap: 16px; align-items: center; margin-top: 7px; }
+.tlc-acts > span { display: flex; align-items: center; gap: 5px; font: 600 12px Inter, sans-serif; color: var(--tlc-ter); }
+.tlc-acts svg { width: 14px; height: 14px; }
+/* replies sit under their parent behind the thread rule the component uses */
+.tlc-replies { margin-left: 22px; padding-left: 17px; border-left: 2px solid var(--tlc-line); }
+.tlc-cmt.tlc-reply { padding: 10px 0; border-bottom: 0; }
+.tlc-cmt.tlc-reply .tlc-av { width: 26px; height: 26px; font-size: 11px; }
+
+/* Zack's comment: hidden until the post, and revealed by the same proxy that types */
+.cmt-mine { display: none; }
+
+.tlc-comp {
+  flex: none;
+  border-top: 1px solid var(--tlc-line);
+  background: var(--tlc-b3);
+  padding: 14px 16px 16px;
+}
+.tlc-ta {
+  min-height: 104px;
+  background: #fff;
+  border: 1px solid #6e7681;
+  border-radius: var(--tlc-r);
+  padding: 12px 14px;
+  font: 400 28px/34px Inter, sans-serif;
+  color: #050505;
+  overflow-wrap: anywhere;
+}
+#cmt-caret {
+  display: inline-block;
+  width: 2px; height: 28px;
+  margin-left: 2px;
+  vertical-align: -5px;
+  background: #050505;
+}
+.tlc-comp-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.tlc-counter { font: 600 11px Inter, sans-serif; color: var(--tlc-ter); font-variant-numeric: tabular-nums; }
+.tlc-post {
+  background: #000; color: #fff;
+  border-radius: var(--tlc-r);
+  height: 40px; padding: 0 20px;
+  display: grid; place-items: center;
+  font: 700 12px Inter, sans-serif;
+  letter-spacing: .05em; text-transform: uppercase;
 }

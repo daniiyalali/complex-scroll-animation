@@ -15,3 +15,9 @@ shots/
 
 # The source masters in assets/Scene */ ARE tracked on purpose — tools/make-*.py
 # read them, so ignoring them would break the asset pipeline for a fresh clone.
+
+# Reference renders and screenshots the user drops in when a scene should look
+# different. Internal working material — .vercelignore already keeps it off the
+# served URL, and `main` is a PUBLIC repo, so it stays out of git as well.
+# Nothing in the code reads it; a fresh clone loses nothing.
+Feedback/

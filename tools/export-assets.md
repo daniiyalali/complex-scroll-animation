@@ -25,13 +25,25 @@ same filename, and **bump that asset's `?v=` cache-buster** in `index.html` (or 
 in `main.js` for emoji/sticker srcs) — browsers cache same-name images across sessions.
 Positions only change if the layout itself moves.
 
-**Two assets are NOT plain node exports.** Do not re-export them from Figma; run their
+**Some assets are NOT plain node exports.** Do not re-export them from Figma; run their
 script and read the docstring first:
 
 | Asset | Script | Why |
 |---|---|---|
 | `picker.webp` (s6 tray) | `tools/make-picker-dark.py` | Translucent + backdrop-blurred, so Figma bakes the backdrop in. An isolated export lands on flat black and loses the phone bleeding through it. |
 | `react-wall.webp` (s6 wall) | `tools/make-react-wall.py` | Animated; converted from the Scene 6 GIF, not exported as a frame. |
+| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, and positioned by their 440×299 render box rather than a content box — a rebuild has to land the pill on the same canvas or every toast shifts. |
+| `xp-frames.webp` (s11) | `tools/make-xp-frames.py` | A sprite grid of every frame of the Scene 11 video. The video **cannot be seeked**, so this is not optional — read the docstring before reaching for a `<video>`. |
+| `ending-frames.webp` (s24) | `tools/make-ending-frames.py` | The closing I.D. video as a full-bleed sprite grid — same reason as above, plus two of its own. Capture at `playbackRate` **0.25**: at 1× Chromium silently drops ~a third of the frames (81 of 120, unevenly). And it ships **12 fps, not 24** — a budget decision, not a quality one; `--measure` prints the table. Frame 0 must keep registering on `#id-card`/`#gold-card` or s24's crossfade breaks. |
+| fandom avatars | `tools/make-jordan-av.py` | The circle is baked into the avatar's **alpha**, not a `border-radius`. It also writes a master back into the All Hands build, so the next `make-page-assets.py` run does not revert it. |
+
+**Retired, and excluded in `.vercelignore` — do not re-export expecting them to appear:** the four
+feed strips, the three nav bars, `panel-rerank.webp` (all replaced by the live `pages/`),
+`drawer.webp` (s10 is coded DOM now), `xp-modal.webp` (s11 is the video sprite) and
+`lanyard.webp` (s24 is the ending video, scrubbed). They stay in
+git as source material and as the record of what the storyboard's framing was measured against.
+| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, positioned by its 440×299 render box. `download_assets` @2× has the right canvas but renders opaque (the screen's background bakes in); `get_screenshot` + `contentsOnly` is properly transparent but only ever 1×. The script combines them. toast-20's node has no shadow at all, so its shadow is spliced from toast-30's, and the pill is **centred** in the 440px screen by the script — not left at the shared x=85 the Figma nodes still use. |
+| `xp-frames.webp` (s11 popup) | `tools/make-xp-frames.py` | Frames extracted from the Scene 11 video, not a frame export. |
 
 **After any asset change**: re-verify with `tools/scrub.py`, then commit and push —
 `main` is the deploy source, so a push republishes. New filenames ship automatically
@@ -94,8 +106,30 @@ manifest.
 Panels: rerank 1838:114790 · quiz — NOT a Figma export anymore: 6 `quiz-*.webp`
 frames captured from the live reference app (see HANDOFF → "s15 quiz autoplay";
 the old static node was 1838:115609)
-Scene-19 satellites: 1838:120852 / 121413 / 121440 / 121477 — exported upright; their
-resting rotations are re-applied in main.js (editorial −5°, ugc +10°, comment −16°, video +16.5°)
+Scene-19 satellites (scene frame `1838:120893`, canvas x=48480 — **stage = canvas − 48480**):
+- UGC `1838:121413` · UGC Comment `1838:121440` · Video `1838:121477` — exported upright, resting
+  rotations re-applied in main.js (ugc +10°, comment −16°, video +16.5°).
+- Latest Editorial — the old `1838:120852` **no longer exists**; it is now `1974:8918` and the art
+  changed (article card → poll card, 55px shorter). See HANDOFF 2026-07-29.
+- Merch tiles `2077:8910` (left) / `2077:8969` (right) — added 2026-07-29. **The one exception to
+  the upright rule**: their rotation is BAKED IN, because Figma reports only the rotated bounding
+  box for them and un-rotating in PIL would resample the whole card. main.js rests them at 0°.
+
+**Getting a rotated Scene-19 card out with alpha at 2× — the dual-source matte.** Neither export
+route gives you both on its own:
+- `download_assets(png, scale 2)` → the rotated bbox at 2×, but **fully opaque** (the transparent
+  area comes back filled, so a white card cannot be keyed out of it);
+- `get_screenshot(contentsOnly: true)` → genuinely transparent, but **1× only** — `maxDimension`
+  only *caps* the render, it will not upscale past the node's natural size.
+So take RGB from the first and alpha from the second, upscaling the alpha to 2× (LANCZOS). The
+card edges are straight lines, so the upscaled matte is effectively exact. Check the result on a
+mid-tone background, not on white or black — a halo hides on both.
+**Also check for a baked shadow before shipping**: measure the fraction of pixels with
+`8 < alpha < 240`. Antialiasing alone is well under 1% (these two measured 0.8%); a real baked
+shadow is several percent, and would double against the CSS `drop-shadow` on `#sats img`.
+**Positions: match the CENTRE, not the top-left.** Rotation is about the centre, and main.js
+derives each card's s19 fly-out from its centre — so centre-matching places the card where the
+design has it *and* keeps the animation vector honest.
 Finale: id-card (single clean card, replaces the old id-small 1844:42327 + id-large
 1844:39437 pair — source `Scene 22/COMPLEX I.D No Shadow.png`) · stickers 1844:42148–42155 ·
 gold card 1844:43712 (crop transparent padding to the content box) ·
