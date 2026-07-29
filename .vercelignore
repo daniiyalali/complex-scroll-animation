@@ -1,4 +1,4 @@
-# Ship only what the page actually fetches: 61 files, ~10 MB.
+# Ship only what the page actually fetches: 255 files, ~12.7 MB (most of it pages/).
 # (Verified by recording every request a real page load makes — not by eyeballing.)
 # The working directory is 1.1 GB, so deploying it unfiltered is not an option.
 
@@ -20,6 +20,36 @@ assets/react-8.webp
 assets/react-9.webp
 assets/react-10.webp
 assets/emoji-grid.webp
+
+# Retired 2026-07-29: the four flat feed-strip exports, the three nav bars and the rerank
+# panel image, all replaced by the live product pages in pages/. Kept in git as source
+# material (and as the record of what the storyboard's framing was measured against),
+# but the page no longer fetches any of them — verified by recording a page load.
+assets/nav-fandom.webp
+assets/nav-latest.webp
+assets/nav-myc.webp
+assets/panel-rerank.webp
+assets/strip-fandom-t0.webp
+assets/strip-fandom-t1.webp
+assets/strip-fandom-t2.webp
+assets/strip-fandom-t3.webp
+assets/strip-fandom-t4.webp
+assets/strip-latest-t0.webp
+assets/strip-latest-t1.webp
+assets/strip-latest-t2.webp
+assets/strip-latest-t3.webp
+assets/strip-latest-t4.webp
+assets/strip-latest-t5.webp
+assets/strip-myc-t0.webp
+assets/strip-myc-t1.webp
+assets/strip-myc-t2.webp
+assets/strip-myc-t3.webp
+assets/strip-myc-t4.webp
+assets/strip-rail-t0.webp
+assets/strip-rail-t1.webp
+assets/strip-rail-t2.webp
+assets/strip-rail-t3.webp
+assets/strip-rail-t4.webp
 
 # Video / staging material dropped into assets/ for scenes not built yet. Tracked in
 # git on purpose (it's source material) but never served.

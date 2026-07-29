@@ -93,6 +93,36 @@ img { display: block; }
   width: 440px;
 }
 
+/* ── Live product pages ──
+   The pages are authored 390px wide; the screen is 440px — exactly ×1.128205, the same
+   ratio that relates every token in the two builds.
+   **Two nested elements, and the split matters.** The iframe keeps its native 390px width
+   so the page lays out exactly as authored, and carries `zoom` so it *rasterises* at 440 —
+   zoom scales the raster, not the layout, so glyphs are drawn at the final size instead of
+   being resampled 12.8% up the way a transform would. The wrapper carries the translateY
+   and has NO zoom, so scene offsets stay in plain stage px; put the zoom on the moving
+   element and every offset would silently come out ×1.128.
+   Frame height is set from JS once the document has measured itself. */
+.page {
+  position: absolute;
+  left: 0; top: 0;
+  width: 440px;
+  visibility: hidden;
+  will-change: transform;
+  pointer-events: none;      /* see the note in index.html — `data-goto` would navigate */
+}
+.page iframe {
+  display: block;
+  width: 390px;              /* the page's authored width — do not change without the zoom */
+  border: 0;
+  zoom: 1.1282051282051282;  /* 440 / 390 — the phone screen */
+  background: #fff;
+}
+/* Pages shown in a side panel: those slabs are 390 wide already, so 1:1. mountPages reads
+   the zoom off the frame rather than assuming, which is what lets the two coexist. */
+.page-1x iframe { zoom: 1; }
+
+
 #screen-scrim {
   position: absolute;
   inset: 0;
@@ -141,11 +171,18 @@ img { display: block; }
 #overlays > img, .overlay-img { position: absolute; visibility: hidden; will-change: transform, opacity; }
 
 /* ── Callouts ──
-   Coded in HTML (inline SVG + live text). Every callout holds two stacked faces:
-   `.idle` = Scene 05, `.act` = the hover / pressed state from Scenes 5.1–5.4.
-   Only their opacity is crossfaded, so nothing ever reflows mid-scrub.
-   Boxes below ARE the Figma row frames (padding 8, gap 13.54, radius 8); the two
-   faces of a callout are offset so they share one icon centre. */
+   Coded in HTML (inline SVG + live text). Boxes below ARE the Figma row frames
+   (padding 8, gap 13.54, radius 8).
+
+   REACT / COMMENT / BOOKMARK have ONE face. Their hover is a `.chip` fading up behind
+   a small rotation of the same icon — nothing crossfades, so there is nothing to look
+   soft. Figma draws those hovers as different art (mirrored bubble, filled bookmark,
+   bold label); reproducing that needs a two-layer dissolve, which is what read as
+   smeary, so it is deliberately dropped — user's call, 2026-07-29.
+
+   FOLLOW keeps two faces (`.idle` / `.act`): it is a press that commits to FOLLOWING,
+   a genuine state change with different text, so it has to swap. It snaps on the click
+   rather than crossfading. */
 #callouts { position: absolute; inset: 0; color: var(--fg); }
 .callout {
   position: absolute;
@@ -163,12 +200,26 @@ img { display: block; }
   border-radius: 8px;
 }
 .cf.act {
-  background: var(--chip);   /* Figma --background/b2 (#f8f8f8), inverted for dark */
   opacity: 0;
   visibility: hidden;
 }
+/* The hover chip is its OWN layer, behind both faces (first child, so it paints under
+   them). That split is what lets the highlight swell slowly — which is what reads as
+   organic — while the two label faces swap fast enough not to ghost. Cross-dissolving
+   near-identical text at two different weights always looks blurred, however it's eased.
+   Box = the `.act` face's box (Figma --background/b2 #f8f8f8, inverted for dark). */
+.callout .chip {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  border-radius: 8px;
+  background: var(--chip);
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity;
+}
 .ci { flex: none; display: flex; align-items: center; justify-content: center; }
-.ci svg { display: block; }
+.ci svg { display: block; will-change: transform; }
 .cl {
   font-size: 32px;
   font-weight: 400;          /* Tags & Labels/32pt/Regular */
@@ -176,22 +227,17 @@ img { display: block; }
   text-transform: uppercase;
   white-space: nowrap;
 }
-.cf.act .cl { font-weight: 700; }   /* Tags & Labels/32pt/Bold */
 
 #callout-react            { left: 339px; top: 288.9px;  width: 205.54px; height: 88px; }
-#callout-react    .act    { top: -4.12px; width: 218.78px; height: 96.24px; }
+#callout-react    .chip   { top: -4.12px; width: 218.78px; height: 96.24px; }
 #callout-react    .ci     { width: 72px; height: 72px; }
-#callout-react    .act .ci { width: 80.24px; height: 80.24px; }
-#callout-react    .act .ci svg { transform: rotate(-7deg); }   /* icon tilt, Scene 5.1 */
 
 #callout-comment          { left: 339px; top: 431.06px; width: 270.54px; height: 88px; }
-#callout-comment  .act    { width: 274.54px; }
+#callout-comment  .chip   { width: 274.54px; }
 #callout-comment  .ci     { width: 72px; height: 72px; }
-/* the active bubble is mirrored and 8px wider — it overhangs the slot to the right */
-#callout-comment  .act .ci { justify-content: flex-start; overflow: visible; }
 
 #callout-bookmark         { left: 339px; top: 573.21px; width: 279.23px; height: 83.69px; }
-#callout-bookmark .act    { width: 287.23px; }
+#callout-bookmark .chip   { width: 287.23px; }
 #callout-bookmark .ci     { width: 67.69px; height: 67.69px; }
 
 #callout-follow           { left: 339px; top: 711.06px; width: 279.23px; height: 80px; }
@@ -234,9 +280,19 @@ img { display: block; }
   width: 390px; height: 887px;
   background: var(--slab);
   border-radius: 20px;
+  overflow: hidden;          /* it is a viewport onto pages/article.html now */
   visibility: hidden;
 }
-#panel-rerank { left: 1253px; top: 97px; width: 390px; height: 887px; }
+#panel-rerank {
+  position: absolute;
+  left: 1253px; top: 97px;
+  width: 390px; height: 887px;
+  visibility: hidden;
+  will-change: transform, opacity;
+  border-radius: 20px;
+  overflow: hidden;          /* a viewport onto pages/rerank.html */
+  background: #000;          /* the editor's own ground, behind the frame */
+}
 #panel-quiz {
   left: 1245px; top: 97px;
   width: 390px; height: 887px;

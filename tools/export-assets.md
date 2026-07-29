@@ -1,5 +1,21 @@
 # Re-exporting assets when the Figma design changes
 
+## ⚠ The feed strips and nav bars are RETIRED (2026-07-29)
+
+The four strip exports and the three nav-bar images are **no longer used**. The phone and the
+two side slabs now hold the **live product pages** from `../10. My Complex All Hands/`,
+imported by `tools/make-page-assets.py` into `pages/` — see CLAUDE.md. Do not re-export the
+nodes below expecting them to appear on the page; they will not. They are kept in git as
+source material and as the record of what the storyboard's framing was measured against, and
+`.vercelignore` keeps them out of the deploy.
+
+**To change what the phone shows, change the page** in the All Hands build and re-run
+`tools/make-page-assets.py`. Then re-derive the affected `POS` offsets — the pages' content
+lengths do not match the strips', and they will not match each other's between versions
+either. The method that works: take the storyboard's cursor tip for the beat and solve for the
+offset that puts the target under it. `-159`-style arithmetic shifts only hold near a page's
+top; deeper down they put scenes on the wrong content entirely (this happened — see HANDOFF).
+
 All visuals come from the Figma file **Fandom x My Complex**
 (`https://www.figma.com/design/0Wn6kFfKuKalOCTev3uUjA/...`, storyboard canvas `1838:87183`).
 `assets/manifest.json` maps every asset → its Figma node ID (and, since the 2026-07-28
@@ -54,7 +70,7 @@ is only needed if you must export something WITH a soft shadow baked in — norm
    storyboard's "Scene 1" container / strip child Y values. If content is added or removed from
    a strip, those offsets shift — re-read them from the scene metadata.
 
-## Asset inventory (node IDs)
+## Asset inventory (node IDs) — historical, for the retired exports
 
 Feed strips (sliced into `-t0…-tN` 4096px-tall tiles at 2×):
 - `strip-latest` — 1838:87228 (Latest Stories, 440×11083)
@@ -84,6 +100,16 @@ Finale: id-card (single clean card, replaces the old id-small 1844:42327 + id-la
 1844:39437 pair — source `Scene 22/COMPLEX I.D No Shadow.png`) · stickers 1844:42148–42155 ·
 gold card 1844:43712 (crop transparent padding to the content box) ·
 lanyard photo 1845:43918 (full-bleed 3840×2160)
+Topic pills (s8): **coded, not exported** — all eleven, over the baked block. Container
+`1838:107337`; the pills are plain frames (`1838:107338` Sneakers · `107340` Style ·
+`107342` Pop Culture · `107344` Music · `107346` Sports · `107348` Bets · `107350` Cover
+Stories · `107352` Verzuz · `107354` Watch · `107356` ComplexCon · `107358` family style),
+**not component instances**, so there is no second variant to export — that is half the
+reason they are coded. CONTINUE button `1838:107360` stays baked; the cursor just clicks it.
+Tokens (confirmed against `../10. My Complex All Hands/` `scene2.html` `.chip`): inset ring
+1.128px `#dfdfdf` unpicked / `#303338` picked, fill `#fff` picked, ink `#fff` / `#050505`,
+radius 33.846, Inter Regular 18.051px, tracking −0.1805, `text-transform: capitalize`.
+The ring is **inset** — a real `border` would grow the box and shift every pill.
 Callouts (s5): rebuilt as HTML/CSS, and since the dark-stage pass the icons are
 **inlined** in `index.html` so `currentColor` can carry the palette. Six glyphs, two
 per callout — idle from Scene 05 (`1844:37192`), active from Scenes 5.1–5.4
