@@ -32,11 +32,12 @@ script and read the docstring first:
 |---|---|---|
 | `picker.webp` (s6 tray) | `tools/make-picker-dark.py` | Translucent + backdrop-blurred, so Figma bakes the backdrop in. An isolated export lands on flat black and loses the phone bleeding through it. |
 | `react-wall.webp` (s6 wall) | `tools/make-react-wall.py` | Animated; converted from the Scene 6 GIF, not exported as a frame. |
-| `toast-{20,30,80,120}.webp` | `tools/make-toasts.py` | The one overlay group still carrying a **baked** shadow, positioned by its 440×299 render box. `download_assets` @2× has the right canvas but renders opaque (the screen's background bakes in); `get_screenshot` + `contentsOnly` is properly transparent but only ever 1×. The script combines them. toast-20's node has no shadow at all, so its shadow is spliced from toast-30's, and the pill is **centred** in the 440px screen by the script — not left at the shared x=85 the Figma nodes still use. |
+| `toast-{10,30,80,120,200}.webp` | **supplied art, not a Figma export** | Rebuilt 2026-07-30 from the designer's `assets/General/Exp01–05.png`. One family: same pill, all centred on the shared slot in the 440×299 render box; the first award is now **+10**, not +20. The **1px progress bar is NOT in the art** — it is real DOM (`.tbar`), and each pill carries a flat patch where the track was, sitting under it. **The sources are 1×** against this 2× pipeline, so all five are LANCZOS upscales; a native 2× export per node is the outstanding fix. `tools/make-toasts.py` is the record of why the canvas is 440×299 and why the pill is centred, but it no longer builds what ships. |
 | `xp-frames.webp` (s11) | `tools/make-xp-frames.py` | A sprite grid of every frame of the Scene 11 video. The video **cannot be seeked**, so this is not optional — read the docstring before reaching for a `<video>`. |
 | `ending-frames.webp` (s24) | `tools/make-ending-frames.py` | The closing I.D. video as a full-bleed sprite grid — same reason as above, plus two of its own. Capture at `playbackRate` **0.25**: at 1× Chromium silently drops ~a third of the frames (81 of 120, unevenly). And it ships **12 fps, not 24** — a budget decision, not a quality one; `--measure` prints the table. Frame 0 must keep registering on `#id-card`/`#gold-card` or s24's crossfade breaks. |
 | `sticker-1…8.webp` (s22 badges) | `tools/make-badges.py` | The badges are **rotated 8.3–29.7°** in the design. The first exports had that rotation reset, so the page drew them upright at eyeballed positions and the pile never matched Scene 21. Source is now `assets/General/Rotated/` — pre-rotated, angle baked into the bitmap, so main.js rests them at 0°. **Positions are measured off a render of Scene 21, not read from the node** — see the rotated-node warning below. |
-| `id-card.webp` (s22/s21) | `tools/make-id-card.py` | Dual-source matte (below): 2× pixels from `assets/General/Jordan Rose ID.png`, alpha from the MCP `contentsOnly` render. Its stage box is **the first frame of the ending video**, not the Figma node box, because s24 hands over to that video frame-by-frame. |
+| `flip-frames.webp` (s19.3) | `tools/make-flip-frames.py` | The designer's card-flip video (`assets/card animation/Flip_Transition_Animation_Reversed.mp4`) as a sprite grid — same rVFC/`playbackRate` 0.25/mediaTime rules as the s11 and s24 sheets, plus its own: each frame's backdrop is normalised to **pure white** (10th-percentile ring gain — a median gain left the vignette corners at ~253, a faint visible edge) so the window fuses with the sheet panel it sits inside. `flip-{regular,bronze}.webp`, the coded flip's registered faces, are **retired** — `make-flip-cards.py` stays as the registration method's record. |
+| `id-card.webp` (s22/s21) | **none — hand-built 2026-07-30**; `make-id-card.py` is STALE | The **gold** card, cropped from `assets/Scene 22/COMPLEX I.D - Gold - Big.png`'s opaque box and fitted to 2× the stage box. **Crop to the opaque box**: the supplied art has a baked shadow (34% soft alpha) and `#id-card` has a CSS drop-shadow, so shipping it whole doubles them. `make-id-card.py` still builds the retired black-strip card from the old dual-source matte — update it before running it. Its stage box is **the first frame of the ending video**, not the Figma node box, because s24 hands over to that video frame-by-frame. |
 | `gold-card.webp` (s23) | `tools/make-gold-card.py` | Placed so the case's **inner card registers on `#id-card`'s box**, which is what lets s23 wrap the card already on screen instead of swapping one card for another. Replaced a different revision that had a white case and a different photo. |
 | fandom avatars | `tools/make-jordan-av.py` | The circle is baked into the avatar's **alpha**, not a `border-radius`. It also writes a master back into the All Hands build, so the next `make-page-assets.py` run does not revert it. |
 
@@ -107,11 +108,26 @@ manifest.
 Panels: rerank 1838:114790 · quiz — NOT a Figma export anymore: 6 `quiz-*.webp`
 frames captured from the live reference app (see HANDOFF → "s15 quiz autoplay";
 the old static node was 1838:115609)
-Scene-19 satellites (scene frame `1838:120893`, canvas x=48480 — **stage = canvas − 48480**):
+Scene-19 satellites (scene frame `1838:120893`, canvas **x=46460** — so **stage = canvas −
+46460**). It was 48480 until 2026-07-30, when Scenes 19.1/19.2/19.3 were inserted after it and
+everything from Scene 20 on shifted right; **48480 is now Scene 19.1**, so the old constant is
+2020px out and will look plausible. Re-read the frame's `x` from `get_metadata` before
+converting anything — do not trust a canvas offset written down in a doc:
 - UGC `1838:121413` · UGC Comment `1838:121440` · Video `1838:121477` — exported upright, resting
   rotations re-applied in main.js (ugc +10°, comment −16°, video +16.5°).
 - Latest Editorial — the old `1838:120852` **no longer exists**; it is now `1974:8918` and the art
   changed (article card → poll card, 55px shorter). See HANDOFF 2026-07-29.
+- **The four upright ones are built by `tools/make-satellites.py`, not by hand.** The re-encode is
+  trivial (1:1 PNG→WebP); the reason for the script is the **stage box**. These boxes are TUNED —
+  88–94% of their node size, because the fan was widened ±20px past the storyboard so the rotated
+  corners clear the bezel — so they cannot be re-derived from Figma when the art changes. What must
+  survive is `(width, centre)`: the centre because main.js derives every card's s19 fly-out and s20
+  recede from `offsetLeft + offsetWidth/2`, the width because that is what clears the bezel. Height
+  then follows from the art's own aspect — `#sats img` has no `object-fit`, so a stale box does not
+  letterbox a shorter card, it **stretches** it. The script prints the rules and a delta per card;
+  sub-pixel deltas are export rounding and should be left alone. Needed twice so far: editorial
+  2026-07-29, ugc 2026-07-30 (Carti → KATSEYE, 64 source px shorter). It also runs the baked-shadow
+  check below automatically.
 - Merch tiles `2077:8910` (left) / `2077:8969` (right) — added 2026-07-29. **The one exception to
   the upright rule**: their rotation is BAKED IN, because Figma reports only the rotated bounding
   box for them and un-rotating in PIL would resample the whole card. main.js rests them at 0°.
@@ -143,10 +159,16 @@ shadow is several percent, and would double against the CSS `drop-shadow` on `#s
 **Positions: match the CENTRE, not the top-left.** Rotation is about the centre, and main.js
 derives each card's s19 fly-out from its centre — so centre-matching places the card where the
 design has it *and* keeps the animation vector honest.
-Finale: id-card (single clean card, replaces the old id-small 1844:42327 + id-large
-1844:39437 pair — source `Scene 22/COMPLEX I.D No Shadow.png`) · stickers 1844:42148–42155 ·
-gold card 1844:43712 (crop transparent padding to the content box) ·
-lanyard photo 1845:43918 (full-bleed 3840×2160)
+Finale: id-card — **the GOLD card since 2026-07-30**, cropped from `Scene 22/COMPLEX I.D - Gold -
+Big.png`'s opaque box and fitted to 2× the stage box. It replaced the black-strip card built from
+`Scene 22/COMPLEX I.D No Shadow.png` (itself replacing the old id-small 1844:42327 + id-large
+1844:39437 pair). **Crop to the opaque box**: the supplied gold art carries a baked shadow at 34%
+soft alpha and `#id-card` has a CSS drop-shadow, so shipping it whole doubles them. `make-id-card.py`
+still describes the retired route — update it before rebuilding · stickers 1844:42148–42155 ·
+gold card — **no longer this node**: `gold-card.webp` is now built by
+`tools/make-gold-card.py` from `assets/General/Jordan Rose Id Wrapped.png` (1844:43712 was the
+white-cased revision) · **lanyard photo 1845:43918 is RETIRED** — s24 plays the ending video
+(`assets/General/Jordan Rose ID Video.mp4` → `ending-frames.webp`) instead of a still
 Topic pills (s8): **coded, not exported** — all eleven, over the baked block. Container
 `1838:107337`; the pills are plain frames (`1838:107338` Sneakers · `107340` Style ·
 `107342` Pop Culture · `107344` Music · `107346` Sports · `107348` Bets · `107350` Cover

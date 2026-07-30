@@ -9,6 +9,15 @@ Reference Projects/
 # Source masters for the exports. The built .webp next to them is what ships.
 assets/Scene */
 
+# Source masters for the s19.3 flip (the video tools/make-flip-frames.py builds
+# flip-frames.webp from, plus the two card PNGs — only the built sheet ships).
+assets/card animation/
+
+# Retired 2026-07-30 (same day they were built): the two coded-flip faces. The s19.3 flip
+# became the designer's video as a sprite sheet (flip-frames.webp), so nothing fetches these.
+assets/flip-regular.webp
+assets/flip-bronze.webp
+
 # Same deal: raw art the user drops in, plus the Figma renders tools/make-toasts.py
 # builds the XP toasts from. Only the built toast-*.webp are fetched.
 assets/General/
@@ -90,7 +99,9 @@ assets/Cursor Light.svg
 tools/
 CLAUDE.md
 HANDOFF.md
+PAGES-SYNC.md
 shots/
+.githooks/
 
 # Never ship the repo itself. Vercel's own CLI excludes .git implicitly, but
 # tools/deploy-vercel.py walks the directory literally — without this it would upload
@@ -104,3 +115,7 @@ shots/
 
 # Drag-and-drop copy of the runtime files (tools/ rebuilds it). Not part of a deploy.
 complex-scroll-animation/
+
+# Import bookkeeping — tracked in git (it is how staleness is detected) but never fetched
+# by the page, so it has no business in the deploy. See PAGES-SYNC.md.
+pages/.import-stamp.json

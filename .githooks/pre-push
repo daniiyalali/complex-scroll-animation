@@ -1,0 +1,59 @@
+#!/bin/sh
+# Refuse to publish a prototype whose pages/ is stale against the All Hands build.
+#
+# `main` is public and wired to Vercel, so a push IS a publication — this is the last moment
+# anyone looks before the deployed prototype shows the wrong product page. See PAGES-SYNC.md.
+#
+# It asks rather than hard-blocks: the source folder is local-only and edited constantly, so
+# there are legitimate reasons to ship a known-behind import (mid-edit source, a deliberate
+# snapshot). It reads the answer from /dev/tty because stdin here is git's ref list.
+#
+# Installed via `git config core.hooksPath .githooks` — see PAGES-SYNC.md if this is not firing.
+
+root=$(git rev-parse --show-toplevel)
+cd "$root" || exit 0
+
+if [ ! -f tools/check-pages-sync.py ]; then
+  exit 0                       # checker not present on this branch — do not block
+fi
+
+python3 tools/check-pages-sync.py
+status=$?
+
+if [ "$status" -eq 0 ]; then
+  exit 0                       # in sync, or nothing to compare against
+fi
+
+if [ "$status" -eq 2 ]; then
+  echo ""
+  echo "  (could not verify pages/ — pushing anyway)"
+  exit 0                       # a fresh clone has no source folder; that is normal
+fi
+
+echo ""
+echo "  This push would publish a prototype built from an OLDER copy of the product pages."
+echo ""
+
+# Read from /dev/tty, not stdin — git hands the hook its ref list on stdin. /dev/tty can exist
+# as a node and still not be connected (a hook run from a GUI client, CI, or a nested shell),
+# and the failure there is noisy, so probe it once and treat "cannot ask" as "do not push".
+# the probe runs in a SUBSHELL: a failed redirection is reported by the shell itself, so
+# `: < /dev/tty 2>/dev/null` still leaks "Device not configured" to the terminal
+if ! (exec < /dev/tty) 2>/dev/null; then
+  echo "  No terminal to ask on — refusing rather than guessing."
+  echo "  Re-run the importer, or push with --no-verify if this is deliberate."
+  exit 1
+fi
+
+printf "  Push anyway? [y/N] "
+read -r reply < /dev/tty || reply=n
+case "$reply" in
+  [yY]|[yY][eE][sS])
+    echo "  ok — pushing with a stale pages/."
+    exit 0
+    ;;
+  *)
+    echo "  aborted. Run: python3 tools/make-page-assets.py"
+    exit 1
+    ;;
+esac

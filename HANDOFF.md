@@ -1,20 +1,24 @@
 # HANDOFF — Fandom × My Complex scroll animation
 
-_Last updated: 2026-07-29 (live product pages, a run of scene rebuilds, the new XP coin on the
-toasts, the s20 → s22 DP click, the s22 badge gravity drop, the badges re-cut from Scene 21's
-rotated exports, the I.D. card replaced and sized to the ending video's first frame, s23 rewritten
-to wrap the card rather than swap it, and the s24 ending video)_
+_Last updated: 2026-07-30, late (**Scene 19.3 built** — the STATUS UNLOCKED level-up sheet, its
+card flip played as the designer's VIDEO scrubbed frame by frame, the strict PDP → pill → sheet →
+flip order over an unmoved page, s20 retargeted to clear the sheet and hold the page until it has
+gone, and the **s24 finale fading to black** from the video's 3.5s mark. Earlier the same day:
+live product pages, the scene rebuilds, the XP-coin toasts, the s22 badge gravity drop, the gold
+I.D. card sized to the ending video's first frame, s23 wrapping the card, the s24 ending video)_
 
-## Status: complete, working, and **pushed** — `origin/main` is level with local (`8e40bea`).
+## Status: complete and working. **Today's work is UNCOMMITTED** — and one earlier commit is local-only (`origin/main` is at `8e40bea`).
 
-Every earlier revision of this file said "local and unpushed"; that stopped being true on
-2026-07-29. `main` is public and wired to Vercel, so **a push is a publication** — treat the next
-one the same way, and re-read the deploy-set rule below before making it.
+`main` is public and wired to Vercel, so **a push is a publication**. The last push was
+`8e40bea` (2026-07-29). One later commit (`6aa6a58`, docs) is local-only, and everything from
+2026-07-30 — the whole s19.3 wave included — sits **uncommitted in the working tree**. Re-read
+the deploy-set rule below before pushing; since the last measured set, `flip-frames.webp`
+(+0.86 MB) is the only new fetched file (the two coded-flip faces it obsoleted never shipped).
 
-**53.79 timeline units / 43,032 px** (re-measure rather than trust it — it moves with every span
+**60.29 timeline units / 48,232 px** (re-measure rather than trust it — it moves with every span
 change, and `window.__tl.duration()` / `window.__scrollLen` are exposed on the page).
-Deploy set **262 files / 17.86 MB** — up from 14.93 MB because the s24 ending sprite is 2.8 MB and
-the badge/card re-cuts are larger than what they replaced. Zero console errors;
+Deploy set **261 files / 17.86 MB** — up from 14.93 MB because the s24 ending sprite is 2.96 MB
+and the badge/card re-cuts are larger than what they replaced. Zero console errors;
 reverse scrub `end → s2` clean. Always re-derived by diffing a real page load against
 `.vercelignore`, never a regex over the source: **nothing fetched that would 404.** That diff is
 also what caught `Feedback/` shipping to a public URL (1.94 MB of internal reference renders — now
@@ -111,7 +115,7 @@ The phone shows a **live page** in every scene now, so "strip" language is gone;
 | s16 | 1.6 | Fandoms rail | `myc` → **−5361**, a **scroll** to the Fandoms card inside this same page. `strip-rail` is retired entirely — the rail was its own export before, but it is a card in this page |
 | s17–s18 | 1.7 / 1.4 | Carti fandom page | app-style push between two **live pages**; `fandom` @ **0** then **−649**. That page's nav is 92px (no tab row), so the old nav image and its clip-path reveal are gone |
 | s19–s20 | 2.0 / 1.7 | UGC + merch explode/recede, then **click the DP** | **six** satellites (four UGC/editorial + two merch tiles) fly out from **behind** the phone (`z-index: -1`). Resting rotations −5/+10/−16/+16.5 and **0** for both merch tiles (theirs is baked in). `fandom` → −1617 then −3118. All six boxes derived from `Feedback/Scene 31.png` — do not nudge by eye. s20 then walks the cursor onto Jordan Rose's profile picture (`PAGE_TARGETS.s20`, the live `.up-av`) and presses it at +1.65, on the scene boundary |
-| s22→s21 | **2.1** / 1.7 | I.D. surfaces, expands | **the card is the answer to that press**: it opens at s22+0.1, as the finger lifts. ONE clean `#id-card` scales .422→1 with y −63→0, no crossfade. Cursor is already here and already flipped, so it just glides onto the card — no teleport. Canvas order really is 22 before 21. The eight badges then **fall in under gravity and pile up** (cascade s22+0.55 → +1.91) instead of popping in place; each impact **jolts the phone** rather than bouncing the badge — see `BADGE_DROP` |
+| s22→s21 | **2.1** / 1.7 | I.D. surfaces, **is clicked**, expands | **the card is the answer to the s20 press**: it opens at s22+0.1, as the finger lifts. ONE clean `#id-card` scales **0.4403→1** with x 14.25→0, y −103.5→0, no crossfade — those constants are the *video's frame 0*, not the Figma node (see `ID_SMALL_*` / `tools/make-id-card.py`). Cursor is already here and already flipped, so it just glides onto the card — no teleport. Canvas order really is 22 before 21. The eight badges then **fall in under gravity and pile up** (cascade s22+0.55 → +1.91) instead of popping in place; each impact **jolts the phone** rather than bouncing the badge — see `BADGE_DROP`. **Then the card is CLICKED open**: the cursor presses it at s22+**1.95** — after the pile settles at ~+1.93, so it reads as a press on a finished card — with a 3% dip on the card itself (0.4403 → 0.4271), and s21's expansion starts at **+0.05**, the frame the release finishes on. The blow-up used to happen off nothing |
 | s23–s24 | 2.0 / **2.95** | Card gets encased → **the ending video, scrubbed** | s23 wraps the card already on screen in its case. s24 then hands over to `assets/ending-frames.webp` — the closing I.D. video as a full-bleed 8×8 sprite grid (60 frames, 12 fps) swept frame by frame across `END_SWEEP` (2.25u ≈ 1,800px): the card glows, morphs onto a real person at ComplexCon, and the shot pulls back over the crowd. The handover is a plain **crossfade at frame 0**, which works only because `#id-card`'s box was measured off that frame and the case is fitted onto the same box. `lanyard.webp` (the static still) is retired |
 
 **How `POS` is derived now.** The offsets no longer come from Figma scene metadata — they are
@@ -315,10 +319,11 @@ What ships, and how that was established:
   and `make-picker-dark.py` read them, so ignoring them would break the asset pipeline
   for anyone cloning. Largest tracked files: the 7.2 MB Scene 6 GIF, a 6.7 MB Scene 24
   PNG. Both well inside GitHub's limits.
-- `.vercelignore` cuts the deploy to **260 files / 14.93 MB** — `pages/` is 221 files / 8.56 MB of
-  that, `assets/` 31 / 6.07 MB — and 257 of those paths are what a real page load fetches
-  (re-measured 2026-07-29). It also names every **retired** asset explicitly (four strips,
-  three navs, `panel-rerank.webp`, `drawer.webp`, `xp-modal.webp`), which matters because the file
+- `.vercelignore` cuts the deploy to **261 files / 17.86 MB** — `pages/` is 221 files / 8.56 MB of
+  that, `assets/` 31 / 8.98 MB — and 257 of those paths are what a real page load fetches
+  (re-measured 2026-07-30, after the s24 ending sprite added 2.96 MB). It also names every
+  **retired** asset explicitly (four strips, three navs, `panel-rerank.webp`, `drawer.webp`,
+  `xp-modal.webp`, `lanyard.webp`), which matters because the file
   is a deny-list: without those lines ~7 MB of superseded art would still ship. That set was derived by
   recording every request a real page load makes and diffing it against what the ignore
   file keeps — not by grepping the source. Do it that way again if you change what loads:
@@ -395,7 +400,7 @@ Unneeded once the Git integration is live, but it works and is the escape hatch.
 4. Deploy set: after any change to what the page loads, re-derive it by recording a page
    load's requests and diffing against `.vercelignore` (see "repo + hosting").
 
-## Dead scroll between scenes (re-measured 2026-07-29, after the whole session's rebuilds)
+## Dead scroll between scenes (re-measured 2026-07-30, after the s22 press and the s24 ending video)
 
 Every scene is a fixed span, so if its last tween finishes early the remainder is scroll
 where **nothing moves** — it reads as having to nudge the wheel to make the page continue.
@@ -410,28 +415,26 @@ under ~0.15px per px of scroll — over ~200px of that reads as a break, under ~
 | scene | dead tail | px | note |
 |---|---|---|---|
 | s1 | 1.00 | 800 | intentional hero hold |
-| s23 | 0.60 | 480 | gold card settling |
+| s23 | 0.60 | 480 | the case settling. **Now the worst real tail on the page** — the biggest single candidate if the finale needs tightening |
 | s13 | 0.40 | 320 | |
-| s21 | 0.40 | 320 | |
+| s21 | 0.40 | 320 | the card is fully expanded by +0.85 and the scene runs to 1.70 |
 | s13.1 | 0.33 | 264 | deliberate — holds the +20/+30 XP toast so it can be read |
-| s22 | 0.19 | 150 | **was 0.34 / 272.** The gravity drop lengthened the scene 1.7 → 2.15 and still shortened the tail. Deliberate now: it is the only span where the finished pile is readable, because s21 then expands the card over most of it |
+| s16 | 0.30 | 240 | |
 | s5 | 0.29 | 232 | FOLLOWING held (deliberate) |
 | s10 | 0.27 | 216 | deliberate — holds the posted comment |
-| s16 | 0.30 | 240 | |
-| s2, s6 | 0.20 | 160 | |
-| s19 | 0.20 | 160 | |
-| s24 | 0.25 | 200 | deliberate — the sweep ends here so the ComplexCon wide shot RESTS before the `end` hold, instead of landing on the last pixel of scroll |
+| s24 | 0.25 | 200 | deliberate — the frame sweep ends at +2.70 of 2.95 so the ComplexCon wide shot RESTS before the `end` hold, instead of landing on the last pixel of scroll |
+| s2, s6, s19 | 0.20 | 160 | |
 | s7 | 0.15 | 120 | |
-| s3, s18 | 0.10 | 80 | |
-| s11 | 0.10 | 80 | was 320 before the XP video — most of the new span is reclaimed, not added |
+| s3, s11, s18 | 0.10 | 80 | s11 was 320 before the XP video — most of the new span is reclaimed, not added |
 | s14 | 0.07 | 56 | |
 | s9 | 0.05 | 40 | |
 | **s4** | **0.00** | **0** | trimmed three times: 2.4 → 1.9 → 1.34. The last one was about the fling's *ease*, not the span — see the 4→5 seam note |
-| s8, s12, s15, s17, s20 | 0.00 | 0 | |
+| **s22** | **0.00** | **0** | **was 0.19 / 150.** The press that opens the card now lands at +1.95 of 2.10, so the scene runs to its edge — the pile is still readable because the press sits after it, and s21 answers on the boundary |
+| s8, s12, s15, s17, s20, end | 0.00 | 0 | |
 
 Some are deliberate holds that let a beat land — don't trim blindly. Re-measure with the
 per-scene walk over `tl.getChildren()` rather than reading durations by eye; the numbers
-above came from that. Note a `power3.out` fling is ~96% done at two thirds of its
+above came from that (re-measured 2026-07-30, after the s22 press and the s24 ending video). Note a `power3.out` fling is ~96% done at two thirds of its
 duration, so a scene can look static well before its last tween actually ends.
 
 Every scene rebuilt in this session was budgeted against this table as it was written, which is
@@ -474,23 +477,23 @@ second rerank swap, three times over, with no error and a plausible-looking fina
   set but fetched by no page — leftovers from a page change. Safe to delete; left in place in case
   an in-flight edit is about to reference them. `make-page-assets.py` will not regenerate them,
   since it builds its list from what the pages actually fetch.
-- **`assets/General/` has unbuilt Jordan Rose art whose purpose is unconfirmed** — dropped in
-  2026-07-29 while the DP swap was being verified: `Jordan Rose ID.png`, `Jordan Rose Id
-  Wrapped.png`, `Jordan Rose ID on Lanyard.png`, `Jordan Rose ID Video.mp4`. They map onto the
-  three finale assets, but **checked: `id-card.webp` (s22/s21), `gold-card.webp` (s23) and
-  `lanyard.webp` (s24) already show Jordan Rose** with the same bucket-hat photo the DP now uses —
-  the finale was always right, which is exactly why the "Adam Kwazoski" post was the odd one out.
-  So these are a refresh of art that already matches, not a fix for a mismatch. The `.mp4` is the
-  interesting one: it may mean a finale scene is meant to *play* rather than scale (s11 has the
-  pattern — `tools/make-xp-frames.py`). Ask before building any of it.
-- **Unbuilt material is sitting in `assets/`** as of 2026-07-29: `Badge Packet
-  Animation.mp4`, `Last frameCinematic Morph Video 1.svg`, and `Scene 11/360-Degree
-  Animation 1.mp4`. Tracked in git, excluded from the deploy, referenced by nothing.
-  They look like the next scenes' source material (a badge reveal, a cinematic morph,
-  and a 360° spin for s11) — confirm with the user before wiring any of it in.
+- **`assets/General/`'s Jordan Rose art is now RESOLVED** — the open question in the earlier
+  revision of this note ("the `.mp4` may mean a finale scene is meant to *play* rather than
+  scale") was answered yes, by the user, on 2026-07-29. Three of the four are built and wired:
+  `Jordan Rose ID.png` → `id-card.webp` (`make-id-card.py`), `Jordan Rose Id Wrapped.png` →
+  `gold-card.webp` (`make-gold-card.py`), and `Jordan Rose ID Video.mp4` → `ending-frames.webp`
+  (`make-ending-frames.py`) **and** the source of `#id-card`'s stage box. Still unbuilt and
+  referenced by nothing: **`Jordan Rose ID on Lanyard.png`** — the still equivalent of the video's
+  end state, superseded before it was ever used — plus `exp coin.png` / `Exp.png` (the coin the
+  toasts already carry) and `Badge Packet Animation.mp4`. Ask before building those.
+- **Unbuilt material still sitting in `assets/`** as of 2026-07-30: `Badge Packet
+  Animation.mp4` and `Last frameCinematic Morph Video 1.svg`. Tracked in git, excluded from
+  the deploy, referenced by nothing — confirm with the user before wiring either in.
+  `Scene 11/360-Degree Animation 1.mp4` is **no longer on this list**: it is the source of
+  `xp-frames.webp` via `tools/make-xp-frames.py`, i.e. the s11 popup the reader scrubs.
 - The Figma file was temporarily modified during the original export (EXPORT-* clones);
   **all were deleted** — verified zero leftovers. Re-exports will do the same dance.
-- `PX_PER_UNIT=800` — 53.79 units, so a **43,032 px** page. Has NOT had a human trackpad
+- `PX_PER_UNIT=800` — 57.39 units, so a **45,912 px** page. Has NOT had a human trackpad
   feel-pass yet. `HOVER_PASS` rides on the same unit, so retuning `PX_PER_UNIT` changes
   how long the s5 hover pass takes in seconds; re-check it against the ~1.5s spec.
 - **A fresh clone can't re-run the s15 capture** — `Reference Projects/` is gitignored
@@ -1513,7 +1516,7 @@ transform on `#ending` would break the registration the whole thing depends on.
 the cursor and the sprite cell agree at **every** sample, no console errors; the sweep advances
 monotonically and the last cell (59) holds byte-identical through the `end` label (rms 0.00).
 Timeline is now **53.79 units / 43,032 px**. Deploy set re-derived the required way — recording a
-real page load and diffing it against `.vercelignore`, not a regex over the source: **262 files /
+real page load and diffing it against `.vercelignore`, not a regex over the source: **261 files /
 17.86 MB**, nothing fetched-but-excluded, `lanyard.webp` added to the deny-list.
 
 **Not done / worth knowing:**
@@ -1523,3 +1526,801 @@ real page load and diffing it against `.vercelignore`, not a regex over the sour
   but if the ending should follow the blow-up *directly* (the user's phrasing was "after that,
   the video"), s23 is the scene to cut — the registration already spans all three.
 - Two unreferenced files in `pages/assets/` (~128 KB) still ship. Pre-existing, harmless.
+
+---
+
+## 2026-07-30: the s19 satellites were re-exported — Carti → KATSEYE
+
+The user replaced three of the four upright Scene 19 masters (`Latest Editorial.png`, `UGC.png`,
+`Video.png`). Not re-crops — the **content pivoted from Playboi Carti to KATSEYE**:
+
+| card | was | now | source px |
+|---|---|---|---|
+| `sat-editorial` | poll "Vote for Best Playboi Carti Album" | poll "Vote for Best KATSEYE Song" | 565×899, **unchanged** |
+| `sat-ugc` | Adam Kwazoski / "CARTI DID NOT MISS" | Kiji Fiji / "GUESS WHO MADE IT TO THE LIVE SHOW!!" | 563×998 → **563×934** |
+| `sat-video` | interview thumb: Carti on Hot 97 | interview thumb: KATSEYE *Wild Hearts* | 563×514, **unchanged** |
+
+`UGC Comment.png` was **not** touched — see the flag at the bottom.
+
+**One box had to move, and only one.** `#sats img` has no `object-fit`, so a stale box does not
+letterbox a shorter card, it **stretches** it. The registration that survives an art change is
+`(width, centre)`, never the top edge — main.js derives every card's s19 fly-out *and* s20 recede
+from `offsetLeft + offsetWidth/2`, so holding the centre keeps both vectors identical, and holding
+the width keeps the fan's two columns clearing the bezel. So `#sat-ugc` went
+`110.8 / 439.4` → `124.6 / 411.9`, centre pinned at **330.5**. The other three came out within
+**0.5px** of their existing boxes (export rounding on the .1px values, not drift) and were left
+alone on purpose — nudging a box by 0.2px only invalidates a verified frame.
+
+**`tools/make-satellites.py` now owns this**, because it is the third time these boxes have had to
+be re-derived by hand. It re-encodes the four upright PNGs 1:1 to WebP (quality 92, method 6 — the
+repo's convention), declares each card's `(width, centre)` as the load-bearing data, derives
+height from the art's own aspect, and prints the styles.css rules plus a per-card delta. Run it
+bare to check, `--write` to build. It also measures soft alpha (`8 < a < 240`) as the baked-shadow
+guard, since a baked shadow would double against the CSS `drop-shadow` on `#sats img` — all four
+came back 0.2–0.4%, i.e. antialiasing only.
+
+**A stale invariant got corrected in passing.** The comment above these rules claimed the rotated
+edges clear the phone "bezel edge x=1195" by "editorial↔ugc ≈ 50px, comment↔video ≈ 69px". Both
+figures were wrong. `#bezel` is `box-sizing: border-box` at `inset: -12px`, so its painted outer
+edges are **728 / 1192**; measured against those, and accounting for the ~(h/2)·sinθ corner swing,
+the gaps are editorial **35.2** ↔ ugc **35.4**, comment **33.2** ↔ video **31.3**. The shorter UGC
+card swings less, so the pair it mirrors now agrees to **0.2px** where it was 2.2px apart before —
+the re-export improved the symmetry rather than costing anything.
+
+**Verified.** s19 mid-flight and resting, s20 mid and end, s22, s18 — no console errors. Rendered
+box vs natural-image aspect for all six satellites is within **0.4%** (sub-pixel, from the .1px
+CSS values); all six centres hold; a reverse scrub (`end → s24 → s2 → s19`) restores all six to
+`visibility: visible`, opacity 1 and their resting rotations. s20's recede still clears every card
+and leaves the cursor on Jordan Rose's DP. Deploy set: **no new paths** — `assets/Scene */` and
+`*.mp4` are both already in `.vercelignore` — and **+110.9 KB** on the three WebPs (the new art is
+photographic, so it costs more than the old flat cards: 120 KB → 231 KB for the three).
+
+**Flagged to the user, NOT changed — the pivot is only half done.** These three satellites are the
+only things on the page that are KATSEYE. Everything they sit around is still Carti:
+- **`pages/fandom.html`** — the page inside the phone throughout s17–s22. Its poll asks "Which of
+  Playboi Carti's moments…", its lead article is "Playboi Carti Returns With New Song and Video
+  'Ketamine'", and its first UGC post is Jordan Rose / "CARTI DID NOT MISS". That last one is the
+  post `sat-ugc` used to be a copy of, so **the satellite no longer mirrors the post it flies out
+  of** — and per the "the poster IS the person on the card" note, this page's identity chain feeds
+  s20 → s22. Changing it means editing **both** `pages/fandom.html` and the All Hands source, or
+  the next `make-page-assets.py` run reverts it.
+- **The two merch tiles** (`sat-merch-left` / `sat-merch-right`) — a Carti hoodie box set and an
+  "NBA PLAYBOI CARTI × M&N" jersey. Still Carti, and they sit in the same fan as the new cards.
+- **`assets/Scene 19/UGC Comment.png`** (`sat-comment`) — untouched, and already internally
+  mixed: the quote reads "yoonchae mid-spin under the rig lights" (KATSEYE) but the article it
+  links is "The Wildest YouTube Comments on Playboi Carti and Travis Scott's 'BACKR00MS' Video".
+  Pre-existing, not introduced here.
+- **`assets/Scene 19/Badge Packet Animation.mp4`** — new, 508 KB, dropped into the Scene 19 folder
+  in the same batch but never mentioned. Nothing in the page references it, and "badge packet"
+  sounds like **s22**, not s19. Left in place, unused, and it does not ship (`*.mp4` is denied).
+  Ask what it is for before wiring it up.
+
+---
+
+## 2026-07-30 (later): the fandom page was rebuilt, and Scene 19 grew three sub-scenes
+
+Two things landed while the satellite re-export above was being verified, and they are bigger
+than that was.
+
+### 1. The live fandom page was replaced — this is what "the products" meant
+
+The user's question "the products are still the same from the old assets" was **not** about the
+two merch satellites. `10. My Complex All Hands/fandom.html` was rewritten at 17:23 and now
+carries a **new Section 15, "Complex Style — shop grid" (`2156:34792`, 743px tall)** — four
+KATSEYE × GAP hoodies (Lara / Daniela / Manon / Yoonchae, $130). Confirmed by the user: "the
+fandom page is being updated in parallel, and that will be the new page."
+
+Re-imported with `tools/make-page-assets.py` (idempotent, so re-run it when they save again):
+119.43 MB of source → **8.36 MB**, `pages/` now **236 files / 8.95 MB** (was 221 / 8.56). The
+page is 7307 css px tall = **8244 stage px**, which matches Figma's own fandom node height
+(8243.79) to 0.2px — a useful independent check that the import is faithful.
+
+**Two things the import broke, and one it didn't.**
+
+- **`POS.fandom` was silently wrong and is now SOLVED, not scaled.** The old values were the
+  retired strip's deltas × a height ratio, checked by eye. Dropping a 743px section into the
+  middle of the feed put **s20 2,512px out** — it framed an ad instead of the post whose profile
+  picture it clicks. New tool `tools/derive-page-offsets.py` solves each offset by registering
+  the live page against the storyboard render of that scene — the same match-against-a-render
+  method the s22 badges use, for the same reason. Result:
+
+  | scene | was | now | Figma node y | note |
+  |---|---|---|---|---|
+  | s17 | 0 | **0** | 0 | page top |
+  | s18 | −649 | **−941** | −972 | render is right; at −972 the post sits 31px high (checked by eye) |
+  | s19 | −1617 | **−977** | −977 | exact agreement |
+  | s20 | −3118 | **−5630** | −5632 | 2px |
+
+  Two independent derivations agreeing to 2px on three of four is the reason to trust these.
+  **The write-up of the harness matters more than the numbers**: the obvious implementation —
+  screenshot once per candidate offset — is a trap. With `zoom` on the root, `scrollHeight` is
+  already post-zoom while `scrollTo` is not, so the conversion lands twice and every offset
+  comes back plausible and wrong (that first pass put s20 at −6352 with a confident-looking
+  33× score). Capturing ONE full-page strip and sliding the window in numpy has no scroll
+  coordinates in it at all, is exact at 1px, and is faster. Score on **row-mean luminance**,
+  not pixels: the two renderers disagree everywhere at pixel level, and the band positions are
+  the only signal that actually moves with the offset.
+
+- **The poster identity reverted, exactly as CLAUDE.md warned.** `Jordan Rose` is gone from
+  `pages/fandom.html` (0 occurrences; 4× `Adam Kwazoski`), because the rewrite dropped that
+  edit. `tools/make-jordan-av.py` only builds the *image* — the name/src swap was always a
+  manual edit in both files. **Not re-applied here** — see the flags below.
+
+- **What did NOT break: `PAGE_TARGETS.s20`.** It finds the first `.post .ph .up-av` in view at
+  `POS.fandom.s20` rather than holding a coordinate, so the corrected offset carried the DP
+  press onto the right avatar with no edit. This is the "name the element, not a number" rule
+  paying for itself — a coordinate would have needed re-measuring and would have failed silently.
+
+**Verified.** s16–s20, s22, s24 and a reverse scrub to s2: no console errors. s20 now registers
+on its reference frame — same post, same "KATSEYE: 11 Things You Didn't Know" article, shop grid
+below. s19 shows the KATSEYE poll and the KATSEYE satellites together.
+
+### 2. Scene 19 now has 19.1, 19.2 and 19.3 in Figma — NOT yet built
+
+**Scene 19's canvas x moved: it is `1838:120893` at x=46460, not 48480.** CLAUDE.md and
+tools/export-assets.md both still say 48480 for the "stage = canvas − 48480" conversion; 48480
+is now **Scene 19.1**. Anything derived with the old constant is 2020px out.
+
+| frame | node | canvas x | what it is |
+|---|---|---|---|
+| Scene 19.1 | `2126:9851` | 48480 | the page scrolled to the shop grid; cursor hovering the **camo (Daniela) hoodie** |
+| Scene 19.2 | `2159:49676` | 50500 | a **product-detail panel** slides in right (KATSEYE X GAP / Daniela Hoodie / $130 / qty / Select size / ADD TO BAG / shop Pay), phone dims behind a scrim, and a **+200 XP "You Copped a Drop"** toast drops in |
+| Scene 19.3 | `2126:11248` | 52520 | a **"YOU UNLOCKED A new badge!"** modal — COMMENT OF THE DAY badge in a case, over the dimmed page |
+
+Page offsets already solved for these (same harness): **19.1 = −6091** (score 0.966) and
+**19.3 = −3658** (0.892, but next-best 0.807 — weakly determined *because* the modal covers the
+screen, so there is almost no page signal; it barely matters at that opacity). **19.2 = −6091**,
+same as 19.1 — the panel slides over a page that does not move, and Figma agrees (its 19.1 and
+19.2 fandom nodes carry identical y).
+
+**`assets/Scene 19/Badge Packet Animation.mp4` is 19.3's asset** — that answers the earlier
+flag. It is byte-identical (508,455 bytes) to `assets/General/Badge Packet Animation.mp4` from
+2026-07-29, so it is a copy, not new material. Per the s11 / s24 precedent it must become a
+**sprite sheet, not a `<video>`** — read `tools/make-ending-frames.py`'s docstring first
+(capture during playback via `requestVideoFrameCallback` at `playbackRate` 0.25).
+
+**Still open, in the order they block work:**
+1. **The two merch satellites are still Playboi Carti** (hoodie box set + NBA Carti × M&N
+   jersey) and there is **no new source anywhere** — `assets/Scene 19/Product 1.png` and
+   `Product 2.png` are byte-identical to what is already built, and Figma's Scene 19 frame still
+   shows the Carti pair on nodes `2077:8910` / `2077:8969`. This is a design-side gap, not
+   something to invent.
+2. **`sat-comment` / `UGC Comment.png` is out of date after all** — Figma's s20 frame has that
+   card as **Jordan Rose**, "YO!! These are effin fire!!!", linking to "KATSEYE: 11 Things You
+   Didn't Know About the Global Girl Group". Our card is Amara Diallo linking to the Carti
+   "BACKR00MS" article. It was the one card not re-exported in the morning batch.
+3. **Amara Diallo vs Jordan Rose on the s20 post.** Figma's s20 says Jordan Rose — which is the
+   documented invariant (the poster IS the person whose I.D. s22 opens). The live page says
+   Amara Diallo. **Deliberately not edited**: the user is rewriting that exact file right now,
+   so patching only our copy would create a divergence the next import reverts silently, and
+   patching theirs risks a lost update. It belongs in the All Hands source.
+4. **Maria Jose's post image** is an Iverson jersey in the live page and the KAT × GAP hoodie in
+   Figma. Probably just the in-flight rewrite; worth re-checking after the user's next save.
+
+---
+
+## 2026-07-30 (later still): 19.1 / 19.2 SKELETON built — cursor registered, PDP panel in
+
+Built at the user's request so the motion could be reviewed before the designed PDP exists:
+"build the skeleton so that the cursor is in the right position as per the Figma frame, and then
+the Add to Bag interaction screen is there. When the build is ready, we can just plug it in."
+
+Timeline is now **57.09 units / 45,672 px** (was 53.79 / 43,032) — `s19.1` 1.5 and `s19.2` 1.8.
+
+### The cursor is registered on the storyboard, to ~1px
+
+| beat | Figma tip (stage) | built tip | delta |
+|---|---|---|---|
+| s19.1 | 1110, 450 | 1108.8, 449.6 | **−1.2, −0.4** |
+| s19.2 | 1282.3, 929.3 | 1282.1, 929.2 | **−0.2, −0.1** |
+
+Neither is a copied coordinate — both are `PAGE_TARGETS` selectors, which is why they survive the
+page moving. What made that possible is a new `frac` option on a page target: it puts the tip at a
+fraction of the resolved element's own box instead of its centre. Both beats need it, and for
+different reasons:
+
+- **s19.1** targets `.stile-img` of the tile whose text matches `/Daniela/` — the product shot, not
+  the whole `.stile`, whose brand/price block would drag the centre down. The storyboard's tip is
+  at **0.755 across, 0.749 down**, which rounds to a clean **three-quarters/three-quarters** and
+  still lands within 1.2px. The element centre would have been **80px** up and left, which reads
+  as a different beat, so the fraction is doing real work rather than decorating.
+- **s19.2** targets `.pdp-shoppay`. Figma presses the button's **vertical** centre but sits well
+  left of the horizontal one — **0.315 across**. Centring it put the tip **66px** right of the
+  render, most of an arrow width. First pass got this wrong by checking only the y (which matched
+  exactly at 929.5) and concluding "dead centre"; the x was never verified until the built frame
+  was measured against the render. **Verify both axes.**
+
+### The PDP panel
+
+`#panel-product` is a real `.page` frame at Figma's own box — `Complex.com PDP [Mobile]`
+(`2159:50283`), **388×858.3 at (1154, 110.6)**. It is the first panel that is *not* 1:1: the page
+is authored 390 like every other product page, so the frame carries **zoom 388/390** and
+`mountPages` reads it back, rather than the panel being widened to 390 to dodge the issue.
+
+`pages/product.html` is a **measured placeholder**, clearly labelled as one in-page and in a header
+comment. What is load-bearing in it and must survive the swap: authored width 390, document height
+863, and `.pdp-addbag` / `.pdp-shoppay` at the boxes measured off the 19.2 render — ADD TO BAG at
+stage y 851..893, shop Pay at 906..953, i.e. 390-space tops 744.2 and 799.5.
+
+**Plugging in the real page is a re-run, not an edit.** `"product": 388/390` is already registered
+in `make-page-assets.py`'s PAGES, and the importer now **skips a page whose source does not exist**
+with a warning instead of dying on the `goto`/`read_text` — which is what lets that entry sit there
+harmlessly. Author `product.html` in the All Hands build, re-run the importer, done.
+
+Two bugs worth recording because both rendered as something other than what they were:
+- **The panel first slid in as a blank white slab.** `.page` ships `visibility: hidden` and each
+  scene reveals its own (as s14 does for `#page-rerank`); without `gsap.set('#page-product',
+  {autoAlpha: 1})` the frame is invisible while its container is not. It is a `set`, not a tween —
+  `#panel-product`'s own fade is the reveal, and animating both would double the dissolve.
+- **`place-items: center` on the shop Pay grid stacked the lockup vertically** (two children, two
+  implicit rows). It is flex now.
+
+The s19 satellite recede **moved from s20 into s19.1** — the cards belong to the UGC beat and 19.1
+is already a different subject. Same converging vectors, just earlier; s20 now clears the 19.2
+panel and scrim instead, back out to the right the way s15 exits `#panel-rerank`.
+
+**Verified.** s19, 19.1, 19.2, s20, s22, s24 and an 11-sample forward+reverse state probe of
+`#panel-product` / `#screen-scrim` / `#cursor` / `#page-product`: panel and scrim are 0 everywhere
+except 19.2 and mid-dismiss in s20, the cursor never disappears before its documented s24 exit, and
+a reverse scrub to s2 restores every one. No console errors anywhere.
+
+**Not built, deliberately — both need art or a decision:**
+- **The +200 XP "You Copped a Drop" toast.** Measured and ready to drop in: Figma `Exp`
+  (`2159:50272`) at stage **(802, 115) 316×87**. It is a fifth toast, so it needs a source through
+  `tools/make-toasts.py` rather than being drawn by hand. **This is also what should fill s19.2's
+  0.35 units (~280px) of dead scroll after the cursor lands** — the hold is deliberate for now, but
+  it is the toast's slot, not a permanent pause.
+- **The tile → panel transition.** The panel currently just arrives. The storyboard may want it to
+  grow out of the tile Zack pressed.
+- **Scene 19.3** (the badge-unlock modal) — untouched. Offset solved (−3658) and its asset
+  identified (`Badge Packet Animation.mp4`, needs sprite extraction, not a `<video>`).
+
+**One caveat on everything above:** the All Hands `fandom.html` was saved again at **17:45** while
+this was being verified (`pages/` holds the 17:23 snapshot). The scroll offsets were solved against
+that snapshot, so **re-run `tools/derive-page-offsets.py` after the page build finishes** — s19.1's
+−6091 in particular points at a section whose position can still move.
+
+---
+
+## 2026-07-30 (later still): re-imported the finished fandom page, and killed a caching trap
+
+**The 17:45 revision of the page is in.** Re-ran `tools/make-page-assets.py` — 118.21 MB →
+8.34 MB. Its content changed (source 57,148 → 65,117 bytes) but its **geometry did not**: document
+height is still 7307 css px / 8244 stage px, and every section sits where it did, shop tiles
+included. So all four solved offsets survived, re-confirmed by re-running the solver against the
+new import: s17 **0**, s18 **−941**, s19 **−977**, s20 **−5630**, and s19.1 came back **−6090**
+(1px off the earlier −6091, with a better score of 0.975 — `POS` now carries −6090 so the code and
+the tool agree). Both cursor tips still register: s19.1 within 1.2px, s19.2 within 0.2px.
+
+**The review cycle that was lost was a browser-cache problem, not a build problem.** Two new
+scenes were reported as not visible while `curl` showed the server returning the new `main.js` and
+a fresh Chromium reported `57.09 units / 45,672 px` with both labels present. Cause:
+`index.html` loads `main.js` and `styles.css` with **no `?v=`**, and `python3 -m http.server`
+sends `Last-Modified` and answers `If-Modified-Since` with a 304, so a long-lived tab keeps the
+previous build — through a hard refresh, and the more so for the iframes, since a reload need not
+revalidate a frame's document.
+
+Ruled out first, in this order, rather than guessed at: a stale or duplicate server (one process,
+pid 75415, correct cwd, sole owner of 8321), the served bytes (`curl` had the new offsets), and the
+build itself (headless load reported the new labels and length).
+
+Fix is `tools/serve.py` — `no-store` on everything and `Last-Modified` stripped, so there is
+nothing to revalidate against and a stale tab is impossible. Threading, or one stalled iframe
+request blocks the page load. **CLAUDE.md's Run section now points at it instead of
+`python3 -m http.server`**, which is the actual repair: a `?v=` bump on two files would have been
+the same trap with an extra step. Dev-only — Vercel still serves `vercel.json`'s headers.
+
+Worth keeping: **the `scroll x / N` denominator in the `?debug` HUD is the fastest check that a tab
+is current**, because N is the timeline length and moves whenever any scene span does. 43,032 is
+pre-19.1; 45,672 is current.
+
+---
+
+## 2026-07-30 (end of day): all five pages re-imported, an importer bug fixed, and a sync guard
+
+### The import was real but kept going stale
+
+`pages/fandom.html` **was** imported (twice), and each time the source moved again minutes
+later — 17:23, then 17:45, then 18:24. Verified rather than asserted: a visible-text diff of
+`pages/fandom.html` against the source now returns **nothing**, i.e. identical. Geometry has been
+stable across all three revisions (7307 css px / 8244 stage px, every section and shop tile in the
+same place), so the solved offsets survived each one — re-checked with the solver, not assumed.
+
+`home-editorial` and `home-feed` came across in the same runs (the importer does all five every
+time) and both now carry the KATSEYE fandom tile: 7 KATSEYE / 0 Carti in home-editorial, and the
+one remaining "carti" in home-feed is editorial copy in a ComplexCon card, not a fandom entry.
+
+**s16 needed no change, and that is worth knowing.** The fandoms rail is still at page y 4800,
+574 tall, and its first `.fnd-card` is now "Music / KATSEYE / Follow" where Playboi Carti used to
+be — the swap happened in place. Confirmed by hit-testing `CUR.s16`'s tip against the live cards:
+it reports **"Music KATSEYE Follow"**. So the whole chain now reads: Zack follows KATSEYE in the
+rail → enters the KATSEYE fandom page → the KATSEYE feed → the shop grid → the PDP.
+
+### An importer bug that produced a single silent 404
+
+`.fan-img` on home-editorial stacks several `<img>` on top of each other. The hidden ones are
+never fetched, so they landed in neither the measured boxes nor the response log, so they were
+absent from `need` — and `need` is what `write_pages` uses to decide which references to rewrite
+to `.webp`. So the page kept asking for a `.png` that convert() had never written. It 404s only
+when an *earlier* run happened to convert that file, which is exactly what happened: one 404 in
+the middle of the KATSEYE fandom tile, in a section that otherwise looked fine.
+
+Fixed at the root: `measure()` now also parses each source page for `assets/…` references and
+adds anything missing to `need` at width 0 (which falls back to `FALLBACK_W` — right, because an
+image with no measured box is one we have no size evidence for). Verified: **zero** unconverted
+raster references left in `pages/*.html`, and a full page load reports **no failed requests**.
+
+### The sync guard (user's request)
+
+`pages/` is generated from a local-only folder that is edited *while* the prototype is reviewed,
+and the import rewrites markup — so `pages/` can never be diffed against its source and staleness
+was invisible. It was got wrong twice in one afternoon in **both** directions: finished work
+reported missing (a browser cache — see `tools/serve.py`), and an import believed current when the
+source had moved on eight minutes later.
+
+- `make-page-assets.py` now writes **`pages/.import-stamp.json`** — the SHA-256 of every source
+  page it read. A hash, not an mtime: the source is saved constantly and most saves change bytes
+  without changing anything that renders, and a check that cries wolf gets ignored.
+- **`tools/check-pages-sync.py`** compares that against the sources now. Exit 0 in sync, 1 stale,
+  2 cannot tell (no stamp, or no source folder — normal on a fresh clone, where `pages/` is
+  committed precisely so the prototype runs without it). Proven in both directions by mutating a
+  source file and restoring it.
+- **`.githooks/pre-push`** runs it before every push and **asks** y/N rather than hard-blocking —
+  the source is local-only and mid-edit snapshots are legitimate. It reads from `/dev/tty`, not
+  stdin (git puts the ref list there), probes the tty in a **subshell** (a failed redirection is
+  reported by the shell itself, so `2>/dev/null` on the command still leaks the error), and
+  refuses when it cannot ask. Installed with `git config core.hooksPath .githooks`.
+- **`PAGES-SYNC.md`** documents all of it, and CLAUDE.md's Run section now leads with the check.
+
+**Known failure mode, called out in both docs:** hooks are not carried by `git clone` and
+`core.hooksPath` is local config, so on a fresh clone the guard silently does nothing until
+`git config core.hooksPath .githooks` is re-run.
+
+`pages/.import-stamp.json` is tracked in git (it is the mechanism) but added to `.vercelignore` —
+the page never fetches it.
+
+**Verified end to end.** `✓ in sync`, timeline 57.09 units / 45,672 px, s16/s17/s19/19.1/19.2/
+s20/s22/s24 plus a reverse scrub to s2: no 404s, no JS errors.
+
+---
+
+## 2026-07-30: the real PDP is built (Track A), and the buy is rewarded
+
+`pages/product.html` is no longer a placeholder. Built from Figma `Complex.com PDP [Mobile]`
+(`2159:50283`) to PROCESS.md **Track A**, authored into the All Hands build as `product.html` and
+imported — so it survives the next `make-page-assets.py` run rather than being a local patch.
+
+**Authored 388, not 390.** The Figma frame is genuinely 388 wide, so the page is authored at its
+real width and mounts **1:1** (`.page-1x`), like the two side slabs. It briefly carried a 388/390
+zoom while the placeholder was 390-authored; authoring to the design's own width is simpler and
+keeps both interaction targets on whole numbers.
+
+**Phase 4 — numeric QA: worst deviation 0.064px** across 17 `data-node` sections (tolerance
+< 0.5px; the build's best previous passes were Fandom 0.016 and Home Feed 0.023). Scene height
+858.281 against the tree's 858.285. The small accumulation is sub-pixel rounding of the design's
+fractional gaps, not drift.
+
+**Phase 5 — visual QA.** First whole-image RMS was 21.5 with a *uniform* score across every band
+including a blank one, which is the signature of global misalignment rather than per-band error —
+so nothing was tuned until it was explained. It was a **1px inside stroke of #303338 with square
+corners** on the frame, measured off the reference render (left column reads 48,229 against
+white) and confirmed in scene context. Width picked by RMS sweep over
+{0.995, 1.0, 1.13, 1.194, 1.25} rather than by eye: **0.995px** wins, which is also the border
+width the rest of the design system uses. Whole-image 21.5 → 17.0, and interior-only 13.6 with
+the blank gap band at **0.0** — exact.
+
+The one remaining outlier, `brand+title` at 32.1, was **localised before being accepted** (the
+Phase 5 rule): text widths measure within 1.3px of the tree ("KATSEYE X GAP" 158.45 vs 158), and a
+3× side-by-side crop is indistinguishable. It is Figma-vs-Chrome antialiasing on large bold
+glyphs — irreducible, accepted. Photo band 8.4 is resampling texture, same call.
+
+Quirks reproduced verbatim per Phase 3: the frame's empty 388×388 "Product Image" node, the
+opacity-0 "Pre-order" badge, and the two **opacity-0 leftovers "x" and "drake"** in the brand row,
+which still occupy their 13px and 56px of it.
+
+`#panel-product` lost its 12px `border-radius`: the design's corners are square and the page draws
+its own stroke, so a radius on the container would clip the design's own edge.
+
+**The cursor `frac` was re-solved against the designed page** — 0.315/0.494 was a fraction of the
+placeholder's guessed 16px button inset and was worth **3.7px** of vertical error. Now
+[0.3155, 0.5096] against the real box (stage x 1169.92..1526.08, y 906.48..951.14), and the tip
+lands within **0.1px** of the storyboard. ADD TO BAG and shop Pay solve to stage y 850.77 and
+906.48 against the tree's 850.82 and 906.54.
+
+### The buy is rewarded — +200 XP drops from the top
+
+User's call: "once the cursor buys the hoodie, the experience pill should appear from the top."
+`assets/toast-200.webp` is the fifth toast, built from the supplied `Exp01.png` onto the same
+880×598 canvas (= the 440×299 render box at 2×) as the other four, with the pill registered on
+Figma `Exp` (`2159:50272`)'s own position — screen-local **(62, 51) 316×87**, verified back at
+(62, 51). It therefore reuses `.toast` and `toastIn` unchanged and arrives with exactly the
+language the other four do.
+
+It lands at s+1.5, **after** the press at s+1.45 — the reward answers the press rather than
+accompanying it, the ordering s12's poll and s13.1's vote already follow. **s19.2 grew 1.8 → 2.1**
+because at 1.8 the 0.35-unit arrival finished exactly on the scene boundary, and a toast that
+starts too near the end never appears at all (the s13.1 lesson). It leaves with the panel at s20.
+
+**Caveat worth carrying:** the supplied `Exp01.png` is **1×** (pill 315×87) where this pipeline is
+2× (632×174), so `toast-200.webp` is a LANCZOS upscale and is softer than its four siblings at
+full-screen scale. The proper fix is `make-toasts.py`'s dual-source route on node `2159:50272`;
+the 2× opaque export lands on an 880×604 canvas that does not share the supplied art's framing,
+so aligning the two needs the offset solved rather than assumed. Not done here.
+
+Timeline **57.39 units / 45,912 px**. Verified: pill hidden before s+1.45, arriving at 1.55
+(op 0.52), resting at 1.9, and gone by s20+0.3 and on reverse scrub; no 404s, no console errors.
+
+---
+
+## 2026-07-30: the XP pills are one family now, with a progress bar
+
+All five toasts rebuilt from the designer's `assets/General/Exp01-05.png`. They are now identical
+art at an identical 310x86 pill, all **centred** on the shared slot at stage y 48 (the 440x299
+render box, 880x598 at 2x) — the convention `make-toasts.py` already documented. The four old
+pills had *different* widths and so different left edges; registering the new art onto those old
+left edges would have left them off-centre, which is the trap here.
+
+**The first award is now +10, not +20** — the new art says so — so `toast-20` was renamed
+`toast-10` (index.html + 2 references in main.js).
+
+**Each pill carries a mini progress bar, and the fill is baked into the art.** Measured off a
+124px track, in story order: **29 / 29 / 50 / 74 / 99 %** for +10 / +30 / +80 / +120 / +200. So
+the progression needs no code — swapping the art is the whole change. Verified: all five reach
+opacity 1.00 at their own beats, in ascending time order (t = 24.60, 27.95, 31.20, 35.85, 45.90).
+
+**Flagged, not "fixed": Exp04 and Exp05 carry the SAME 29% fill**, so the first two beats (+10 at
+s12 and +30 at s13.1) do not visibly advance the bar. That is what the supplied art does; changing
+it is a design decision, not a build one. If the bar should move on every award, the fills need
+re-drawing (or the build has to override them, which would mean the art and the render disagree).
+
+**The level-up moment is NOT built** — user's directive pending.
+
+**Resolution caveat still stands:** all five sources are **1x** (pill ~315x87) against a 2x
+pipeline, so every toast is now a LANCZOS upscale, not just toast-200. They are softer than the
+retired exports at full-screen scale. The fix is `make-toasts.py`'s dual-source route per node;
+the 2x opaque export lands on a differently-framed canvas, so the offset must be solved, not
+assumed.
+
+**Fandom re-import: nothing to pull.** `check-pages-sync.py` reports in sync against all 6 source
+pages — the "slight update" had not been saved to `10. My Complex All Hands/fandom.html` at the
+time of writing (the check is SHA-256 over the source, so this is authoritative, not a guess).
+Re-run the importer once it lands; geometry has been stable across the last three revisions, but
+re-run `derive-page-offsets.py` if any section moves.
+
+---
+
+## 2026-07-30: s8 was only picking two of the three chips
+
+User's report: on the "Welcome to My Complex" section the cursor no longer selected Sneakers.
+Cause: `home-feed` renamed that chip **"Sneakers" -> "Sneaker"**, `PICKS` still said the plural,
+`prepareChips()`'s exact match found nothing, and the pick was dropped — Zack chose two topics and
+pressed Continue anyway. It warned to the console, which nobody had open.
+
+Fixed twice over: `PICKS` now carries the page's own wording, and the matcher falls back to a
+singular/plural stem when the exact match misses, warning when it does. Matching by label is still
+right (index would break on a reorder); it just has to survive a plural.
+
+Verified: all three twins (Sneaker / Sports / ComplexCon) sit at opacity 1.00 by the end of s8,
+no warnings, no errors.
+
+Worth knowing: the page's PRE-picked chips have also changed — now Sneaker / Music / Sports /
+ComplexCon, not the Style / Bets / Watch / ComplexCon that CLAUDE.md's s8 note describes.
+`prepareChips()` strips `.sel` off all eleven first, so this does not break anything, but the
+count in that note is stale.
+
+---
+
+## 2026-07-30: the I.D. card is the GOLD variant now
+
+User dropped `assets/Scene 21/COMPLEX I.D - Gold.png` and `assets/Scene 22/COMPLEX I.D - Gold -
+Big.png`. `id-card.webp` is rebuilt from the **Big** one (1023x609 opaque vs 843x502).
+
+Two things had to be handled rather than copied:
+
+- **The supplied art carries a baked shadow** — 34% soft alpha, against the <1.5% that is just
+  antialiasing — and `#id-card` already has a CSS `drop-shadow`. Shipping it whole would have
+  doubled the shadow. It is cropped to the card's own opaque rectangle, so the CSS shadow stays
+  correct and the repo's shadow-free rule holds. Result measures 0.04% soft alpha.
+- **The stage box is NOT negotiable.** `#id-card` is 466.5, 291, 958.5x594 because that box IS the
+  ending video's frame 0, and `make-gold-card.py` fits s23's case onto it. So the art is fitted to
+  2x that box (1917x1188). The new source's aspect is 1.6798 against the box's 1.6136, so it takes
+  a x1.874 / x1.951 fit — the previous card was stretched the other way (1.5435). Do not "fix"
+  this by moving the box.
+
+**This closes most of the s23/s24 ghosting.** CLAUDE.md recorded four lines that ghost through
+`END_XFADE` because our card was the 500-PTS Regular revision while the video morphs the gold
+5000-PTS one. Our card is now gold: X.P. reads **5000 PTS**, Status **Gold**, and the held-by
+figure **1%** — all three now match the video. Only the date still differs (05.22.2026 on the card
+vs 05.19.2023 in the video). The strip is gold (155,116,61) where it was black, which is the other
+half of that mismatch — CLAUDE.md's note that "the video's gold strip is 60 stage px against our
+black strip's 39" should be re-measured now.
+
+Verified: s22 small, s21 expanded, s23 wrapped and s24 frame 0 all render; no 404s, no console
+errors. Previous asset saved at /tmp/id-card-prev.webp for the session.
+
+**Not re-derived:** `tools/make-id-card.py` still describes the old two-source route from
+`COMPLEX I.D No Shadow.png`. It no longer matches how this asset is built — update it before the
+next rebuild, or it will regenerate the black-strip card.
+
+---
+
+## 2026-07-30 (final): the XP bar accumulates, and the s13.1 glide is smooth again
+
+**The bar is now one running total across the story.** Each award animates from where the
+previous one left it, and the pill *arrives* already showing that total (a `tl.set` on the bar at
+the same instant the pill starts dropping), so nothing ever snaps back to zero. Measured:
+0 → 0.072 → 0.29 → 0.50 → 0.74 → 0.99, each start matching the previous end exactly.
+
+The one judgement call is in `FILL`: **Exp04 and Exp05 were drawn with the same 29% fill**, so
+taking both literally would leave the +30 award moving the bar not at all. The shared checkpoint is
+split by the XP actually awarded — +10 then +30 is 40 points to reach 29%, so +10 lands at
+10/40 × 29% = **7.25%**. Every award now advances the bar and every checkpoint the designer drew
+distinctly (29 / 50 / 74 / 99) is still hit exactly. This is safe to re-derive because the track is
+empty in the WebP now — no bitmap can contradict the table.
+
+**s13.1's glide read as choppy because the wrong thing was shortened.** Cutting the lead-in 80%
+took the glide itself to 0.15 units, so the cursor covered its whole travel in ~120px of scroll —
+a jump, not a move. The delay was never the glide; it was the 0.25 units of nothing before it plus
+a glide twice as long as it needed to be. Now **wait 0.04, glide 0.40** — lead-in 0.44 against the
+old 0.95, still a 54% cut, with the motion readable. Verified by sampling cursor travel per 0.05u
+across the beat: `0.0 0.6 6.3 24.1 58.8 43.5 15.1 3.0 0.1` — a clean ease bell, not a step.
+Scene is 1.55 (press at s+0.57, toast arriving by s+1.30). **If it needs to be faster again,
+shorten the WAIT, not the glide.**
+
+Timeline **57.04 units / 45,632 px**. No 404s, no console errors.
+
+---
+
+## 2026-07-30 (final): the vote glide moved to s13, and the XP bar is real DOM
+
+**The cursor no longer travels inside s13.1.** User's proposal, and it is the right shape: the
+cursor moves to UNDERRATED *pre-emptively during s13*, while the feed is still scrolling and the
+panel is still fading in, so the travel is covered by motion that is already happening. By the
+time s13.1 begins the cursor is resting on the button and that beat is only the press.
+
+This is what finally fixed a problem two retimes could not. The glide went 0.7 -> 0.15 (choppy)
+-> 0.40 (still choppy) because the duration was never the issue: **a move that has to finish
+inside the beat it triggers is either slow or abrupt, with nothing in between.** Measured proof —
+cursor travel per 0.05u:
+
+    s13    0 0 0 0 0 1 3 7 13 21 32 46 64 87 87 64 46 32 21 13 7 3 1 0 0 ...
+    s13.1  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+A clean ease bell across ~1.1 units in s13, and dead still in s13.1. The `cursorTo` left in s13.1
+is a zero-distance move kept only so the click stays one implementation. s13.1 is 1.2 units.
+
+**The progress bar is real DOM now, not a bitmap hack.** It had been the track painted flat into
+each WebP with a bare div scaled over it at fractional geometry — `top: 111.5px`, `height: 4.5px`.
+On a stage that is itself scaled to fit the window those land on half-pixels, which is what read as
+pixelated (user's report). Now `.tbar` is a rounded track element with a rounded `<b>` fill inside
+it, whole-pixel box (218, 111, 126x5, radius 2.5), `overflow: hidden` so the fill's radius cannot
+poke past the track, and only the inner fill transforms. The flat patch still in each WebP sits
+exactly underneath and is covered.
+
+Verified after both changes: all five bars still accumulate exactly —
+0 → 0.072 → 0.29 → 0.50 → 0.74 → 0.99. Timeline **56.69 units / 45,352 px**. No 404s, no errors.
+
+---
+
+## 2026-07-30: docs pass — what every MD now claims
+
+All four MD files brought up to what the code does. Corrections worth knowing, because each was
+a claim that had gone false rather than merely missing:
+
+- **Timeline is 56.69 units / 45,352 px.** CLAUDE.md and HANDOFF's own status header both still
+  said 57.09/57.39. It has moved five times today; treat any written figure as stale and read the
+  `?debug` HUD.
+- **`tools/make-id-card.py` is marked STALE in both CLAUDE.md and export-assets.md.** Running it
+  as-is regenerates the retired *black-strip* card. `id-card.webp` is now hand-built from the gold
+  source, cropped to its opaque box so its baked shadow does not double with the CSS one.
+- **The I.D. card note's "gold strip 60px vs our black 39px" is retired** — ours is gold now, and
+  the s23→s24 ghosting is down to the date line alone.
+- **`tools/make-toasts.py` no longer builds what ships.** Both files now say so; it stays as the
+  record of why the canvas is 440×299 and why the pill is centred.
+- **New XP-toast section in CLAUDE.md's Architecture** covering the accumulating bar, the real-DOM
+  `.tbar`, why the bitmap version pixelated, and the derived 7.25% for +10.
+- **New s19.1/s19.2 section** covering the PDP panel, the 388 authored width, and the `frac`
+  cursor targets. The scene-order quirk now records the 19.x insertion and that **19.3 is not
+  built**.
+- **PAGES-SYNC.md and export-assets.md** updated for the sixth page (`product.html`) and the new
+  toast family.
+
+Outstanding, and stated in the docs rather than hidden: 19.3 unbuilt; the two Carti merch
+satellites have no new source; `sat-comment` is a revision behind Figma; the five toast sources
+are 1× against a 2× pipeline; a flat patch is still baked under each pill's CSS track; and the
+fandom "slight update" had not been saved at the time of writing (`check-pages-sync.py` green).
+
+---
+
+## 2026-07-30: s13.1 REVERTED to its original timing — do not retime it again
+
+Every attempt to make the UNDERRATED vote feel faster was rejected, and the last one (moving the
+glide pre-emptively into s13) was rejected outright: "revert the underrated cursor movement to its
+original state with the delay and all."
+
+**s13 and s13.1 are now exactly as they were before 2026-07-30:**
+
+- `s13` — `cursorTo(tl, CUR.s13, s + 0.9, 0.7)`, span 2.0
+- `s13.1` — `cursorTo(..., s + 0.25, 0.7)`, span 1.9, press at s+1.08
+
+Timeline back to **57.39 units / 45,912 px**.
+
+The three rejected attempts, so nobody repeats them: glide 0.7 → **0.15** (read as choppy);
+0.15 → **0.40** (still choppy); and moving the travel into s13 entirely so s13.1 only presses
+(measured perfectly smooth — a clean ease bell in s13, dead still in s13.1 — and still not what
+was wanted). **Leave this beat alone unless the user asks again, and if they do, ask what
+specifically feels wrong before changing a number.**
+
+The XP progress bars are unaffected by the revert and still accumulate:
+0 → 0.072 → 0.29 → 0.50 → 0.74 → 0.99.
+
+---
+
+## 2026-07-30: the stray white line in the XP bar
+
+User: "I still see that weird white line preemptively, part of the progress bar, and then there is
+the actual fill on top of it." Correct — the art still had part of the old bar in it.
+
+The first repaint covered only the grey track's rows (223–231). The baked **white fill is ~1px
+taller on each side** (rows 223 and 232 measured bright after the paint), so a sliver of the
+designer's pre-filled bar survived outside the CSS element and read as a second, static bar under
+the animated one.
+
+Fixed by rebuilding all five from `Exp01–05.png` and inpainting rows **218–238** across the bar's
+own columns, interpolating the pill's vertical gradient between two clean rows. Two things this
+had to avoid, both of which were hit on the way:
+- a flat fill leaves a visible band, because the pill's background is a gradient;
+- a generous x-window **smears the XP coin** — the paint span must be derived from the bar's own
+  bright columns, not guessed.
+
+Verified: no pixel above the background threshold survives in the bar region of any of the five,
+and the rendered bar profiles as fill-then-track with nothing beyond it. Cache-busters at `?v=9`.
+The bar is now entirely CSS — the art contributes nothing to it.
+
+## 2026-07-30: Scene 19.3 is BUILT — STATUS UNLOCKED, and the card flips to Bronze
+
+The Figma 19.3 changed under the earlier notes: node `2126:11248` is no longer the
+"YOU UNLOCKED A new badge!" modal — it is a **STATUS UNLOCKED sheet** ("You've earned Bronze
+Status" / "Complex I.D. Card · 1,500 XP to Silver") with Martin Hen's I.D. card featured over
+the dimmed fandom page. The user's brief: card 1 (800 PTS / Regular) flips in 3D and
+becomes card 2 (1000 PTS / Bronze), scrubbed frame-by-frame with the scroll — first specced
+as a 360° turn, revised the same day to ONE slower 180° half-turn. Sources are
+`assets/card animation/card 1.png` / `card 2.png`. That makes 19.3 the purchase's second
+answer: +200 XP at 19.2 is what tips Martin past 1,000 PTS.
+
+**What was built (label `s19.3`, 2.9 units, between 19.2 and s20):**
+- `tools/make-flip-cards.py` → `flip-regular.webp` / `flip-bronze.webp`, both registered on
+  their solid-alpha bboxes into ONE 920×667 box (2× of Figma's own card node: stage
+  (730, 423.48) 460×333.23). The sources land already matched — both carry the same 1267px
+  solid content — so the crop-and-fit registers them within a pixel (mask IoU 0.992). The
+  TYPE inside the card sits ~15px differently between the designer's two revisions; harmless
+  here because nothing dissolves and only one face shows at a time (contrast END_XFADE, where
+  exactly this kind of mismatch ghosts).
+- `#status-modal` in index.html — coded sheet (live Inter type per the Figma specs) + a real
+  3D stack: `#sm-flip` carries `perspective: 1300px`, `#sm-card` carries `preserve-3d`, two
+  faces with `backface-visibility: hidden` — Regular is the front, Bronze is the BACK,
+  pre-rotated 180° so the half-turn lands it un-mirrored. **No filter and no animated opacity on or between those two
+  elements** — CSS grouping flattens preserve-3d silently; the sheet's drop-shadow lives on
+  `#sm-panel` and the entrance pop on `#status-modal`, both safely outside the 3D context.
+  Stage-level overlay, deliberately: the card overhangs the phone screen by 10px each side by
+  design, and a mid-turn card projects past its box — `#screen`'s overflow would slice it.
+- The timeline rotates `#sm-card` 0→180° over 1.6 units, `power2.inOut` — one continuous
+  tween with NO discrete state anywhere in the scene: `backface-visibility` alone does the
+  reveal, so there is nothing to mis-restore on a reverse scrub. NOT a back/elastic ease: an
+  overshoot past 180° swings the revealed Bronze face past flat and back, a visible wobble.
+  (The first build was a full 360° with a hidden second front revealed by two `tl.set`s at
+  the exact midpoint; the user cut it to a single, slower half-turn the same day. If a full
+  turn ever returns, that machinery is in the git history — and its midpoint arithmetic only
+  holds for a symmetric ease.)
+- s20's opening moves shifted one scene later, and the ORDER inside 19.3 is the user's spec:
+  the pill's bar fills at the end of 19.2 (that is the level-up), then the PDP leaves, then
+  the pill floats back up and goes, and only then does the sheet arrive. **The page does not
+  scroll under any of it** — there is deliberately NO `POS.fandom.s19_3`; the level-up plays
+  over the same frame the purchase happened on. (The offset solved at −3665 against the
+  current design, 18.1× confidence, if Figma's own framing — a different post — is ever
+  wanted; breadcrumbs in POS and derive-page-offsets.py, ref kept at shots/refs/ref-s19_3.png.)
+  **s20 clears the sheet + the scrim, and holds the page still until the sheet has fully
+  dismissed** — the scroll to Jordan Rose's post is the next thing that happens, not something
+  the level-up dissolves into. `CUR.s19_3` = (1677, 905), Figma 19.3's own parked cursor
+  pose — the press that caused this scene was 19.2's, so the cursor stands aside at s+0.15
+  before the sheet pops.
+
+**Verified** (scrub.py, forward + backward seeks, re-run after the 180° cut): pre-scene frame
+shows no sheet; Regular card at rest over the unmoved shop grid; mid-turn shows the un-mirrored
+Bronze back; rest state is the Bronze card matching the Figma render; s20+0.38 has the sheet
+and scrim gone with the page still parked, and the scroll to Jordan Rose's post starts only
+after; seeking BACK from past the flip restores the Regular face. No console errors. Timeline
+is now 48,232px (was 45,912) — the `?debug` denominator to expect.
+
+**Fallout for the earlier notes:** `assets/Scene 19/Badge Packet Animation.mp4` is now
+ORPHANED — it was the old 19.3's asset and nothing references the badge-unlock modal any more.
+Leave it (tracked source material, `.vercelignore`d via `*.mp4`) unless the design brings the
+beat back. `.vercelignore` also gained `assets/card animation/` (sources for shipped WebPs),
+and — found while there — `PAGES-SYNC.md` and `.githooks/`, which were shipping to the public
+URL by default.
+
+---
+
+## 2026-07-30: s19.2 now serves the All Hands build's own `pdp.html`
+
+The PDP authored from this side (`product.html`) is superseded by **`pdp.html`** in the All Hands
+build. `make-page-assets.py`'s PAGES imports `pdp` instead; `product.html` is left in the source
+folder (not ours to delete) and is no longer imported.
+
+It dropped in almost cleanly — same `.scene` root of **388 × 858.2847**, so `#panel-product` did
+not move. Two things did change:
+- **Selector**: `PAGE_TARGETS.s19_2` now finds `.btn-pay` (their class) instead of `.pdp-shoppay`.
+  The `frac` needed no change at all — shop Pay lands at stage y **906.46** against the Figma
+  tree's 906.54, ADD TO BAG at 850.76 against 850.82, and the cursor tip at **(1282.3, 929.2)**
+  against the storyboard's (1282.3, 929.3).
+- **`border-radius: 12px` restored on `#panel-product`.** Their `.scene` carries it, and this
+  container clips (`overflow: hidden`), so a square container shears the design's corners off. It
+  was square because I read the *isolated Figma render's* corner alpha instead of the page.
+  **Read the page.**
+
+### The checker now catches an unimported source page
+
+This is the gap that let it happen: `pdp.html` sat in the source folder for ~90 minutes while the
+prototype served `product.html`, and **every sync check was green** — both files were individually
+in sync, they just were not the same page. `check-pages-sync.py` now reports *every* `*.html` in
+the source that is not imported, not only the ones already in PAGES, and says so explicitly when
+one is not in PAGES at all ("…so it never will be"). `IGNORE` holds `all-scenes` (a combined
+build, not a page) and `product` (superseded — drop it from there if it is revived or removed).
+
+It earned its keep immediately: on first run it flagged both `product.html` and a **fresh save of
+`pdp.html`** (13,459 → 14,362 bytes) that had landed mid-task.
+
+## 2026-07-30: the s19.3 flip is the designer's VIDEO now, scrubbed frame by frame
+
+Third revision of the flip in one afternoon, superseding both coded versions below: the user
+dropped `assets/card animation/Flip_Transition_Animation_Reversed.mp4` (1112×834, 5s @ 60fps —
+the card turning Regular → Bronze, rendered with real perspective, motion blur and a moving
+shadow) and asked for it to play frame-by-frame with the scroll, **contained inside the white
+sheet so nothing bleeds out and the 3D illusion holds**.
+
+- `tools/make-flip-frames.py` → `assets/flip-frames.webp`: 60 frames at 12 fps, 8×8 grid,
+  1.5× cells, 0.86 MB. All the s11/s24 capture rules apply (rVFC during playback,
+  `playbackRate` 0.25, sample by mediaTime) plus one of its own: **each frame's backdrop is
+  normalised to pure white** with a per-frame gain keyed to the border ring's **10th
+  percentile** — the median left the vignette corners at ~253, which reads as a faint window
+  edge against the panel's true white.
+- The window (`#sm-flip`) is now the s11 machinery — a clipping box over the sheet, one cell
+  shown, moved by transform — at the **panel's inner width** (391.2 stage px, video's 4:3),
+  flush inside the borders. It deliberately does NOT honour Figma's card box, which overhangs
+  the panel: an RGB video cannot overhang anything. The card reads ~10% smaller than the
+  Figma node — the price of containment, accepted by the spec above.
+- The sweep is `ease: none` (unlike the coded flips): the video's own animation curve is
+  baked into its frames, and easing the sweep would double-ease the motion. 1.6 units,
+  ~21px of scroll per frame, s+1.1 → s+2.7 of the 2.9-unit scene.
+- **Alpha-matting the video was tried and is a dead end** — the card's paper face is the same
+  near-white as the backdrop, so a border flood-fill leaks INTO the card (frame 0 keyed to
+  20% foreground). White-on-white containment is the robust answer; the tool's docstring
+  records this so nobody re-attempts it.
+- Retired: `flip-regular.webp` / `flip-bronze.webp` (the coded flip's registered faces) —
+  kept in git, added to `.vercelignore`; `make-flip-cards.py` marked superseded, kept as the
+  face-registration record. Manifest updated (flip-frames added, faces marked retired).
+
+**Verified** (scrub.py): sheet pops with the video's frame 0 (Regular card) showing; quarter
+and mid frames show the rendered 3D turn with its own shadow, edge-on at the sweep's centre;
+the video region is indistinguishable from the panel (no window edge, no bleed past the white
+frame); rest state is the Bronze card; backward seek restores the Regular frame; s20 handoff
+unchanged. No console errors. Page length unchanged at 48,232px.
+
+## 2026-07-30: the finale fades to black from the video's 3.5s mark
+
+User's spec: "exactly at the 3.5-second mark, start fading out the video to black until it's
+all black till the end of it." Built as `#ending-fade` — a black overlay ABOVE `#ending`
+(fading `#ending` itself would expose the s23 layers under it, and any transform on it breaks
+the frame-0 registration) — ramping 0→1 with `ease: none` from `END_FADE_FRAME` (42, = 3.5s ×
+the sheet's 12 fps) to the sweep's last frame. The fade's timeline position derives from the
+SAME frame→time mapping the sweep uses (`s + 0.45 + f/(END_FRAMES−1) × END_SWEEP`), so the
+two cannot drift and the fade scrubs and reverses like everything else. The page's held
+bottom (`end` label) now rests on black.
+
+This is NOT the dip-to-black the s24 header warns against — that warning is about covering
+the frame-0 handover seam, at the other end of the sweep; this fade never reaches it.
+
+**Verified** (scrub.py + luminance measurement): s24+2.0 full brightness (fade not yet
+started); s24+2.35 mean luma 27/max 136 ≈ 47% faded, matching the scrub fraction exactly;
+sweep end and the `end` rest both measure 0.00 — pure black; reverse seek to s24+1.5 restores
+the video fully. No console errors.

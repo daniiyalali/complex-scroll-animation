@@ -36,6 +36,7 @@ Idempotent: safe to re-run after the source pages change. Run:
     python3 tools/make-page-assets.py --report   # measure only, change nothing
 """
 import functools
+import json
 import http.server
 import math
 import os
@@ -62,6 +63,12 @@ PAGES = {                     # page -> the zoom it is displayed at
     "article": 1.0,
     "rerank": 1.0,
     "fandom": 1.0,
+    # s19.2's product-detail panel — the All Hands build's own `pdp.html` (2026-07-30). It
+    # supersedes the `product.html` authored from this side while the page did not exist yet;
+    # that file is left in the source folder but is no longer imported. Same 388x858.2847 root,
+    # so #panel-product does not move and it mounts 1:1 like the two side slabs.
+    # A page whose source is missing is skipped with a warning (see __main__).
+    "pdp": 1.0,
 }
 KEEP_AS_IS = {".svg", ".avif", ".webp"}   # already vector or already efficient
 CONVERT = {".png", ".jpg", ".jpeg"}
@@ -156,6 +163,30 @@ def measure():
             b.close()
     finally:
         srv.shutdown()
+
+    # Everything the MARKUP references, whether or not the browser fetched it.
+    #
+    # Measuring alone is not enough, and the gap is silent in the worst way. `.fan-img` on
+    # home-editorial stacks several <img> on top of each other; the hidden ones are never
+    # fetched, so they land in neither `boxes` nor `seen`, so they are absent from `need` — and
+    # then convert() does not write them AND write_pages() does not rewrite their reference,
+    # because it only rewrites what is in `need`. The page keeps asking for a .png that is not
+    # there. It 404s only if a previous run happened to convert it, which is exactly what
+    # happened on 2026-07-30 to the KATSEYE fandom tile: one 404 in the middle of a section that
+    # otherwise looked fine.
+    # So: parse every page for asset references and make sure each one is in `need`. Width 0
+    # means convert() falls back to FALLBACK_W, which is right — an image with no measured box
+    # is one we have no size evidence for.
+    ref_re = re.compile(r'(?:src|href)="(assets/[^"?#]+)"')
+    for name in PAGES:
+        src = SRC / f"{name}.html"
+        if not src.exists():
+            continue
+        for rel in ref_re.findall(src.read_text(encoding="utf-8")):
+            if pathlib.Path(rel).suffix.lower() in CONVERT | KEEP_AS_IS:
+                per_page.setdefault(name, set()).add(rel)
+                if rel not in need:
+                    need[rel] = 0
     return need, per_page
 
 
@@ -228,10 +259,48 @@ def write_pages(per_page, need):
             (OUT / f"{name}.html").write_text(banner + html, encoding="utf-8")
 
 
+STAMP = "pages/.import-stamp.json"
+
+
+def write_stamp():
+    """Record the SHA-256 of every source page this import was built from.
+
+    This is what makes staleness detectable at all. The imported page is deliberately not a
+    copy — asset references are rewritten to .webp, the font is repointed and a banner is
+    prepended — so `pages/` can never be diffed against the source directly, and "is the
+    prototype current?" was previously answerable only by eye. It was answered wrong twice on
+    2026-07-30, in both directions: work was reported missing when it had shipped, and an
+    import was believed current when the source had moved on eight minutes later.
+
+    A hash, not an mtime: the source folder is edited continuously and saved often, and most
+    saves change bytes without changing anything the prototype renders — but an mtime moves on
+    every save including a no-op, and would cry wolf until it was ignored.
+    """
+    import hashlib
+    stamp = {"source": str(SRC.name), "pages": {}}
+    for name in PAGES:
+        src = SRC / f"{name}.html"
+        if src.exists():
+            b = src.read_bytes()
+            stamp["pages"][name] = {"sha256": hashlib.sha256(b).hexdigest(), "bytes": len(b)}
+    (PROJECT / STAMP).write_text(json.dumps(stamp, indent=1) + "\n", encoding="utf-8")
+    print(f"stamped {STAMP} — {len(stamp['pages'])} source pages. "
+          f"`python3 tools/check-pages-sync.py` compares against it.")
+
+
 if __name__ == "__main__":
     if not SRC.exists():
         sys.exit(f"source folder not found: {SRC}\n"
                  "It is a sibling of this repo and is not checked in — see CLAUDE.md.")
+    # A page can be registered above before it has been designed, so that wiring it up later is
+    # a re-run rather than an edit. Skip those instead of dying: measure() would 404 on the
+    # goto and write_pages() would raise on the read.
+    for name in [n for n in PAGES if not (SRC / f"{n}.html").exists()]:
+        print(f"  skipping '{name}' — no {name}.html in {SRC.name} yet "
+              f"(pages/{name}.html left as-is)")
+        del PAGES[name]
+    if not PAGES:
+        sys.exit("no source pages found — nothing to do.")
     print(f"measuring {len(PAGES)} pages from {SRC.name} ...")
     need, per_page = measure()
     print(f"  {len(need)} distinct assets referenced")
@@ -245,6 +314,7 @@ if __name__ == "__main__":
     print("\n  %6.2f MB  ->  %6.2f MB   (%.0f%% smaller)"
           % (before / 1e6, after / 1e6, 100 * (1 - after / before)))
     if not REPORT_ONLY:
-        print(f"\nwrote {OUT.relative_to(PROJECT)}/ — 5 pages + assets.")
+        write_stamp()
+        print(f"\nwrote {OUT.relative_to(PROJECT)}/ — {len(PAGES)} pages + assets.")
         print("Next: bump any ?v= on pages you already embedded, and re-verify the deploy "
               "set (record a real page load and diff against .vercelignore).")

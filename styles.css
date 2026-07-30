@@ -163,6 +163,35 @@ img { display: block; }
 }
 #navs { z-index: 8; }
 #toasts { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+/* The XP pills' progress bar — a real element, track and fill both.
+   It was briefly a bitmap hack: the track painted flat into the WebP with a bare div scaled
+   over it, at fractional geometry (top 111.5, height 4.5). On a stage that is itself scaled to
+   fit the window that lands on half-pixels, which is what read as pixelated (user, 2026-07-30).
+   Now: whole-pixel box, both parts rounded, and only the inner fill transforms.
+   Box measured off the designer's art at stage (218, 111) 126x5; toast-200's pill is 4px wider
+   so its track sits 2px left. The flat patch left in each WebP sits exactly under this and is
+   covered by it. */
+#toasts .tbar {
+  position: absolute;
+  left: 218px; top: 111px;
+  width: 126px; height: 5px;
+  border-radius: 2.5px;
+  background: #40444a;
+  overflow: hidden;             /* so the fill's own radius cannot poke past the track */
+  visibility: hidden;
+  will-change: transform, opacity;
+  z-index: 13;
+}
+#toasts .tbar > b {
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: 2.5px;
+  background: #f8f8f8;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+#toasts #tbar-200 { left: 216px; }
 
 /* The popup is the Scene 11 video's frames. Box is the VIDEO's aspect (1120x1504 = 0.7447),
    not the retired card's, and it is centred where that card was: it was 358x457 at top 248,
@@ -318,6 +347,30 @@ img { display: block; }
   overflow: hidden;          /* a viewport onto pages/rerank.html */
   background: #000;          /* the editor's own ground, behind the frame */
 }
+/* s19.2's product-detail panel. Box is Figma `Complex.com PDP [Mobile]` (2159:50283) —
+   388x858.3 at (1154, 110.6), measured, not eyeballed.
+   The page is the All Hands build's own `pdp.html`, authored **388** — the frame's own width —
+   so this mounts **1:1** like the two side slabs (`.page-1x` in index.html).
+   **`border-radius` must MATCH the page's own.** `pdp.html`'s `.scene` is `border-radius: 12px`,
+   and this container clips it (`overflow: hidden`), so a square container shears the design's
+   rounded corners off. It was briefly square here, from reading the isolated Figma render's
+   corner alpha rather than the page — read the page. The card's 1px inside stroke of #303338 is
+   the page's own and is not repeated here.
+   **No border-radius and no border here.** The frame has SQUARE corners and carries a 1px inside
+   stroke of #303338, which the page draws itself (measured off the reference render — the left
+   column reads 48,229 against white — and re-confirmed in scene context). A radius on the
+   container would clip the design's own corners. */
+#panel-product {
+  position: absolute;
+  left: 1154px; top: 110.6px;
+  width: 388px; height: 858.3px;
+  visibility: hidden;
+  will-change: transform, opacity;
+  border-radius: 12px;      /* == pdp.html's own .scene radius; see the note above */
+  overflow: hidden;
+  background: #fff;
+}
+
 #panel-quiz {
   left: 1245px; top: 97px;
   width: 390px; height: 887px;
@@ -346,17 +399,25 @@ img { display: block; }
    explosion reads as cards flying out from behind the mockup. Fan widened
    +20px per side vs the storyboard resting centers. */
 #sats img { position: absolute; visibility: hidden; will-change: transform, opacity; z-index: -1; }
-/* Right-card lefts are set so the ROTATED bounding edge clears the phone
-   (bezel edge x=1195) by the same gap as the mirrored left card:
-   editorial↔ugc ≈ 50px, comment↔video ≈ 69px. Rotation swings corners
-   ~(h/2)·sinθ past the CSS box — account for it when nudging these. */
-/* editorial re-exported 2026-07-29 — the art changed from an article card to a poll card
-   and got 55px shorter. Its vertical CENTRE is held at the old 338, not its top: main.js
-   computes the s19 fly-out from each card's centre, so keeping the centre keeps the
-   explosion path identical. Figma node 1838:120852 no longer exists, so the size comes
-   from the export and the position from that centre. */
+/* Right-card lefts are set so the ROTATED bounding edge clears the phone by the same gap as
+   the mirrored left card. Rotation swings corners ~(h/2)·sinθ past the CSS box, so the CSS
+   left is NOT the clearance — account for the swing when nudging these. Measured against the
+   painted bezel (#bezel is border-box at inset −12px, so its outer edges are 728 / 1192, not
+   the 1195 this note used to claim): editorial 35.2 ↔ ugc 35.4, comment 33.2 ↔ video 31.3.
+   The ugc figure was 33.0 before the 2026-07-30 re-export — the shorter card swings less, so
+   the pair it mirrors now agrees to 0.2px instead of 2.2. */
+/* These four boxes are TUNED (88–94% of their node size, per the fan widening above), so
+   when the art changes the registration that must survive is `(width, centre)` — never the
+   top edge. main.js derives every card's s19 fly-out and s20 recede from
+   `offsetLeft + offsetWidth/2`, so holding the centre keeps the explosion path identical,
+   and holding the width keeps the two columns clearing the bezel. Height then follows from
+   the art's own aspect; `#sats img` has no object-fit, so a stale box STRETCHES the card.
+   `tools/make-satellites.py` owns this arithmetic — run it after any re-export rather than
+   nudging these by hand. It has now been needed twice: editorial 2026-07-29 (article card →
+   poll card, 55px shorter) and ugc 2026-07-30 (Carti → KATSEYE, 64 source px shorter, so
+   the box came down 27.5px with its centre pinned at 330.5). */
 #sat-editorial { left: 408.2px; top: 144.1px; width: 266.6px; height: 423.9px; }
-#sat-ugc       { left: 1261.3px; top: 110.8px; width: 248.3px; height: 439.4px; }
+#sat-ugc       { left: 1261.3px; top: 124.6px; width: 248.3px; height: 411.9px; }
 #sat-comment   { left: 413.4px; top: 750.6px; width: 256.1px; height: 219.8px; }
 #sat-video     { left: 1252.1px; top: 689.9px; width: 264.8px; height: 241.3px; }
 /* The two merch tiles (Figma `2077:8910` left, `2077:8969` right, Scene 19 `1838:120893`).
@@ -384,6 +445,69 @@ img { display: block; }
    another. Derived in tools/make-gold-card.py — rebuild there, don't nudge. */
 #gold-card { left: 405.43px; top: 149.57px; width: 1092.26px; height: 786.15px; }
 
+/* ── s19.3: the STATUS UNLOCKED sheet and the Bronze flip ──
+   All boxes are Figma Scene 19.3 (2126:11248 → group 2190:64222), 1:1 in stage px, local to
+   #status-modal's own box (730, 246) 460x587.5 so the entrance pop scales about the sheet's
+   centre. Stage-level rather than inside #screen because the sheet itself overhangs nothing
+   but sits over the scrim, and the modal's entrance must not be clipped by the bezel.
+   NOTE the flip window deliberately does NOT honour Figma's card box (2190:64227: stage
+   730,423.48 460x333.23, overhanging the sheet on both sides): the flip is now an RGB video
+   on a white backdrop, so it must stay INSIDE the white panel to have nothing to bleed over
+   (user's spec, 2026-07-30). The Figma box is kept on record here in case the flip ever goes
+   back to alpha'd art. */
+#status-modal { left: 730px; top: 246px; width: 460px; height: 587.5px; }
+#sm-panel {
+  position: absolute;
+  left: 31.87px; top: 0;
+  width: 392.63px; height: 587.5px;
+  background: #fff;                      /* the sheet is product UI, not stage furniture */
+  border: 0.72px solid rgba(25, 22, 20, .05);
+  border-bottom-width: 1.45px;
+  border-radius: 11.59px;
+  padding-top: 54.33px;
+  text-align: center;
+}
+#sm-kicker {
+  font: 600 17.3px/1 Inter, sans-serif;
+  text-transform: uppercase;
+  color: #40444A;
+}
+#sm-title {
+  margin-top: 12.36px;
+  font: 700 30.32px/31.87px Inter, sans-serif;
+  letter-spacing: -1.21px;
+  color: #111827;
+}
+#sm-caption {
+  position: absolute;
+  left: 0; right: 0;
+  top: 539.1px;                          /* Figma's 787.71 is the CAP top (text-box-trim) —
+                                            back the line box's half-leading out of it */
+  font: 600 13.04px/15.94px Inter, sans-serif;
+  color: #000;
+  text-align: center;
+}
+/* The flip window — the s11 #xp-modal machinery: a clipping box over the sprite grid, the
+   sheet moved by transform so exactly one cell shows. The box is the video's 4:3 aspect at
+   the PANEL'S INNER WIDTH (392.63 minus the 0.72px border each side), sitting flush inside
+   it: the frames' backdrop is normalised to pure white by make-flip-frames.py, so the video
+   fuses with the panel and cannot bleed past the white frame's bounds (user's spec). Top
+   puts the video's own card centre (49.28% down its frame, measured) on the Figma card
+   slot's centre, local y 344.1 — the card in the video is ~10% smaller than Figma's card
+   node, the price of containing the whole flip inside the panel. */
+#sm-flip {
+  position: absolute;
+  left: 32.6px; top: 199.5px;
+  width: 391.2px; height: 293.4px;
+  overflow: hidden;
+}
+#sm-sheet {
+  position: absolute;
+  left: 0; top: 0;
+  width: 3129.6px;            /* 8 cols x 391.2 — height follows from the sheet's aspect */
+  will-change: transform;
+}
+
 /* ── s24 finale: the I.D. video's frames, one cell at a time ──
    Same machinery as #xp-modal — a window over a sprite grid, the grid moved by transform so
    exactly one frame is ever in the box — but FULL-BLEED: the source is 1280x720, exactly the
@@ -403,15 +527,25 @@ img { display: block; }
   width: 15360px;             /* 8 cols x 1920 — height follows from the sheet's aspect */
   will-change: transform;
 }
+/* the finale's scrubbed fade to black — sits over #ending by DOM order, under the cursor */
+#ending-fade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  visibility: hidden;
+  will-change: opacity;
+}
 
 /* ── Drop shadows in code (assets are now exported shadow-free) ──
    Static filters only — never animated. Tune or delete in this block. */
 #drawer        { filter: drop-shadow(0 20px 50px rgba(0,0,0,.30)); }
 #picker        { filter: drop-shadow(0 14px 30px rgba(0,0,0,.22)); }
 #panel-rerank,
+#panel-product,
 #panel-quiz    { filter: drop-shadow(0 18px 44px rgba(0,0,0,.25)); }
 #sats img      { filter: drop-shadow(0 16px 36px rgba(0,0,0,.28)); }
 #stickers img  { filter: drop-shadow(0 5px 12px rgba(0,0,0,.35)); }
+#sm-panel      { filter: drop-shadow(0 18px 44px rgba(0,0,0,.25)); }
 #id-card       { filter: drop-shadow(0 24px 60px rgba(0,0,0,.35)); }
 #gold-card     { filter: drop-shadow(0 24px 60px rgba(0,0,0,.28)); }
 
@@ -477,26 +611,8 @@ img { display: block; }
 }
 #hud.on { display: block; }
 
-#scroll-hint {
-  position: absolute;
-  bottom: 26px; left: 50%;
-  transform: translateX(-50%);
-  color: rgba(255,255,255,.45);
-  font-size: 14px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  z-index: 80;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  transition: opacity .4s ease;
-}
-#scroll-hint span { animation: hintbob 1.6s ease-in-out infinite; }
-@keyframes hintbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-
-@media (prefers-reduced-motion: reduce) {
-  #scroll-hint span { animation: none; }
-}
+/* The "Scroll to explore" hint was removed 2026-07-30 (user's call). Its rules, the
+   `hintbob` keyframes and the reduced-motion override went with it — nothing else used them. */
 
 
 /* ══ s10 comments tray ══

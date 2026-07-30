@@ -1,801 +1,840 @@
 {
- "note": "All sizes in CSS px (1x, stage coords 1920x1080). Images are 2x unless noted. 2026-07-28 refresh: overlay assets replaced with shadow-free exports from the 'Scene N' source folders (kept alongside); drop shadows now applied in styles.css. 'stage' = [left, top] in stage px where the element is placed. 2026-07-28 (late): the stage went BLACK \u2014 see the --stage-bg/--fg/--chip/--device/--slab tokens at the top of styles.css. Everything inside the phone screen is still the light product UI; only stage-level furniture inverted.",
- "assets": {
-  "drawer": {
-   "file": "drawer.webp",
-   "w": 420,
-   "h": 854,
-   "figmaNodeId": "1838:110417",
-   "scale": 2,
-   "stage": [
-    1113,
-    123
-   ],
-   "source": "Scene 10/Asset 5.2.png",
-   "note": "content-only crop (old render incl. shadow was 920x1080 @ 882,0)"
-  },
-  "emoji-grid": {
-   "file": "emoji-grid.webp",
-   "w": 355,
-   "h": 893,
-   "rb": [
-    11358,
-    93,
-    355,
-    893
-   ],
-   "bb": [
-    11358,
-    93,
-    355,
-    893
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "panel-rerank": {
-   "file": "panel-rerank.webp",
-   "w": 390,
-   "h": 887,
-   "figmaNodeId": "1838:114790",
-   "scale": 2,
-   "stage": [
-    1253,
-    97
-   ],
-   "source": "Scene 14/rerank.png"
-  },
-  "gold-card": {
-   "file": "gold-card.webp",
-   "w": 1092.26,
-   "h": 786.15,
-   "stage": [
-    405.43,
-    149.57
-   ],
-   "scale": 2,
-   "source": "General/Jordan Rose Id Wrapped.png",
-   "note": "The encased I.D. Replaced a different revision that had a WHITE case and a different photo. Positioned so the case's inner card (121,290 1899x1218 in the source) lands exactly on #id-card's stage box, which is why s23 can keep the plain card on screen and wrap it. Rebuild with tools/make-gold-card.py"
-  },
-  "sat-ugc": {
-   "file": "sat-ugc.webp",
-   "w": 282,
-   "h": 499,
-   "figmaNodeId": "1838:121413",
-   "scale": 2,
-   "stage": [
-    1286,
-    59
-   ],
-   "source": "Scene 19/UGC.png",
-   "restingRotationDeg": 10,
-   "note": "upright export; rotation re-applied in main.js; left set so rotated edge clears the phone by the mirrored left-card gap"
-  },
-  "sat-editorial": {
-   "file": "sat-editorial.webp",
-   "w": 282.5,
-   "h": 449.5,
-   "figmaNodeId": null,
-   "scale": 2,
-   "stage": [
-    372,
-    113.25
-   ],
-   "source": "Scene 19/Latest Editorial.png",
-   "restingRotationDeg": -5,
-   "note": "re-exported 2026-07-29: art changed (article card -> 'Vote for Best Playboi Carti Album' poll) and 55px shorter. Vertical CENTRE held at 338 so the s19 fly-out path, which main.js derives from each card's centre, is unchanged. Original node 1838:120852 NO LONGER EXISTS in the Figma file \u2014 ask for the new node before re-exporting. Upright export; rotation re-applied in main.js."
-  },
-  "xp-modal": {
-   "file": "xp-modal.webp",
-   "w": 358,
-   "h": 457,
-   "rb": [
-    20981,
-    312,
-    358,
-    457
-   ],
-   "bb": [
-    20981,
-    312,
-    358,
-    457
-   ],
-   "figmaNodeId": "1838:111574",
-   "scale": 2
-  },
-  "sat-video": {
-   "file": "sat-video.webp",
-   "w": 282,
-   "h": 257,
-   "figmaNodeId": "1838:121477",
-   "scale": 2,
-   "stage": [
-    1295,
-    626
-   ],
-   "source": "Scene 19/Video.png",
-   "restingRotationDeg": 16.5,
-   "note": "upright export; rotation re-applied in main.js; left set so rotated edge clears the phone by the mirrored left-card gap"
-  },
-  "sat-comment": {
-   "file": "sat-comment.webp",
-   "w": 282,
-   "h": 242,
-   "figmaNodeId": "1838:121440",
-   "scale": 2,
-   "stage": [
-    346,
-    642
-   ],
-   "source": "Scene 19/UGC Comment.png",
-   "restingRotationDeg": -16,
-   "note": "upright export; rotation re-applied in main.js (measured from old baked render); fan widened +-20px vs storyboard (2026-07-28)"
-  },
-  "toast-20": {
-   "file": "toast-20.webp",
-   "w": 440,
-   "h": 299,
-   "rb": [
-    22960,
-    64,
-    440,
-    299
-   ],
-   "bb": [
-    23022.0,
-    112,
-    316,
-    87
-   ],
-   "figmaNodeId": "1838:113166",
-   "scale": 2,
-   "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (316 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
-  },
-  "toast-30": {
-   "file": "toast-30.webp",
-   "w": 440,
-   "h": 299,
-   "rb": [
-    24980,
-    64,
-    440,
-    299
-   ],
-   "bb": [
-    25053.5,
-    112,
-    293,
-    87
-   ],
-   "figmaNodeId": "1838:113788",
-   "scale": 2,
-   "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (293 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
-  },
-  "toast-80": {
-   "file": "toast-80.webp",
-   "w": 440,
-   "h": 299,
-   "rb": [
-    27000,
-    64,
-    440,
-    299
-   ],
-   "bb": [
-    27074.5,
-    112,
-    291,
-    87
-   ],
-   "figmaNodeId": "1838:114592",
-   "scale": 2,
-   "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (291 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
-  },
-  "toast-120": {
-   "file": "toast-120.webp",
-   "w": 440,
-   "h": 299,
-   "rb": [
-    29020,
-    64,
-    440,
-    299
-   ],
-   "bb": [
-    29085.5,
-    112,
-    309,
-    87
-   ],
-   "figmaNodeId": "1838:115423",
-   "scale": 2,
-   "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (309 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
-  },
-  "picker": {
-   "file": "picker.webp",
-   "w": 729,
-   "h": 277,
-   "figmaNodeId": "1898:70619",
-   "scale": 2,
-   "stage": [
-    405,
-    337
-   ],
-   "source": "Scene 6/Reactions Dark.png + Scene 6/Reactions Light (previous picker.webp).webp",
-   "note": "DARK variant, and a COMPOSITE \u2014 regenerate with tools/make-picker-dark.py, never by exporting the node alone. The tray fill is translucent with a backdrop blur, so an isolated export bakes flat black behind it and loses the phone bleeding through the right half. RGB comes from a 2x render of the whole dark Scene 06 cropped to this export frame; alpha is borrowed from the previous light asset (identical 1458x554 canvas); the cursor the storyboard parks on the tray is healed out. Geometry is unchanged from the light asset, so #picker keeps its CSS box and the '49% 100%' pop origin."
-  },
-  "sticker-6": {
-   "file": "sticker-6.webp",
-   "w": 155.5,
-   "h": 225.0,
-   "figmaNodeId": "1844:42153",
-   "scale": 2,
-   "screenPos": [
-    284.88,
-    648.16
-   ],
-   "source": "General/Rotated/Screenshot 2026-07-22 at 3.51.49 PM 2.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-8": {
-   "file": "sticker-8.webp",
-   "w": 205.0,
-   "h": 210.5,
-   "figmaNodeId": "1844:42155",
-   "scale": 2,
-   "screenPos": [
-    148.04,
-    567.81
-   ],
-   "source": "General/Rotated/Screenshot 2026-07-22 at 3.52.10 PM 2.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-5": {
-   "file": "sticker-5.webp",
-   "w": 125.5,
-   "h": 184.0,
-   "figmaNodeId": "1844:42152",
-   "scale": 2,
-   "screenPos": [
-    20.73,
-    760.93
-   ],
-   "source": "General/Rotated/image 1964.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-4": {
-   "file": "sticker-4.webp",
-   "w": 164.5,
-   "h": 162.5,
-   "figmaNodeId": "1844:42151",
-   "scale": 2,
-   "screenPos": [
-    114.54,
-    789.56
-   ],
-   "source": "General/Rotated/image 1965.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "nav-latest": {
-   "file": "nav-latest.webp",
-   "w": 440,
-   "h": 159,
-   "rb": [
-    740,
-    64,
-    440,
-    159
-   ],
-   "bb": [
-    740,
-    64,
-    440,
-    159
-   ],
-   "figmaNodeId": "1838:87201",
-   "scale": 2
-  },
-  "nav-myc": {
-   "file": "nav-myc.webp",
-   "w": 440,
-   "h": 159,
-   "rb": [
-    12860,
-    64,
-    440,
-    159
-   ],
-   "bb": [
-    12860,
-    64,
-    440,
-    159
-   ],
-   "figmaNodeId": "1838:104877",
-   "scale": 2
-  },
-  "nav-fandom": {
-   "file": "nav-fandom.webp",
-   "w": 440,
-   "h": 159,
-   "rb": [
-    35080,
-    64,
-    440,
-    159
-   ],
-   "bb": [
-    35080,
-    64,
-    440,
-    159
-   ],
-   "figmaNodeId": "1838:120681",
-   "scale": 2
-  },
-  "sticker-2": {
-   "file": "sticker-2.webp",
-   "w": 153.5,
-   "h": 154.0,
-   "figmaNodeId": "1844:42149",
-   "scale": 2,
-   "screenPos": [
-    36.89,
-    563.42
-   ],
-   "source": "General/Rotated/image 1963.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-1": {
-   "file": "sticker-1.webp",
-   "w": 254.0,
-   "h": 138.5,
-   "figmaNodeId": "1844:42148",
-   "scale": 2,
-   "screenPos": [
-    -0.17,
-    672.49
-   ],
-   "source": "General/Rotated/Screenshot 2026-07-22 at 3.48.58 PM 1.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-3": {
-   "file": "sticker-3.webp",
-   "w": 99.0,
-   "h": 94.0,
-   "figmaNodeId": "1844:42150",
-   "scale": 2,
-   "screenPos": [
-    242.0,
-    775.28
-   ],
-   "source": "General/Rotated/Screenshot 2026-07-22 at 3.48.58 PM 5.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "sticker-7": {
-   "file": "sticker-7.webp",
-   "w": 115.0,
-   "h": 81.0,
-   "figmaNodeId": "1844:42154",
-   "scale": 2,
-   "screenPos": [
-    261.0,
-    860.28
-   ],
-   "source": "General/Rotated/Screenshot 2026-07-22 at 3.51.34 PM 2.png",
-   "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
-  },
-  "react-1": {
-   "file": "react-1.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    0,
-    0
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-2": {
-   "file": "react-2.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    185,
-    0
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-3": {
-   "file": "react-3.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    0,
-    185
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-4": {
-   "file": "react-4.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    185,
-    185
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-5": {
-   "file": "react-5.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    0,
-    369
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-6": {
-   "file": "react-6.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    185,
-    369
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-7": {
-   "file": "react-7.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    0,
-    554
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-8": {
-   "file": "react-8.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    185,
-    554
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-9": {
-   "file": "react-9.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    0,
-    738
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "react-10": {
-   "file": "react-10.webp",
-   "w": 155,
-   "h": 155,
-   "gridPos": [
-    185,
-    738
-   ],
-   "figmaNodeId": "1844:38061",
-   "scale": 2,
-   "source": "Scene 6 (react06-09 renumbered to match grid order)",
-   "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
-  },
-  "strip-latest": {
-   "tiles": [
-    {
-     "file": "strip-latest-t0.webp",
-     "cssY": 0.0,
-     "cssH": 2048.0
+  "note": "All sizes in CSS px (1x, stage coords 1920x1080). Images are 2x unless noted. 2026-07-28 refresh: overlay assets replaced with shadow-free exports from the 'Scene N' source folders (kept alongside); drop shadows now applied in styles.css. 'stage' = [left, top] in stage px where the element is placed. 2026-07-28 (late): the stage went BLACK \u2014 see the --stage-bg/--fg/--chip/--device/--slab tokens at the top of styles.css. Everything inside the phone screen is still the light product UI; only stage-level furniture inverted.",
+  "assets": {
+    "drawer": {
+      "file": "drawer.webp",
+      "w": 420,
+      "h": 854,
+      "figmaNodeId": "1838:110417",
+      "scale": 2,
+      "stage": [
+        1113,
+        123
+      ],
+      "source": "Scene 10/Asset 5.2.png",
+      "note": "content-only crop (old render incl. shadow was 920x1080 @ 882,0)"
     },
-    {
-     "file": "strip-latest-t1.webp",
-     "cssY": 2048.0,
-     "cssH": 2048.0
+    "emoji-grid": {
+      "file": "emoji-grid.webp",
+      "w": 355,
+      "h": 893,
+      "rb": [
+        11358,
+        93,
+        355,
+        893
+      ],
+      "bb": [
+        11358,
+        93,
+        355,
+        893
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
     },
-    {
-     "file": "strip-latest-t2.webp",
-     "cssY": 4096.0,
-     "cssH": 2048.0
+    "panel-rerank": {
+      "file": "panel-rerank.webp",
+      "w": 390,
+      "h": 887,
+      "figmaNodeId": "1838:114790",
+      "scale": 2,
+      "stage": [
+        1253,
+        97
+      ],
+      "source": "Scene 14/rerank.png"
     },
-    {
-     "file": "strip-latest-t3.webp",
-     "cssY": 6144.0,
-     "cssH": 2048.0
+    "gold-card": {
+      "file": "gold-card.webp",
+      "w": 1092.26,
+      "h": 786.15,
+      "stage": [
+        405.43,
+        149.57
+      ],
+      "scale": 2,
+      "source": "General/Jordan Rose Id Wrapped.png",
+      "note": "The encased I.D. Replaced a different revision that had a WHITE case and a different photo. Positioned so the case's inner card (121,290 1899x1218 in the source) lands exactly on #id-card's stage box, which is why s23 can keep the plain card on screen and wrap it. Rebuild with tools/make-gold-card.py"
     },
-    {
-     "file": "strip-latest-t4.webp",
-     "cssY": 8192.0,
-     "cssH": 2048.0
+    "sat-ugc": {
+      "file": "sat-ugc.webp",
+      "w": 282,
+      "h": 467,
+      "figmaNodeId": "1838:121413",
+      "scale": 2,
+      "stage": [
+        1286,
+        59
+      ],
+      "source": "Scene 19/UGC.png",
+      "restingRotationDeg": 10,
+      "note": "re-exported 2026-07-30: art changed (Adam Kwazoski / 'CARTI DID NOT MISS' -> Kiji Fiji / 'GUESS WHO MADE IT TO THE LIVE SHOW!!') and 64 source px shorter, so the stage box came down 439.4 -> 411.9 with its vertical CENTRE pinned at 330.5 \u2014 main.js derives the s19 fly-out from each card's centre, so the explosion path is unchanged. Upright export; rotation re-applied in main.js; left set so the rotated edge clears the phone by the mirrored left-card gap. Rebuild with tools/make-satellites.py, which owns the box arithmetic."
     },
-    {
-     "file": "strip-latest-t5.webp",
-     "cssY": 10240.0,
-     "cssH": 843.5
+    "sat-editorial": {
+      "file": "sat-editorial.webp",
+      "w": 282.5,
+      "h": 449.5,
+      "figmaNodeId": null,
+      "scale": 2,
+      "stage": [
+        372,
+        113.25
+      ],
+      "source": "Scene 19/Latest Editorial.png",
+      "restingRotationDeg": -5,
+      "note": "re-exported 2026-07-30: art changed again (poll is now 'Vote for Best KATSEYE Song', was 'Vote for Best Playboi Carti Album'); same pixel size, so the box did not move. The 2026-07-29 pass is what set this box \u2014 the card went from an article to a poll and 55px shorter, and its vertical CENTRE was held rather than its top. Original node 1838:120852 NO LONGER EXISTS in the Figma file (now 1974:8918) \u2014 ask for the current node before re-exporting. Upright export; rotation re-applied in main.js. Rebuild with tools/make-satellites.py."
+    },
+    "xp-modal": {
+      "file": "xp-modal.webp",
+      "w": 358,
+      "h": 457,
+      "rb": [
+        20981,
+        312,
+        358,
+        457
+      ],
+      "bb": [
+        20981,
+        312,
+        358,
+        457
+      ],
+      "figmaNodeId": "1838:111574",
+      "scale": 2
+    },
+    "sat-video": {
+      "file": "sat-video.webp",
+      "w": 282,
+      "h": 257,
+      "figmaNodeId": "1838:121477",
+      "scale": 2,
+      "stage": [
+        1295,
+        626
+      ],
+      "source": "Scene 19/Video.png",
+      "restingRotationDeg": 16.5,
+      "note": "re-exported 2026-07-30: art changed (interview thumb Playboi Carti on Hot 97 -> KATSEYE 'Wild Hearts'); same pixel size, so the box did not move. Upright export; rotation re-applied in main.js; left set so rotated edge clears the phone by the mirrored left-card gap. Rebuild with tools/make-satellites.py."
+    },
+    "sat-comment": {
+      "file": "sat-comment.webp",
+      "w": 282,
+      "h": 242,
+      "figmaNodeId": "1838:121440",
+      "scale": 2,
+      "stage": [
+        346,
+        642
+      ],
+      "source": "Scene 19/UGC Comment.png",
+      "restingRotationDeg": -16,
+      "note": "upright export; rotation re-applied in main.js (measured from old baked render); fan widened +-20px vs storyboard (2026-07-28). The ONE Scene 19 card not re-exported in the 2026-07-30 KATSEYE pass: its quote already reads 'yoonchae mid-spin', but the article it links still says \"Playboi Carti and Travis Scott's BACKR00MS Video\" \u2014 flagged to the user 2026-07-30, not changed here. Rebuild with tools/make-satellites.py."
+    },
+    "toast-20": {
+      "file": "toast-20.webp",
+      "w": 440,
+      "h": 299,
+      "rb": [
+        22960,
+        64,
+        440,
+        299
+      ],
+      "bb": [
+        23022.0,
+        112,
+        316,
+        87
+      ],
+      "figmaNodeId": "1838:113166",
+      "scale": 2,
+      "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (316 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
+    },
+    "toast-30": {
+      "file": "toast-30.webp",
+      "w": 440,
+      "h": 299,
+      "rb": [
+        24980,
+        64,
+        440,
+        299
+      ],
+      "bb": [
+        25053.5,
+        112,
+        293,
+        87
+      ],
+      "figmaNodeId": "1838:113788",
+      "scale": 2,
+      "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (293 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
+    },
+    "toast-80": {
+      "file": "toast-80.webp",
+      "w": 440,
+      "h": 299,
+      "rb": [
+        27000,
+        64,
+        440,
+        299
+      ],
+      "bb": [
+        27074.5,
+        112,
+        291,
+        87
+      ],
+      "figmaNodeId": "1838:114592",
+      "scale": 2,
+      "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (291 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
+    },
+    "toast-120": {
+      "file": "toast-120.webp",
+      "w": 440,
+      "h": 299,
+      "rb": [
+        29020,
+        64,
+        440,
+        299
+      ],
+      "bb": [
+        29085.5,
+        112,
+        309,
+        87
+      ],
+      "figmaNodeId": "1838:115423",
+      "scale": 2,
+      "note": "coin art updated 2026-07-29: the new MY COMPLEX XP coin replaces the silver speech bubble. The coin is wider, so the pill grew (309 wide now) and all four were RE-CENTRED in the 440px screen -- they used to share a left edge of x=85, which was centre at the old widths and is not at the new ones. Rebuilt by tools/make-toasts.py, NOT a plain node export."
+    },
+    "picker": {
+      "file": "picker.webp",
+      "w": 729,
+      "h": 277,
+      "figmaNodeId": "1898:70619",
+      "scale": 2,
+      "stage": [
+        405,
+        337
+      ],
+      "source": "Scene 6/Reactions Dark.png + Scene 6/Reactions Light (previous picker.webp).webp",
+      "note": "DARK variant, and a COMPOSITE \u2014 regenerate with tools/make-picker-dark.py, never by exporting the node alone. The tray fill is translucent with a backdrop blur, so an isolated export bakes flat black behind it and loses the phone bleeding through the right half. RGB comes from a 2x render of the whole dark Scene 06 cropped to this export frame; alpha is borrowed from the previous light asset (identical 1458x554 canvas); the cursor the storyboard parks on the tray is healed out. Geometry is unchanged from the light asset, so #picker keeps its CSS box and the '49% 100%' pop origin."
+    },
+    "sticker-6": {
+      "file": "sticker-6.webp",
+      "w": 155.5,
+      "h": 225.0,
+      "figmaNodeId": "1844:42153",
+      "scale": 2,
+      "screenPos": [
+        284.88,
+        648.16
+      ],
+      "source": "General/Rotated/Screenshot 2026-07-22 at 3.51.49 PM 2.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-8": {
+      "file": "sticker-8.webp",
+      "w": 205.0,
+      "h": 210.5,
+      "figmaNodeId": "1844:42155",
+      "scale": 2,
+      "screenPos": [
+        148.04,
+        567.81
+      ],
+      "source": "General/Rotated/Screenshot 2026-07-22 at 3.52.10 PM 2.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-5": {
+      "file": "sticker-5.webp",
+      "w": 125.5,
+      "h": 184.0,
+      "figmaNodeId": "1844:42152",
+      "scale": 2,
+      "screenPos": [
+        20.73,
+        760.93
+      ],
+      "source": "General/Rotated/image 1964.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-4": {
+      "file": "sticker-4.webp",
+      "w": 164.5,
+      "h": 162.5,
+      "figmaNodeId": "1844:42151",
+      "scale": 2,
+      "screenPos": [
+        114.54,
+        789.56
+      ],
+      "source": "General/Rotated/image 1965.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "nav-latest": {
+      "file": "nav-latest.webp",
+      "w": 440,
+      "h": 159,
+      "rb": [
+        740,
+        64,
+        440,
+        159
+      ],
+      "bb": [
+        740,
+        64,
+        440,
+        159
+      ],
+      "figmaNodeId": "1838:87201",
+      "scale": 2
+    },
+    "nav-myc": {
+      "file": "nav-myc.webp",
+      "w": 440,
+      "h": 159,
+      "rb": [
+        12860,
+        64,
+        440,
+        159
+      ],
+      "bb": [
+        12860,
+        64,
+        440,
+        159
+      ],
+      "figmaNodeId": "1838:104877",
+      "scale": 2
+    },
+    "nav-fandom": {
+      "file": "nav-fandom.webp",
+      "w": 440,
+      "h": 159,
+      "rb": [
+        35080,
+        64,
+        440,
+        159
+      ],
+      "bb": [
+        35080,
+        64,
+        440,
+        159
+      ],
+      "figmaNodeId": "1838:120681",
+      "scale": 2
+    },
+    "sticker-2": {
+      "file": "sticker-2.webp",
+      "w": 153.5,
+      "h": 154.0,
+      "figmaNodeId": "1844:42149",
+      "scale": 2,
+      "screenPos": [
+        36.89,
+        563.42
+      ],
+      "source": "General/Rotated/image 1963.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-1": {
+      "file": "sticker-1.webp",
+      "w": 254.0,
+      "h": 138.5,
+      "figmaNodeId": "1844:42148",
+      "scale": 2,
+      "screenPos": [
+        -0.17,
+        672.49
+      ],
+      "source": "General/Rotated/Screenshot 2026-07-22 at 3.48.58 PM 1.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-3": {
+      "file": "sticker-3.webp",
+      "w": 99.0,
+      "h": 94.0,
+      "figmaNodeId": "1844:42150",
+      "scale": 2,
+      "screenPos": [
+        242.0,
+        775.28
+      ],
+      "source": "General/Rotated/Screenshot 2026-07-22 at 3.48.58 PM 5.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "sticker-7": {
+      "file": "sticker-7.webp",
+      "w": 115.0,
+      "h": 81.0,
+      "figmaNodeId": "1844:42154",
+      "scale": 2,
+      "screenPos": [
+        261.0,
+        860.28
+      ],
+      "source": "General/Rotated/Screenshot 2026-07-22 at 3.51.34 PM 2.png",
+      "note": "ROTATED export \u2014 the node's rotation is baked into the bitmap, so the page draws it at rotation 0. In-screen stage px, MEASURED off a render of Scene 21 (node 1844:39703) rather than read from the node x/y, which is not where a rotated node renders. Rebuild with tools/make-badges.py"
+    },
+    "react-1": {
+      "file": "react-1.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        0,
+        0
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-2": {
+      "file": "react-2.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        185,
+        0
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-3": {
+      "file": "react-3.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        0,
+        185
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-4": {
+      "file": "react-4.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        185,
+        185
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-5": {
+      "file": "react-5.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        0,
+        369
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-6": {
+      "file": "react-6.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        185,
+        369
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-7": {
+      "file": "react-7.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        0,
+        554
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-8": {
+      "file": "react-8.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        185,
+        554
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-9": {
+      "file": "react-9.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        0,
+        738
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "react-10": {
+      "file": "react-10.webp",
+      "w": 155,
+      "h": 155,
+      "gridPos": [
+        185,
+        738
+      ],
+      "figmaNodeId": "1844:38061",
+      "scale": 2,
+      "source": "Scene 6 (react06-09 renumbered to match grid order)",
+      "note": "RETIRED 2026-07-28 (late): the dark Scene 06 replaced the static 2x5 column of 10 tiles with the animated 4x5 wall \u2014 see the 'react-wall' entry. File kept as history; not fetched at runtime."
+    },
+    "strip-latest": {
+      "tiles": [
+        {
+          "file": "strip-latest-t0.webp",
+          "cssY": 0.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-latest-t1.webp",
+          "cssY": 2048.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-latest-t2.webp",
+          "cssY": 4096.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-latest-t3.webp",
+          "cssY": 6144.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-latest-t4.webp",
+          "cssY": 8192.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-latest-t5.webp",
+          "cssY": 10240.0,
+          "cssH": 843.5
+        }
+      ],
+      "w": 440.0,
+      "h": 11083.5,
+      "scale": 2
+    },
+    "strip-myc": {
+      "tiles": [
+        {
+          "file": "strip-myc-t0.webp",
+          "cssY": 0.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-myc-t1.webp",
+          "cssY": 2048.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-myc-t2.webp",
+          "cssY": 4096.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-myc-t3.webp",
+          "cssY": 6144.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-myc-t4.webp",
+          "cssY": 8192.0,
+          "cssH": 132.5
+        }
+      ],
+      "w": 440.0,
+      "h": 8324.5,
+      "scale": 2
+    },
+    "strip-rail": {
+      "tiles": [
+        {
+          "file": "strip-rail-t0.webp",
+          "cssY": 0.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-rail-t1.webp",
+          "cssY": 2048.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-rail-t2.webp",
+          "cssY": 4096.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-rail-t3.webp",
+          "cssY": 6144.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-rail-t4.webp",
+          "cssY": 8192.0,
+          "cssH": 1650.5
+        }
+      ],
+      "w": 440.0,
+      "h": 9842.5,
+      "scale": 2
+    },
+    "strip-fandom": {
+      "tiles": [
+        {
+          "file": "strip-fandom-t0.webp",
+          "cssY": 0.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-fandom-t1.webp",
+          "cssY": 2048.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-fandom-t2.webp",
+          "cssY": 4096.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-fandom-t3.webp",
+          "cssY": 6144.0,
+          "cssH": 2048.0
+        },
+        {
+          "file": "strip-fandom-t4.webp",
+          "cssY": 8192.0,
+          "cssH": 109.5
+        }
+      ],
+      "w": 440.0,
+      "h": 8301.5,
+      "scale": 2
+    },
+    "patches-latest-s4": {
+      "patches": [],
+      "scale": 2
+    },
+    "patches-latest-s5": {
+      "patches": [],
+      "scale": 2
+    },
+    "patches-myc-s8": {
+      "patches": [],
+      "scale": 2
+    },
+    "patches-myc-s9": {
+      "patches": [],
+      "scale": 2
+    },
+    "patches-myc-s12": {
+      "patches": [],
+      "scale": 2
+    },
+    "lanyard": {
+      "file": "lanyard.webp",
+      "w": 1920,
+      "h": 1080,
+      "stage": [
+        0,
+        0
+      ],
+      "scale": 2,
+      "source": "Scene 24/image 2006.png",
+      "note": "RETIRED 2026-07-29: the static 'worn in the real world' still that closed s24. Replaced by ending-frames.webp, the closing video scrubbed frame by frame. Kept in git as source material; excluded in .vercelignore. full-bleed 3840x2160 photo"
+    },
+    "id-card": {
+      "file": "id-card.webp",
+      "w": 958.5,
+      "h": 594.0,
+      "stage": [
+        466.5,
+        291.0
+      ],
+      "scale": 2,
+      "figmaNodeId": "1878:63616",
+      "source": "General/Jordan Rose ID.png (2x pixels) + MCP contentsOnly render (alpha)",
+      "note": "Complex I.D. card, black strip. The STAGE BOX is the first frame of General/Jordan Rose ID Video.mp4 (card incl. strip, 639x396 of 1280x720, x1.5), not the Figma node box, because the video takes over frame-by-frame after the s21 blow-up and the two must coincide. Rebuild with tools/make-id-card.py"
+    },
+    "callout-icons": {
+      "files": [
+        "icon-react.svg",
+        "icon-comment.svg",
+        "icon-bookmark.svg"
+      ],
+      "source": "Scene 5",
+      "note": "callouts rebuilt as HTML/CSS in index.html/styles.css (live text + SVG icons)"
+    },
+    "quiz-frames": {
+      "files": [
+        "quiz-q1.webp",
+        "quiz-q1-sel.webp",
+        "quiz-q2.webp",
+        "quiz-q2-sel.webp",
+        "quiz-reveal.webp",
+        "quiz-badge.webp"
+      ],
+      "w": 390,
+      "h": 887,
+      "stage": [
+        1245,
+        97
+      ],
+      "scale": 2,
+      "source": "Reference Projects/4. Complex Quiz \u2014 live captures of /play (prod build, 390x887 @2x)",
+      "note": "s15 autoplay stack: Q1 -> A selected -> Q2 -> A selected -> 5/5 reveal -> First Play badge; replaces the static panel-quiz.webp (Figma 1838:115609)"
+    },
+    "callouts": {
+      "file": "(coded \u2014 inline SVG + live text in index.html)",
+      "figmaNodeId": "1844:37192 (idle, Scene 05) / 1901:71436 (Scene 5.1)",
+      "note": "Each callout carries an .idle face (Scene 05) and an .act face (the hover/pressed state from Scenes 5.1, 5.2, 5.3, 5.3-follow). Row boxes, stage px: react (339,288.90) 205.54x88 -> act (339,284.78) 218.78x96.24; comment (339,431.06) 270.54x88 -> act 274.54 wide; bookmark (339,573.21) 279.23x83.69 -> act 287.23 wide; follow (339,711.06) 279.23x80 -> FOLLOWING 312 wide. Padding 8, gap 13.54, radius 8; label 32px, Regular idle / Bold hovered (the FOLLOW pill label stays Regular). Active icon art: react = same glyph rotated -7deg; comment = mirrored bubble, 80.25x72, overhanging the 72px slot to the right; bookmark = filled; follow = plus (44x44) -> tick (44x44). Figma's auto-layout reflows the column when a row grows; we keep row positions fixed and share an icon centre between the two faces instead, so nothing moves mid-scrub."
+    },
+    "react-wall": {
+      "file": "react-wall.webp",
+      "w": 596,
+      "h": 596,
+      "figmaNodeId": "1898:70637",
+      "scale": "1.34 (800px source shown at 596)",
+      "stage": [
+        1199,
+        257
+      ],
+      "source": "Scene 6/download (2).gif",
+      "animated": {
+        "frames": 56,
+        "sourceFrames": 70,
+        "loopMs": 2330,
+        "fps": "~30"
+      },
+      "grid": {
+        "cols": 4,
+        "rows": 5,
+        "sourceCell": [
+          200,
+          160
+        ],
+        "stageCell": [
+          149,
+          119.2
+        ]
+      },
+      "note": "Animated 4x5 wall of 20 looping reactions. Rebuild with tools/make-react-wall.py (2.6 MB vs the GIF's 7.5 MB, and cleaner \u2014 the GIF's 256-colour palette dithers the gradients). Pillow coalesces identical consecutive frames 70 -> 56 and folds their durations, so the loop still totals exactly 2330 ms; the script asserts this, because Pillow's WebP READER reports per-frame durations as None and will look like data loss. Rendered through 20 clipping cells built in buildDom (one <img> each, all pointing at this one file, so one decode and all 20 stay frame-synced) which lets each cell stagger in on its own. The cells tile the image exactly, so at rest the composite is pixel-identical to the whole frame and emoji that overflow their cell (jack-in-the-box, NO sign) are not clipped. Background is opaque black \u2014 the same black as the stage \u2014 so no alpha is needed; if the stage ever stops being #000 this asset needs keying."
+    },
+    "sat-merch-left": {
+      "file": "sat-merch-left.webp",
+      "w": 367.5,
+      "h": 430.0,
+      "figmaNodeId": "2077:8910",
+      "scale": 2,
+      "stage": [
+        34.15,
+        405.5
+      ],
+      "restingRotationDeg": 0,
+      "note": "added to Scene 19 (1838:120893) 2026-07-29. Rotation is BAKED INTO THE ART, unlike the other four satellites \u2014 Figma reports only the rotated bbox for this node and un-rotating in PIL would resample the card. Built by the dual-source matte: RGB from download_assets scale 2 (opaque), alpha from a contentsOnly screenshot (transparent, 1x), alpha upscaled to 2x. Box is centre-matched to the Figma bbox centre. No baked shadow (0.8% soft alpha = antialiasing), so the CSS drop-shadow on #sats img is correct."
+    },
+    "sat-merch-right": {
+      "file": "sat-merch-right.webp",
+      "w": 369.0,
+      "h": 430.5,
+      "figmaNodeId": "2077:8969",
+      "scale": 2,
+      "stage": [
+        1646.45,
+        348.8
+      ],
+      "restingRotationDeg": 0,
+      "note": "added to Scene 19 (1838:120893) 2026-07-29. Rotation is BAKED INTO THE ART, unlike the other four satellites \u2014 Figma reports only the rotated bbox for this node and un-rotating in PIL would resample the card. Built by the dual-source matte: RGB from download_assets scale 2 (opaque), alpha from a contentsOnly screenshot (transparent, 1x), alpha upscaled to 2x. Box is centre-matched to the Figma bbox centre. No baked shadow (0.8% soft alpha = antialiasing), so the CSS drop-shadow on #sats img is correct."
+    },
+    "ending-frames": {
+      "file": "ending-frames.webp",
+      "w": 1920,
+      "h": 1080,
+      "stage": [
+        0,
+        0
+      ],
+      "scale": 1,
+      "source": "General/Jordan Rose ID Video.mp4",
+      "note": "NOT a node export \u2014 tools/make-ending-frames.py. The s24 finale: an 8x8 sprite grid of the closing I.D. video (60 frames, resampled from the source's 24 fps to 12), swept by the timeline and positioned with a transform so one cell shows at a time. Cells are 1024x576 in the sheet and displayed full-bleed at 1920x1080 \u2014 the source is 1280x720, exactly the stage's 16:9. Frame 0 registers on #id-card / the encased #gold-card, which is what lets s24 hand over with a plain crossfade. 2.96 MB."
+    },
+    "flip-regular": {
+      "file": "flip-regular.webp",
+      "w": 460,
+      "h": 333.23,
+      "stage": [
+        730,
+        423.48
+      ],
+      "scale": 2,
+      "figmaNodeId": "2190:64227",
+      "source": "card animation/card 1.png",
+      "note": "RETIRED 2026-07-30, same day it was built \u2014 the s19.3 flip became the designer's video as a sprite sheet (see flip-frames). Kept in git as the coded-flip record; excluded in .vercelignore. s19.3 flip face A: Martin Hen's REGULAR (800 PTS) card in its case. Stage box is Figma Scene 19.3's own image node (2126:11248 -> 2190:64227); registered on its solid-alpha bbox against flip-bronze so the 180deg rotateY reads as one card upgrading. Rebuild with tools/make-flip-cards.py"
+    },
+    "flip-bronze": {
+      "file": "flip-bronze.webp",
+      "w": 460,
+      "h": 333.23,
+      "stage": [
+        730,
+        423.48
+      ],
+      "scale": 2,
+      "figmaNodeId": "2190:64227",
+      "source": "card animation/card 2.png",
+      "note": "RETIRED 2026-07-30, same day it was built \u2014 the s19.3 flip became the designer's video as a sprite sheet (see flip-frames). Kept in git as the coded-flip record; excluded in .vercelignore. s19.3 flip face B: the same card at BRONZE (1000 PTS) \u2014 what the flip reveals. Same box and registration as flip-regular; it is the card's BACK face, pre-rotated 180deg in CSS so the half-turn lands it un-mirrored. Rebuild with tools/make-flip-cards.py"
+    },
+    "flip-frames": {
+      "file": "flip-frames.webp",
+      "w": 391.2,
+      "h": 293.4,
+      "stage": [
+        762.6,
+        445.5
+      ],
+      "scale": 1.5,
+      "figmaNodeId": null,
+      "source": "card animation/Flip_Transition_Animation_Reversed.mp4",
+      "note": "s19.3: the designer's card-flip video (Regular -> Bronze) as an 8x8 sprite grid, 60 frames at 12fps, scrubbed by the timeline like the s11/s24 sheets. Frames' backdrop is normalised to pure white so the window fuses with the sheet panel it sits inside (nothing may bleed past the white frame - user's spec). Stage box is the panel's inner width at the video's 4:3; NOT Figma's card node, which overhangs the panel. Rebuild with tools/make-flip-frames.py - read the docstring first (rVFC capture at playbackRate 0.25, mediaTime sampling)."
     }
-   ],
-   "w": 440.0,
-   "h": 11083.5,
-   "scale": 2
-  },
-  "strip-myc": {
-   "tiles": [
-    {
-     "file": "strip-myc-t0.webp",
-     "cssY": 0.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-myc-t1.webp",
-     "cssY": 2048.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-myc-t2.webp",
-     "cssY": 4096.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-myc-t3.webp",
-     "cssY": 6144.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-myc-t4.webp",
-     "cssY": 8192.0,
-     "cssH": 132.5
-    }
-   ],
-   "w": 440.0,
-   "h": 8324.5,
-   "scale": 2
-  },
-  "strip-rail": {
-   "tiles": [
-    {
-     "file": "strip-rail-t0.webp",
-     "cssY": 0.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-rail-t1.webp",
-     "cssY": 2048.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-rail-t2.webp",
-     "cssY": 4096.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-rail-t3.webp",
-     "cssY": 6144.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-rail-t4.webp",
-     "cssY": 8192.0,
-     "cssH": 1650.5
-    }
-   ],
-   "w": 440.0,
-   "h": 9842.5,
-   "scale": 2
-  },
-  "strip-fandom": {
-   "tiles": [
-    {
-     "file": "strip-fandom-t0.webp",
-     "cssY": 0.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-fandom-t1.webp",
-     "cssY": 2048.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-fandom-t2.webp",
-     "cssY": 4096.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-fandom-t3.webp",
-     "cssY": 6144.0,
-     "cssH": 2048.0
-    },
-    {
-     "file": "strip-fandom-t4.webp",
-     "cssY": 8192.0,
-     "cssH": 109.5
-    }
-   ],
-   "w": 440.0,
-   "h": 8301.5,
-   "scale": 2
-  },
-  "patches-latest-s4": {
-   "patches": [],
-   "scale": 2
-  },
-  "patches-latest-s5": {
-   "patches": [],
-   "scale": 2
-  },
-  "patches-myc-s8": {
-   "patches": [],
-   "scale": 2
-  },
-  "patches-myc-s9": {
-   "patches": [],
-   "scale": 2
-  },
-  "patches-myc-s12": {
-   "patches": [],
-   "scale": 2
-  },
-  "lanyard": {
-   "file": "lanyard.webp",
-   "w": 1920,
-   "h": 1080,
-   "stage": [
-    0,
-    0
-   ],
-   "scale": 2,
-   "source": "Scene 24/image 2006.png",
-   "note": "RETIRED 2026-07-29: the static 'worn in the real world' still that closed s24. Replaced by ending-frames.webp, the closing video scrubbed frame by frame. Kept in git as source material; excluded in .vercelignore. full-bleed 3840x2160 photo"
-  },
-  "id-card": {
-   "file": "id-card.webp",
-   "w": 958.5,
-   "h": 594.0,
-   "stage": [
-    466.5,
-    291.0
-   ],
-   "scale": 2,
-   "figmaNodeId": "1878:63616",
-   "source": "General/Jordan Rose ID.png (2x pixels) + MCP contentsOnly render (alpha)",
-   "note": "Complex I.D. card, black strip. The STAGE BOX is the first frame of General/Jordan Rose ID Video.mp4 (card incl. strip, 639x396 of 1280x720, x1.5), not the Figma node box, because the video takes over frame-by-frame after the s21 blow-up and the two must coincide. Rebuild with tools/make-id-card.py"
-  },
-  "callout-icons": {
-   "files": [
-    "icon-react.svg",
-    "icon-comment.svg",
-    "icon-bookmark.svg"
-   ],
-   "source": "Scene 5",
-   "note": "callouts rebuilt as HTML/CSS in index.html/styles.css (live text + SVG icons)"
-  },
-  "quiz-frames": {
-   "files": [
-    "quiz-q1.webp",
-    "quiz-q1-sel.webp",
-    "quiz-q2.webp",
-    "quiz-q2-sel.webp",
-    "quiz-reveal.webp",
-    "quiz-badge.webp"
-   ],
-   "w": 390,
-   "h": 887,
-   "stage": [
-    1245,
-    97
-   ],
-   "scale": 2,
-   "source": "Reference Projects/4. Complex Quiz \u2014 live captures of /play (prod build, 390x887 @2x)",
-   "note": "s15 autoplay stack: Q1 -> A selected -> Q2 -> A selected -> 5/5 reveal -> First Play badge; replaces the static panel-quiz.webp (Figma 1838:115609)"
-  },
-  "callouts": {
-   "file": "(coded \u2014 inline SVG + live text in index.html)",
-   "figmaNodeId": "1844:37192 (idle, Scene 05) / 1901:71436 (Scene 5.1)",
-   "note": "Each callout carries an .idle face (Scene 05) and an .act face (the hover/pressed state from Scenes 5.1, 5.2, 5.3, 5.3-follow). Row boxes, stage px: react (339,288.90) 205.54x88 -> act (339,284.78) 218.78x96.24; comment (339,431.06) 270.54x88 -> act 274.54 wide; bookmark (339,573.21) 279.23x83.69 -> act 287.23 wide; follow (339,711.06) 279.23x80 -> FOLLOWING 312 wide. Padding 8, gap 13.54, radius 8; label 32px, Regular idle / Bold hovered (the FOLLOW pill label stays Regular). Active icon art: react = same glyph rotated -7deg; comment = mirrored bubble, 80.25x72, overhanging the 72px slot to the right; bookmark = filled; follow = plus (44x44) -> tick (44x44). Figma's auto-layout reflows the column when a row grows; we keep row positions fixed and share an icon centre between the two faces instead, so nothing moves mid-scrub."
-  },
-  "react-wall": {
-   "file": "react-wall.webp",
-   "w": 596,
-   "h": 596,
-   "figmaNodeId": "1898:70637",
-   "scale": "1.34 (800px source shown at 596)",
-   "stage": [
-    1199,
-    257
-   ],
-   "source": "Scene 6/download (2).gif",
-   "animated": {
-    "frames": 56,
-    "sourceFrames": 70,
-    "loopMs": 2330,
-    "fps": "~30"
-   },
-   "grid": {
-    "cols": 4,
-    "rows": 5,
-    "sourceCell": [
-     200,
-     160
-    ],
-    "stageCell": [
-     149,
-     119.2
-    ]
-   },
-   "note": "Animated 4x5 wall of 20 looping reactions. Rebuild with tools/make-react-wall.py (2.6 MB vs the GIF's 7.5 MB, and cleaner \u2014 the GIF's 256-colour palette dithers the gradients). Pillow coalesces identical consecutive frames 70 -> 56 and folds their durations, so the loop still totals exactly 2330 ms; the script asserts this, because Pillow's WebP READER reports per-frame durations as None and will look like data loss. Rendered through 20 clipping cells built in buildDom (one <img> each, all pointing at this one file, so one decode and all 20 stay frame-synced) which lets each cell stagger in on its own. The cells tile the image exactly, so at rest the composite is pixel-identical to the whole frame and emoji that overflow their cell (jack-in-the-box, NO sign) are not clipped. Background is opaque black \u2014 the same black as the stage \u2014 so no alpha is needed; if the stage ever stops being #000 this asset needs keying."
-  },
-  "sat-merch-left": {
-   "file": "sat-merch-left.webp",
-   "w": 367.5,
-   "h": 430.0,
-   "figmaNodeId": "2077:8910",
-   "scale": 2,
-   "stage": [
-    34.15,
-    405.5
-   ],
-   "restingRotationDeg": 0,
-   "note": "added to Scene 19 (1838:120893) 2026-07-29. Rotation is BAKED INTO THE ART, unlike the other four satellites \u2014 Figma reports only the rotated bbox for this node and un-rotating in PIL would resample the card. Built by the dual-source matte: RGB from download_assets scale 2 (opaque), alpha from a contentsOnly screenshot (transparent, 1x), alpha upscaled to 2x. Box is centre-matched to the Figma bbox centre. No baked shadow (0.8% soft alpha = antialiasing), so the CSS drop-shadow on #sats img is correct."
-  },
-  "sat-merch-right": {
-   "file": "sat-merch-right.webp",
-   "w": 369.0,
-   "h": 430.5,
-   "figmaNodeId": "2077:8969",
-   "scale": 2,
-   "stage": [
-    1646.45,
-    348.8
-   ],
-   "restingRotationDeg": 0,
-   "note": "added to Scene 19 (1838:120893) 2026-07-29. Rotation is BAKED INTO THE ART, unlike the other four satellites \u2014 Figma reports only the rotated bbox for this node and un-rotating in PIL would resample the card. Built by the dual-source matte: RGB from download_assets scale 2 (opaque), alpha from a contentsOnly screenshot (transparent, 1x), alpha upscaled to 2x. Box is centre-matched to the Figma bbox centre. No baked shadow (0.8% soft alpha = antialiasing), so the CSS drop-shadow on #sats img is correct."
-  },
-  "ending-frames": {
-   "file": "ending-frames.webp",
-   "w": 1920,
-   "h": 1080,
-   "stage": [
-    0,
-    0
-   ],
-   "scale": 1,
-   "source": "General/Jordan Rose ID Video.mp4",
-   "note": "NOT a node export \u2014 tools/make-ending-frames.py. The s24 finale: an 8x8 sprite grid of the closing I.D. video (60 frames, resampled from the source's 24 fps to 12), swept by the timeline and positioned with a transform so one cell shows at a time. Cells are 1024x576 in the sheet and displayed full-bleed at 1920x1080 \u2014 the source is 1280x720, exactly the stage's 16:9. Frame 0 registers on #id-card / the encased #gold-card, which is what lets s24 hand over with a plain crossfade. 2.96 MB."
   }
- }
 }

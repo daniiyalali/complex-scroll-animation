@@ -40,11 +40,25 @@
              one cell shows; `assets/xp-modal.webp` (the old static card) is retired. -->
         <div class="overlay-img" id="xp-modal"><img id="xp-sheet" src="assets/xp-frames.webp" alt="" /></div>
 
+        <!-- The five XP pills, rebuilt 2026-07-30 from the designer's Exp01-05.png. One family
+             now: same art, same 310x86 pill, all CENTRED on the shared slot at stage (62-65, 48)
+             on the 440x299 render box. The bar builds across the five toward the level-up
+             moment, which the +200 pill's full bar triggers: s19.3's STATUS UNLOCKED sheet.
+             The first award is now +10, not +20, so `toast-20` was renamed `toast-10`. -->
         <div id="toasts">
-          <img class="toast" id="toast-20"  src="assets/toast-20.webp?v=3"  alt="" />
-          <img class="toast" id="toast-30"  src="assets/toast-30.webp?v=3"  alt="" />
-          <img class="toast" id="toast-80"  src="assets/toast-80.webp?v=3"  alt="" />
-          <img class="toast" id="toast-120" src="assets/toast-120.webp?v=3" alt="" />
+          <img class="toast" id="toast-10"  src="assets/toast-10.webp?v=9"  alt="" />
+          <img class="toast" id="toast-30"  src="assets/toast-30.webp?v=9"  alt="" />
+          <img class="toast" id="toast-80"  src="assets/toast-80.webp?v=9"  alt="" />
+          <img class="toast" id="toast-120" src="assets/toast-120.webp?v=9" alt="" />
+          <img class="toast" id="toast-200" src="assets/toast-200.webp?v=9" alt="" />
+          <!-- The bar FILLS in code. Each pill's track is now empty in the art and
+               these scale across it after the pill lands — a pre-filled bar arriving
+               with the pill read as static (user, 2026-07-30). -->
+          <i class="tbar" id="tbar-10"><b></b></i>
+          <i class="tbar" id="tbar-30"><b></b></i>
+          <i class="tbar" id="tbar-80"><b></b></i>
+          <i class="tbar" id="tbar-120"><b></b></i>
+          <i class="tbar" id="tbar-200"><b></b></i>
         </div>
 
       </div>
@@ -162,6 +176,11 @@
            needs no scrolling at all, and mounts 1:1 with no zoom like the article panel. -->
       <div id="panel-rerank"><div class="page page-1x" id="page-rerank"><iframe
            src="pages/rerank.html" scrolling="no" tabindex="-1" aria-hidden="true" title=""></iframe></div></div>
+      <!-- s19.2: the product-detail panel, Figma `Complex.com PDP [Mobile]` (2159:50283) at
+           stage (1154, 110.6) 388x858.3. The page is authored 388 — the frame's own width — so
+           it mounts 1:1 like the two panels above, hence .page-1x. -->
+      <div id="panel-product"><div class="page page-1x" id="page-product"><iframe
+           src="pages/pdp.html?v=1" scrolling="no" tabindex="-1" aria-hidden="true" title=""></iframe></div></div>
       <!-- s15 quiz autoplay: stacked frames captured from the live 5-for-5 app
            (Reference Projects/4. Complex Quiz), revealed in order by the timeline -->
       <div class="overlay-img" id="panel-quiz">
@@ -173,19 +192,42 @@
         <img class="qframe" id="qf-6" src="assets/quiz-badge.webp"  alt="" />
       </div>
 
+      <!-- ══ s19.3: STATUS UNLOCKED — the card flip ══
+           The sheet is coded live type (same call as the s5 callouts and the s10 tray); the
+           flip IS the designer's video (`assets/card animation/Flip_Transition_Animation_
+           Reversed.mp4`), played frame by frame as the reader scrolls. A sprite grid rather
+           than a <video>, for the s11/s24 reasons: that file cannot be seeked reliably and the
+           scrub has to be deterministic and reversible (see tools/make-flip-frames.py — and
+           read its docstring before re-extracting). The inner image is the whole 8x8 sheet,
+           moved by transform so exactly one cell shows.
+           The window sits INSIDE the sheet panel and the frames' backdrop is normalised to
+           pure white, so the video fuses with the panel and nothing bleeds past the white
+           frame's bounds (user's spec, 2026-07-30 — this replaced a coded CSS rotateY flip,
+           whose two-face art `flip-regular/bronze.webp` is retired). -->
+      <div class="overlay-img" id="status-modal">
+        <div id="sm-panel">
+          <p id="sm-kicker">Status Unlocked</p>
+          <p id="sm-title">You&rsquo;ve earned<br />Bronze Status</p>
+        </div>
+        <p id="sm-caption">Complex I.D. Card &middot; 1,500 XP to Silver</p>
+        <div id="sm-flip"><img id="sm-sheet" src="assets/flip-frames.webp" alt="" /></div>
+      </div>
+
       <div id="sats">
-        <img id="sat-editorial" src="assets/sat-editorial.webp?v=3" alt="" />
-        <img id="sat-ugc"       src="assets/sat-ugc.webp?v=2"       alt="" />
+        <!-- editorial / ugc / video re-exported 2026-07-30 (Carti → KATSEYE). Rebuilt by
+             tools/make-satellites.py, which also re-derives the stage boxes. -->
+        <img id="sat-editorial" src="assets/sat-editorial.webp?v=4" alt="" />
+        <img id="sat-ugc"       src="assets/sat-ugc.webp?v=3"       alt="" />
         <img id="sat-comment"   src="assets/sat-comment.webp?v=2"   alt="" />
-        <img id="sat-video"     src="assets/sat-video.webp?v=2"     alt="" />
+        <img id="sat-video"     src="assets/sat-video.webp?v=3"     alt="" />
         <!-- the two merch tiles added to Scene 19 on 2026-07-29. Unlike the other four these
              carry their rotation BAKED IN (see styles.css), so main.js gives them a resting
              rotation of 0. -->
-        <img id="sat-merch-left"  src="assets/sat-merch-left.webp"  alt="" />
-        <img id="sat-merch-right" src="assets/sat-merch-right.webp" alt="" />
+        <img id="sat-merch-left"  src="assets/sat-merch-left.webp?v=2"  alt="" />
+        <img id="sat-merch-right" src="assets/sat-merch-right.webp?v=2" alt="" />
       </div>
 
-      <img class="overlay-img" id="id-card" src="assets/id-card.webp?v=2" alt="" />
+      <img class="overlay-img" id="id-card" src="assets/id-card.webp?v=3" alt="" />
       <img class="overlay-img" id="gold-card" src="assets/gold-card.webp?v=2" alt="" />
     </div>
 
@@ -197,6 +239,11 @@
          the source is 16:9 — exactly the stage. `assets/lanyard.webp`, the static lanyard
          still this replaced, is retired. -->
     <div id="ending"><img id="ending-sheet" src="assets/ending-frames.webp" alt="" /></div>
+    <!-- The finale's fade to black: from the video's 3.5s mark (frame 42) to its last frame,
+         scrubbed with the sweep (user's call, 2026-07-30). An overlay ABOVE #ending, because
+         fading #ending itself would expose the s23 layers under it, and any transform on
+         #ending breaks the frame-0 registration. -->
+    <div id="ending-fade"></div>
 
     <!-- ══ Cursor ══ -->
     <div id="cursor">
@@ -212,7 +259,6 @@
 
   <div id="loader"><div id="loader-bar"><div id="loader-fill"></div></div></div>
   <div id="hud"></div>
-  <div id="scroll-hint">Scroll to explore<span>▾</span></div>
 </div>
 
 <script src="vendor/gsap.min.js"></script>

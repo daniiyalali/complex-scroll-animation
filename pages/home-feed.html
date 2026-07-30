@@ -609,6 +609,15 @@
   .s13-title { font-size: 18px; line-height: 22px; font-weight: 600; color: var(--text-primary); white-space: nowrap; height: 13px; }
   .s13-video { position: relative; width: 100%; aspect-ratio: 432 / 243; border-radius: 4px; overflow: hidden; }
   .s13-video img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---- save toggle ----
+     Unsaved is the outline bookmark on its own: the label is hidden rather than reworded, and
+     `display:none` takes it out of the flex row so the 4px gap collapses with it. That is the
+     state Figma ships on Home Feed's first two posts. Saved restores that post's own filled
+     export plus "Saved". */
+  .eact.save { cursor: pointer; }
+  .eact.save:not(.saved) .ecnt { display: none; }
+  .eact.save:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 </style>
 
 <div class="scene">
@@ -699,15 +708,15 @@
       </svg>
       <p class="ob-title trim">Follow topics and authors on stories you like to see related articles here. Or try one of these:</p>
       <div class="chips">
-        <div class="chip"><p class="trim">Sneakers</p></div>
-        <div class="chip sel"><p class="trim">Style</p></div>
+        <div class="chip sel"><p class="trim">Sneaker</p></div>
+        <div class="chip"><p class="trim">Style</p></div>
         <div class="chip"><p class="trim">Pop Culture</p></div>
-        <div class="chip"><p class="trim">Music</p></div>
-        <div class="chip"><p class="trim">Sports</p></div>
-        <div class="chip sel"><p class="trim">Bets</p></div>
+        <div class="chip sel"><p class="trim">Music</p></div>
+        <div class="chip sel"><p class="trim">Sports</p></div>
+        <div class="chip"><p class="trim">Bets</p></div>
         <div class="chip"><p class="trim">Cover Stories</p></div>
         <div class="chip"><p class="trim">Verzuz</p></div>
-        <div class="chip sel"><p class="trim">Watch</p></div>
+        <div class="chip"><p class="trim">Watch</p></div>
         <div class="chip sel"><p class="trim">ComplexCon</p></div>
         <div class="chip"><p class="trim">family style</p></div>
       </div>
@@ -739,7 +748,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/250f7bc9-efd6-4251-9c58-d1078c9a4a54.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/efe64410-f2b1-452c-8cdc-f7c5fcf02f23.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/efe64410-f2b1-452c-8cdc-f7c5fcf02f23.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -783,7 +792,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/250f7bc9-efd6-4251-9c58-d1078c9a4a54.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/5acc94d9-243e-43ef-8c0c-17b04871b4bc.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/5acc94d9-243e-43ef-8c0c-17b04871b4bc.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -814,7 +823,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/a4ea8011-b8e3-46a0-9048-ee900f8107fa.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/ae7d071e-e7fe-472c-bb0e-e08aa1bf4eb7.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/ae7d071e-e7fe-472c-bb0e-e08aa1bf4eb7.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -892,7 +901,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -923,12 +932,12 @@
           <div class="fnd-card" data-goto="fandom.html">
             <div class="fnd-img">
               <img src="assets/b2a8e77f-8489-477c-8760-1d3f375946a8.webp" alt="">
-              <img src="assets/97b1f8ac-557c-4728-b892-306b701130aa.webp" alt="">
+              <img src="assets/096945de-c21e-4e71-9f46-30257e9f2e02.webp" alt="">
             </div>
             <div class="fnd-meta">
               <div class="fnd-lbls">
                 <p class="fnd-kicker trim up">Music</p>
-                <p class="fnd-name trim up">Playboi Carti</p>
+                <p class="fnd-name trim up">KATSEYE</p>
               </div>
               <div class="fnd-btn"><span class="trim up">Follow</span></div>
             </div>
@@ -988,7 +997,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/5f2889da-9360-4a9c-ada5-d6e8bd9b1bdc.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/5acc94d9-243e-43ef-8c0c-17b04871b4bc.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/5acc94d9-243e-43ef-8c0c-17b04871b4bc.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -1023,7 +1032,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/20107eb3-13ff-4d80-9ad3-354439916324.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/2bef7c04-2d37-41f3-8242-656140723cca.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/2bef7c04-2d37-41f3-8242-656140723cca.svg" data-off="assets/bookmark-outline-inv.svg"><div class="i20"><div class="bm-in"><img src="assets/bookmark-outline-inv.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -1072,7 +1081,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/c4a8ccc5-a728-4150-bafa-7f2159f5a8a1.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/7e023f80-6677-448e-9412-af835c09644e.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/7e023f80-6677-448e-9412-af835c09644e.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -1139,7 +1148,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/4f8de6df-0a50-4bfc-ba64-040d233c6fc7.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/d7d20f72-78b7-494f-a873-48278f10b5ee.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/d7d20f72-78b7-494f-a873-48278f10b5ee.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -1165,7 +1174,7 @@
         <div class="eng"><div class="eng-g">
           <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
           <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-          <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/96947524-edbe-48aa-83b7-962a8cccf16d.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/96947524-edbe-48aa-83b7-962a8cccf16d.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
         </div></div>
       </div>
     </div>
@@ -1239,6 +1248,42 @@
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-goto]');
     if (t) { window.location.href = t.getAttribute('data-goto'); }
+  });
+})();
+</script>
+
+<script>
+/* Save toggle. Posts start unsaved; Figma ships that state as the outline bookmark with no
+   label, so the label is hidden by CSS rather than reworded (qa/apply-unsaved-default.py).
+
+   Each button carries its own filled export in `data-on` and the outline in `data-off`, so a
+   post restores its own asset rather than a shared one. Plain two-state toggle: click saves,
+   click again un-saves. */
+(function () {
+  document.querySelectorAll('.eact.save').forEach(function (btn) {
+    var img = btn.querySelector('img');
+    function render() {
+      var on = btn.classList.contains('saved');
+      img.src = on ? btn.dataset.on : btn.dataset.off;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Saved' : 'Save');
+    }
+    function toggle(e) { e.stopPropagation(); btn.classList.toggle('saved'); render(); }
+    btn.addEventListener('click', toggle);
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); }
+    });
+    /* Read back by qa/test-save.py, which drives real clicks. */
+    btn.saveState = function () {
+      var label = btn.querySelector('.ecnt');
+      return {
+        saved: btn.classList.contains('saved'),
+        src: img.getAttribute('src'),
+        labelShown: getComputedStyle(label).display !== 'none',
+        label: label.textContent
+      };
+    };
+    render();
   });
 })();
 </script>

@@ -37,11 +37,13 @@
     color: var(--text-primary);
   }
   img { display: block; }
-  /* Scene 3 root frame 1885:65374 — 390x6870. The content frame sits at y=84.204575 and the
-     92px nav paints OVER its top 7.8px; the frame clips the final 0.625px of content. */
+  /* Scene 3 root frame 2154:637 — 390x7307 (rev. 2026-07-30, the KATSEYE content pass; the
+     previous Playboi Carti frame 1885:65374 is still in the file but hidden). The content frame
+     sits at y=84.204575 and the 92px nav paints OVER its top 7.8px; the frame clips the final
+     0.097px of content. */
   .scene {
     width: 390px;
-    height: 6870px;
+    height: 7307px;
     margin: 0;
     background: var(--bg-b1);
     position: relative;
@@ -65,8 +67,9 @@
 
   /* ================= Section 01: Top Main Navigation — 1885:65770 — 390x92 =================
      Scene 1/2's nav with the tab strip removed (84px promo+header + 8px bottom padding). */
+  /* No fill on the 92px nav frame: its bottom 8px is padding, and in Figma the hero cover shows
+     through it. (Painting it white was invisible against the old cover, which was pale there.) */
   .s01 {
-    background: var(--bg-b1);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -232,6 +235,7 @@
   .lgi img { position: absolute; inset: 0; width: 100%; height: 100%; }
   .lg-complex { inset: calc(21% - 0.29px) calc(22.87% - 0.27px) calc(20.09% - 0.3px) calc(22% - 0.28px); }
   .lg-pop { inset: calc(15% - 0.35px) calc(4.25% - 0.46px) calc(25% - 0.25px) calc(6% - 0.44px); }
+  .lg-style { inset: calc(15% - 0.35px) calc(29.68% - 0.2px) calc(25% - 0.25px) calc(30.38% - 0.2px); }
   .ph-name { font-size: 14px; line-height: 18px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
   .badge20 { position: relative; width: 20px; height: 20px; overflow: clip; flex: none; }
   .badge20 .in { position: absolute; inset: 0.68%; }
@@ -275,8 +279,12 @@
   .sub { font-size: 14px; line-height: 22px; font-weight: 400; color: var(--text-secondary); width: 100%; }
   .pimg { position: relative; width: 100%; aspect-ratio: 4 / 5; border-radius: 4px; overflow: hidden; }
   .pimg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  /* Figma crop transform carried verbatim (h 150.03%, left -2.62%, top -47.59%, w 105.24%) */
+  /* Figma crop transforms carried verbatim */
   .pimg .crop150 { inset: auto; left: -2.62%; top: -47.59%; width: 105.24%; height: 150.03%; object-fit: cover; }
+  .pimg .crop142 { inset: auto; left: 0; top: -34.18%; width: 100%; height: 142.57%; object-fit: cover; }
+  .pimg .crop147 { inset: auto; left: -11.45%; top: -23.68%; width: 122.91%; height: 147.35%; object-fit: cover; }
+  /* §11's photo is 358x191, not the feed's usual 4:5 */
+  .pimg.wide191 { aspect-ratio: 358 / 191; }
 
   /* ================= Sections 08/12: Ad slots — 1885:65551 / 1885:65645 (Scene 2 verbatim) ================= */
   .ad {
@@ -290,13 +298,12 @@
   .ad-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .ad-cap { font-size: 10px; line-height: 12px; font-weight: 400; color: var(--text-tertiary); white-space: nowrap; height: 7px; }
 
-  /* ================= Section 02: Fandom hero — 1885:65377 — 390x592 ================= */
+  /* ================= Section 02: Fandom hero — 2154:640 — 390x592 =================
+     The 2026-07-30 revision replaced the two-fill, crop-transformed cover with a single
+     uncropped fill, so there is no `.cw` crop wrapper any more. */
   .hero { display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
   .hero-cover { position: relative; width: 100%; height: 257px; overflow: hidden; }
   .hero-cover > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .hero-cover .cw { position: absolute; inset: 0; overflow: hidden; }
-  /* Figma fill crop transform, verbatim */
-  .hero-cover .cw img { position: absolute; left: -3.11%; top: -2.96%; width: 104.71%; height: 105.93%; max-width: none; }
   .hero-card {
     background: var(--bg-b2);
     display: flex; flex-direction: column; gap: 24px; align-items: flex-start;
@@ -419,8 +426,10 @@
   /* SVG ink boxes (221x14 / 323x58) differ from the cap-trimmed text boxes (350x13 / 324x54),
      so each is offset to minimum pixel-RMS vs the Figma render (title 51.3→16.2, quote 43.8→13.6) */
   .ital-title img { position: absolute; left: 2px; top: -1px; }
+  /* fitted by ink box against the Figma render — qa/fit-italic-svg.py */
+  .ital-title2 img { position: absolute; left: 1px; top: -1px; }
   .ital-quote img { position: absolute; left: 0; top: -1px; }
-  .ital-title { width: 100%; height: 13px; flex: none; }
+  .ital-title, .ital-title2 { width: 100%; height: 13px; flex: none; }
   .quote .ital-quote { flex: 1 0 0; min-width: 1px; height: 54px; }
   /* Amara's link-preview card (347 wide inside a 350 column — verbatim) */
   .lcard {
@@ -435,7 +444,7 @@
     display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
     flex: 1 0 0; min-width: 1px; align-self: stretch; padding: 4px 0;
   }
-  .lcard-hl { font-size: 14px; line-height: 18px; font-weight: 600; color: var(--text-primary); width: 100%; height: 64px; }
+  .lcard-hl { font-size: 14px; line-height: 18px; font-weight: 600; color: var(--text-primary); width: 100%; height: 46px; }
   .lcard-meta {
     display: flex; align-items: center; justify-content: space-between; width: 100%;
     font-size: 10px; line-height: 12px; font-weight: 600; color: var(--text-tertiary);
@@ -443,7 +452,7 @@
   }
   .lcard-meta p { height: 7px; }
 
-  /* ================= Section 06: Carti community poll — 1885:65471 — 390x457 =================
+  /* ================= Section 06: KATSEYE community poll — 2154:734 — 390x433 =================
      Same bar component as Scene 2's poll on a blue→red gradient; all text is white. */
   .poll3 {
     position: relative;
@@ -463,10 +472,12 @@
     background-image: url('assets/0e3ae05b-cd21-4298-9b4e-a577c4217092.webp');
     background-size: 358.0000305175781px 358.0000305175781px; background-position: top left;
     mix-blend-mode: soft-light;
+    /* the revision dialled the node opacity down from 1 to 0.2 */
+    opacity: 0.2;
   }
   .poll3-in { position: relative; display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%; }
   .poll3 .ph-name, .poll3 .ph-time, .poll3 .ecnt { color: var(--text-primary-inv); }
-  .poll3-q { font-size: 20px; line-height: 24px; font-weight: 700; color: var(--text-primary-inv); width: 100%; height: 87px; }
+  .poll3-q { font-size: 20px; line-height: 24px; font-weight: 700; color: var(--text-primary-inv); width: 100%; height: 63px; }
   .bars { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; width: 100%; }
   .bar { background: #fff; display: flex; align-items: center; height: 42px; border-radius: 999px; overflow: clip; width: 100%; }
   .bar-fill {
@@ -476,7 +487,9 @@
     border-radius: 999px 0 0 999px;
     flex: none;
   }
-  .bar-fill p { font-size: 12px; line-height: 14px; font-weight: 500; color: var(--text-primary); flex: none; }
+  /* 10px on a 14px line box — the revision shrank the label from 12px, the token name
+     ("Headings/12pt/Medium") kept its old value and now lies about the size. */
+  .bar-fill p { font-size: 10px; line-height: 14px; font-weight: 500; color: var(--text-primary); flex: none; }
   .bar-fill.win { background: #000; }
   .bar-pct { flex: 1 0 0; min-width: 1px; display: flex; align-items: center; justify-content: center; padding: 0 12px; }
   .bar-pct p { flex: 1 0 0; min-width: 1px; font-size: 14px; line-height: 18px; font-weight: 600; text-align: right; color: var(--text-tertiary); }
@@ -508,15 +521,66 @@
   .bar-fill.win p { color: var(--text-primary); }
   .bar-fill.win .bar-ink p { color: var(--text-primary-inv); }
 
-  /* ================= Section 16: Exclusive Interview — 1885:65738 (Scene 2 §15 verbatim) ================= */
-  .s13-title { font-size: 18px; line-height: 22px; font-weight: 600; color: var(--text-primary); white-space: nowrap; height: 13px; }
+  /* ================= Section 17: Exclusive Interview — 2154:1001 — 390x411.875 =================
+     The revision turned the one-word "Exclusive Interview" label into a full 3-line headline,
+     so the title wraps now (350 wide, h 57) instead of being a nowrap 13px box. */
+  .s13-title { font-size: 18px; line-height: 22px; font-weight: 600; color: var(--text-primary); width: 100%; height: 57px; }
+  .s13-title .nb { white-space: nowrap; }
   .s13-video { position: relative; width: 100%; aspect-ratio: 432 / 243; border-radius: 4px; overflow: hidden; }
   .s13-video img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ================= Section 15: Complex Style shop grid — 2156:34792 — 390x742.972 =========
+     New in the 2026-07-30 revision. Post chrome is the usual one, but padded 20/16/24 rather
+     than the feed's 32/16 or the 20/20/24 of the Amara cards. */
+  .post.pad20x16 { padding: 20px 16px 24px; }
+  .shop-title { font-size: 20px; line-height: 24px; font-weight: 700; color: var(--text-primary); width: 100%; height: 15px; }
+  /* Figma lays the tiles out on a FIXED 287.986px row pitch while each tile's own content adds
+     up to 295.083 — the details block's 8px bottom padding is simply allowed to run under the
+     next row's image. Reproduced as an explicit row height with the overflow left visible;
+     later rows paint over earlier ones exactly as they do in Figma, and nothing collides
+     (row 1's price ends 0.9px above row 2's image). A hug-height grid would push row 2 down 7px. */
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 177.66668701171875px);
+    grid-auto-rows: 287.9861145019531px;
+    width: 358px;
+  }
+  .stile { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; width: 177.66668701171875px; }
+  .stile-img { position: relative; width: 100%; aspect-ratio: 40 / 50; overflow: clip; background: var(--bg-b1); flex: none; }
+  .stile-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .stile-d { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; padding: 8px 4px; width: 100%; }
+  .stile-c { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; width: 100%; }
+  .stile-brand {
+    font-size: 10px; line-height: 12px; font-weight: 700; color: var(--text-tertiary);
+    text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 7px;
+  }
+  .stile-name {
+    font-size: 12px; line-height: 20px; font-weight: 500; color: var(--text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 100%; width: 0; height: 9px;
+  }
+  /* The 4px gap belongs to the outer Price row (which also holds a hidden discount block);
+     the "$" and "130" nodes inside sit flush, so they need their own gap-less group. */
+  .stile-price {
+    display: flex; align-items: center; gap: 4px; width: 100%;
+    font-size: 12px; line-height: 14px; font-weight: 700; color: var(--text-primary);
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .stile-price span { display: flex; align-items: center; }
+  .stile-price p { height: 9px; }
+
+  /* ---- save toggle ----
+     Unsaved is the outline bookmark on its own: the label is hidden rather than reworded, and
+     `display:none` takes it out of the flex row so the 4px gap collapses with it. That is the
+     state Figma ships on Home Feed's first two posts. Saved restores that post's own filled
+     export plus "Saved". */
+  .eact.save { cursor: pointer; }
+  .eact.save:not(.saved) .ecnt { display: none; }
+  .eact.save:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 </style>
 
 <div class="scene">
   <!-- Section 01: Top Main Navigation — overlays the content's top 7.8px -->
-  <div class="s01" data-node="1885:65770">
+  <div class="s01" data-node="2154:1033">
     <div>
       <div class="s01-promo">
         <div class="s01-promo-chevron"></div>
@@ -549,23 +613,23 @@
   </div>
 
   <div class="main3">
-    <!-- Section 02: Fandom hero — cover photo + Playboi Carti card + related artists -->
-    <div class="hero" data-node="1885:65377">
+    <!-- Section 02: Fandom hero — cover photo + KATSEYE card + related artists -->
+    <div class="hero" data-node="2154:640">
       <div class="hero-cover">
-        <img src="assets/ab1e5697-7b85-4e70-bb68-bf0c9c69c36e.webp" alt="">
-        <div class="cw"><img src="assets/97b1f8ac-557c-4728-b892-306b701130aa.webp" alt=""></div>
+        <img src="assets/2167ae8c-8794-4bd0-ae70-d4a25872a10c.webp" alt="">
       </div>
       <div class="hero-card">
         <div class="hero-top">
           <div class="hero-row">
             <div class="hero-who">
-              <div class="hero-av"><img src="assets/b00d0699-fb98-4ace-83f2-f8b1d02f9d59.webp" alt=""></div>
-              <p class="hero-name trim up">Playboi Carti</p>
+              <div class="hero-av"><img src="assets/dfddf7ad-4a0d-4844-804c-d51c82cc58fd.webp" alt=""></div>
+              <p class="hero-name trim up">KATSEYE</p>
             </div>
             <div class="btn-join"><span class="trim up">JOIN</span></div>
           </div>
           <div class="hero-bio-wrap">
-            <p class="hero-bio trim clamp4">Jordan Terrell Carter, known professionally as Playboi Carti, is an American rapper. Known for his eccentric vocal style and fashion, he is considered an influential figure in modern hip-hop and a pioneer of the rage microgenre.discovery, empowerment, and unity, inspiring listeners to embrace their individuality and pursue their dreams. From mesmerizing vocals to dynamic choreography, Katseye&rsquo;s artistry transcends boundaries and redefines the K-pop genre.</p>
+            <!-- the source copy ends in a literal "..."; the 81px box still clips it at 4 lines -->
+            <p class="hero-bio trim clamp4">KATSEYE is a global girl group formed through the Netflix competition series 'Pop Star Academy.' Known for their dynamic performances and genre-blending sound, they are redefining what it means to be a pop group in the modern era...</p>
             <p class="hero-more trim up">Read more</p>
           </div>
         </div>
@@ -617,18 +681,18 @@
       </div>
     </div>
 
-    <!-- Section 03: Content / Fandom / Shop tabs -->
-    <div class="tabs3-wrap" data-node="1885:65428">
+    <!-- Section 03: Content / Feed / Shop tabs -->
+    <div class="tabs3-wrap" data-node="2154:691">
       <div class="tabs3">
         <div class="tab3"><span class="trim up">Content</span></div>
-        <div class="tab3 on"><span class="trim up">Fandom</span></div>
+        <div class="tab3 on"><span class="trim up">Feed</span></div>
         <div class="tab3"><span class="trim up">Shop</span></div>
       </div>
     </div>
 
     <div class="feed3">
       <!-- Section 04: Composer -->
-      <div class="post pad20 comp" data-node="1885:65438">
+      <div class="post pad20 comp" data-node="2154:701">
         <div class="comp-row">
           <div class="comp-av"><img src="assets/ea1d7fa2-336d-4af0-bf72-0c6be970d7bc.webp" alt=""></div>
           <div class="comp-input"><p class="trim">Whats the word, Maria?</p></div>
@@ -636,7 +700,7 @@
       </div>
 
       <!-- Section 05: User post — Maria Jose -->
-      <div class="post pad16" data-node="1885:65443">
+      <div class="post pad16" data-node="2154:706">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l">
@@ -650,23 +714,21 @@
             <p class="sub trim" style="height:54px">KAT &times; GAP hoodie just landed at my dorm and the embroidery is INSANE in person. wearing it to class tomorrow whether it&rsquo;s appropriate or not.</p>
             <div class="mimg">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
               <div class="card">
                 <img src="assets/2459657d-a18b-489d-a3eb-1bb1d175db29.webp" alt="">
-                <img src="assets/b1b1fd5d-1f32-44b3-ae44-3a8ee355c889.webp" alt="">
               </div>
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
-      <!-- Section 06: Carti community poll (Complex Pop Culture) -->
-      <div class="poll3" data-node="1885:65471">
+      <!-- Section 06: KATSEYE community poll (Complex Pop Culture) -->
+      <div class="poll3" data-node="2154:734">
         <div class="poll3-bg">
           <div class="gr"></div>
           <div class="tex"></div>
@@ -684,23 +746,22 @@
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <p class="poll3-q trim">Which of Playboi Carti&rsquo;s moments or tracks do you think officially solidified his status as a cultural icon?</p>
+            <p class="poll3-q trim">Which KATSEYE moment or release do you think officially put them on the map as global pop icons?</p>
             <div class="bars unvoted">
               <div class="bar" data-votes="15" data-pct="15" data-w="124">
-                <div class="bar-fill" style="width:124px"><p class="trim" style="width:227px">The viral impact and endless replays of &ldquo;Magnolia&rdquo; becoming a global anthem</p><span class="bar-ink"><p class="trim" style="width:227px">The viral impact and endless replays of &ldquo;Magnolia&rdquo; becoming a global anthem</p></span></div>
+                <div class="bar-fill" style="width:124px"><p class="trim" style="width:227px">&quot;Touch&quot; going viral on TikTok and becoming a worldwide pop anthem</p><span class="bar-ink"><p class="trim" style="width:227px">&quot;Touch&quot; going viral on TikTok and becoming a worldwide pop anthem</p></span></div>
                 <div class="bar-pct"><p class="trim">15%</p></div>
               </div>
-              <div class="bar" data-votes="39" data-pct="40" data-w="244">
-                <div class="bar-fill win" style="width:244px"><p class="trim" style="width:284px">The legendary rollout and mystique surrounding Whole Lotta Red on Christmas 2020</p><span class="bar-ink"><p class="trim" style="width:284px">The legendary rollout and mystique surrounding Whole Lotta Red on Christmas 2020</p></span></div>
+              <div class="bar" data-votes="39" data-pct="40" data-w="291">
+                <div class="bar-fill win" style="width:291px"><p class="trim" style="width:284px">Their formation on The Debut: Dream Academy and the emotional journey that captivated millions</p><span class="bar-ink"><p class="trim" style="width:284px">Their formation on The Debut: Dream Academy and the emotional journey that captivated millions</p></span></div>
                 <div class="bar-pct win"><p class="trim">40%</p></div>
               </div>
               <div class="bar" data-votes="35" data-pct="35" data-w="198">
-                <!-- knife-edge wrap: Chrome fits "Die Lit" on line 1, Figma breaks after "Die" -->
-                <div class="bar-fill" style="width:198px"><p class="trim" style="width:227px">His self-titled debut mixtape and Die<br>Lit defining the rage sound</p><span class="bar-ink"><p class="trim" style="width:227px">His self-titled debut mixtape and Die<br>Lit defining the rage sound</p></span></div>
+                <div class="bar-fill" style="width:198px"><p class="trim" style="width:227px">The debut album SIS (Soft Is Strong) proving they could bridge K-pop and Western pop</p><span class="bar-ink"><p class="trim" style="width:227px">The debut album SIS (Soft Is Strong) proving they could bridge K-pop and Western pop</p></span></div>
                 <div class="bar-pct"><p class="trim">35%</p></div>
               </div>
               <div class="bar" data-votes="10" data-pct="10" data-w="72">
-                <div class="bar-fill" style="width:72px"><p class="trim" style="width:270px">The MUSIC era and his genre-defying evolution into punk-rap and opium aesthetics</p><span class="bar-ink"><p class="trim" style="width:270px">The MUSIC era and his genre-defying evolution into punk-rap and opium aesthetics</p></span></div>
+                <div class="bar-fill" style="width:72px"><p class="trim" style="width:270px">Their electrifying live performances and rapid rise on global charts like Billboard</p><span class="bar-ink"><p class="trim" style="width:270px">Their electrifying live performances and rapid rise on global charts like Billboard</p></span></div>
                 <div class="bar-pct"><p class="trim">10%</p></div>
               </div>
             </div>
@@ -712,8 +773,8 @@
         </div></div>
       </div>
 
-      <!-- Section 07: Complex post — Playboi Carti "Ketamine" -->
-      <div class="post" data-node="1885:65518">
+      <!-- Section 07: Complex post — Ed Sheeran x KATSEYE "Animal" -->
+      <div class="post" data-node="2154:781">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l">
@@ -727,62 +788,60 @@
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <p class="hl trim" style="height:35px">Playboi Carti Returns With New Song and Video &quot;Ketamine&quot;</p>
-            <p class="sub trim" style="height:54px">The release comes on the heels of Carti nabbing his first No. 1 on the Hot 100 courtesy of an appearance on Kanye and Ty Dolla Sign&rsquo;s &quot;Carnival.&quot;</p>
+            <p class="hl trim" style="height:57px">Ed Sheeran Shares How KATSEYE Inspired Him to Write Their Single &lsquo;Animal&rsquo;</p>
+            <p class="sub trim" style="height:32px">Sheeran said he became a &quot;fan&quot; of the group before the collaboration.</p>
             <div class="pimg">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
-              <img src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
-              <img src="assets/4007590e-14f1-466a-85ca-d6c09f49673b.webp" alt="">
+              <img class="crop147" src="assets/6fe8c14d-bde7-4cbc-83a8-2935bf718b28.webp" alt="">
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
       <!-- Section 08: Ad slot 1 -->
-      <div class="ad" data-node="1885:65551">
+      <div class="ad" data-node="2154:814">
         <div class="ad-in">
           <div class="ad-img" style="width:302px;height:255px"><img src="assets/46710c65-7eeb-48ac-8155-5046a98cc913.webp" alt=""></div>
           <p class="ad-cap trim up">Advertisment</p>
         </div>
       </div>
 
-      <!-- Section 09: User post — Jordan Rose (CARTI DID NOT MISS) -->
-      <div class="post" data-node="1885:65555">
+      <!-- Section 09: User post — Adam Kwazoski (I WAS THERE!) -->
+      <div class="post" data-node="2154:818">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l">
-              <div class="up-av"><img src="assets/jordan-rose.webp" alt=""></div>
-              <p class="ph-name trim">Jordan Rose</p>
+              <div class="up-av"><img src="assets/269954e0-36ea-4b7f-886e-de6358c674f2.webp" alt=""></div>
+              <p class="ph-name trim">Adam Kwazoski</p>
             </div>
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <p class="up-title trim" style="height:13px">CARTI DID NOT MISS &#128293;</p>
-            <p class="sub trim" style="height:54px">bro i&rsquo;ve had MUSIC on repeat since it dropped, this man carti is on another level fr. the beats are so different nobody else is doing this rn. whole album feels like a movie &#128128;&#129435;</p>
+            <p class="up-title trim" style="height:13px">I WAS THERE!</p>
+            <p class="sub trim" style="height:10px">See that dot! Thats me!! LOVE YOU KATSEYE &#128293;&#128420;</p>
             <div class="pimg">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
-              <img src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
+              <img src="assets/71dd6713-d32a-4f2f-9a7e-cd202a71d1bf.webp" alt="">
+              <img src="assets/828acf77-fc1a-4c97-9e92-d58f87f158b4.webp" alt="">
               <img src="assets/4007590e-14f1-466a-85ca-d6c09f49673b.webp" alt="">
-              <img src="assets/5dde9c16-bf76-4591-9982-6e469b7ee17a.webp" alt="">
+              <img src="assets/5bf37fae-323d-43f1-a2a2-77401a68cb4e.webp" alt="">
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
       <!-- Section 10: User post — Amara Diallo (quote + link card) -->
-      <div class="post pad20" data-node="1885:65582">
+      <div class="post pad20" data-node="2154:845">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l" style="overflow:clip">
@@ -792,15 +851,15 @@
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <div class="ital-svg ital-title"><img src="assets/amara-title-italic.svg" alt="YO!! These are effin fire!!!"></div>
+            <div class="ital-svg ital-title2"><img src="assets/amara-title2-italic.svg" alt="Is it me or this new collab is just FIRE!!"></div>
             <div class="quote">
               <div class="rule"></div>
               <div class="ital-svg ital-quote"><img src="assets/amara-quote-italic.svg" alt="&ldquo;shoutout to whoever was on photo!! the wide of yoonchae mid-spin under the rig lights deserves a print run&rdquo;"></div>
             </div>
             <div class="lcard">
-              <div class="lcard-img"><img src="assets/1357f66f-d104-4008-ba20-c168b805fbfb.webp" alt=""></div>
+              <div class="lcard-img"><img src="assets/1c0c5c0e-d22d-4491-a946-e34958f31539.webp" alt=""></div>
               <div class="lcard-txt">
-                <p class="lcard-hl trim">The Wildest YouTube Comments on Playboi Carti and Travis Scott&rsquo;s &quot;BACKR00MS&quot; Video</p>
+                <p class="lcard-hl trim">KATSEYE's Yoonchae Says She Forgot How to Speak Korean While Meeting BTS</p>
                 <div class="lcard-meta">
                   <p class="trim">Trace Will</p>
                   <p class="trim">2d</p>
@@ -811,56 +870,55 @@
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
-      <!-- Section 11: User post — Jordan Rose (Nuthin but luv!) -->
-      <div class="post" data-node="1885:65618">
+      <!-- Section 11: User post — Adam Kwazoski (Thats right!) — no body copy, 358x191 photo -->
+      <div class="post" data-node="2154:881">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l">
-              <div class="up-av"><img src="assets/jordan-rose.webp" alt=""></div>
-              <p class="ph-name trim">Jordan Rose</p>
+              <div class="up-av"><img src="assets/269954e0-36ea-4b7f-886e-de6358c674f2.webp" alt=""></div>
+              <p class="ph-name trim">Adam Kwazoski</p>
             </div>
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <p class="up-title trim" style="height:13px">Nuthin but luv!</p>
-            <p class="sub trim" style="height:10px">My boi cooked!!!</p>
-            <div class="pimg">
+            <p class="up-title trim" style="height:13px">Thats right! I am one of them now!</p>
+            <div class="pimg wide191">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
-              <img src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
+              <img src="assets/71dd6713-d32a-4f2f-9a7e-cd202a71d1bf.webp" alt="">
+              <img src="assets/828acf77-fc1a-4c97-9e92-d58f87f158b4.webp" alt="">
               <img src="assets/4007590e-14f1-466a-85ca-d6c09f49673b.webp" alt="">
               <img src="assets/5dde9c16-bf76-4591-9982-6e469b7ee17a.webp" alt="">
-              <img class="crop150" src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
+              <img src="assets/e7181533-010b-40dd-85c8-48c5cafa4d3f.webp" alt="">
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
       <!-- Section 12: Ad slot 2 -->
-      <div class="ad" data-node="1885:65645">
+      <div class="ad" data-node="2154:908">
         <div class="ad-in">
           <div class="ad-img" style="width:302px;height:255px"><img src="assets/46710c65-7eeb-48ac-8155-5046a98cc913.webp" alt=""></div>
           <p class="ad-cap trim up">Advertisment</p>
         </div>
       </div>
 
-      <!-- Section 13: User post — Carlos Mendes (NONE YALL HAVE THIS LEVEL OF FLEX!) -->
-      <div class="post" data-node="1885:65649">
+      <!-- Section 13: User post — Carla Mendes (NONE YALL HAVE THIS LEVEL OF FLEX!) -->
+      <div class="post" data-node="2154:912">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l" style="overflow:clip">
-              <div class="up-av"><img src="assets/4c306b54-5164-4782-9d4a-4ad3dd2d8682.webp" alt=""></div>
-              <div class="up-name17"><p>Carlos Mendes</p></div>
+              <div class="up-av"><img src="assets/331dbed0-ba14-479b-815e-c66194097b07.webp" alt=""></div>
+              <div class="up-name17"><p>Carla Mendes</p></div>
             </div>
             <p class="ph-time trim up">2h ago</p>
           </div>
@@ -868,29 +926,29 @@
             <p class="up-title trim" style="height:13px">NONE YALL HAVE THIS LEVEL OF FLEX!</p>
             <div class="pimg">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
-              <img src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
+              <img src="assets/71dd6713-d32a-4f2f-9a7e-cd202a71d1bf.webp" alt="">
+              <img src="assets/828acf77-fc1a-4c97-9e92-d58f87f158b4.webp" alt="">
               <img src="assets/4007590e-14f1-466a-85ca-d6c09f49673b.webp" alt="">
               <img src="assets/5dde9c16-bf76-4591-9982-6e469b7ee17a.webp" alt="">
               <img class="crop150" src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
-              <img src="assets/84b4fa3b-ee35-4bc7-861a-07ea5e10911c.webp" alt="">
+              <img class="crop142" src="assets/f532b170-47a3-4bc4-b9e3-5c278b5f2d72.webp" alt="">
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
-      <!-- Section 14: User post — Amara Diallo (repeat of §10, verbatim duplicate in Figma) -->
-      <div class="post pad20" data-node="1885:65675">
+      <!-- Section 14: User post — Jordan Rose (same layout as §10; different byline, title + link card) -->
+      <div class="post pad20" data-node="2154:938">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l" style="overflow:clip">
-              <div class="up-av"><img src="assets/018e879f-e583-4f12-bb2c-ec706a16f7cb.webp" alt=""></div>
-              <div class="up-name17"><p>Amara Diallo</p></div>
+              <div class="up-av"><img src="assets/6f5e1eb7-1695-442b-856f-0dbac3d84a55.webp" alt=""></div>
+              <div class="up-name17"><p>Jordan Rose</p></div>
             </div>
             <p class="ph-time trim up">2h ago</p>
           </div>
@@ -901,9 +959,9 @@
               <div class="ital-svg ital-quote"><img src="assets/amara-quote-italic.svg" alt="&ldquo;shoutout to whoever was on photo!! the wide of yoonchae mid-spin under the rig lights deserves a print run&rdquo;"></div>
             </div>
             <div class="lcard">
-              <div class="lcard-img"><img src="assets/1357f66f-d104-4008-ba20-c168b805fbfb.webp" alt=""></div>
+              <div class="lcard-img"><img src="assets/ffa3a256-c05e-4900-a29f-f2ba067284b0.webp" alt=""></div>
               <div class="lcard-txt">
-                <p class="lcard-hl trim">The Wildest YouTube Comments on Playboi Carti and Travis Scott&rsquo;s &quot;BACKR00MS&quot; Video</p>
+                <p class="lcard-hl trim">KATSEYE: 11 Things You Didn't Know About the Global Girl Group</p>
                 <div class="lcard-meta">
                   <p class="trim">Trace Will</p>
                   <p class="trim">2d</p>
@@ -914,13 +972,80 @@
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
-      <!-- Section 15: User post — Carlos Mendes (GUESS WHO MADE IT TO THE LIVE SHOW!!) -->
-      <div class="post" data-node="1885:65711">
+      <!-- Section 15: Complex Style — shop grid (new in the 2026-07-30 revision) -->
+      <div class="post pad20x16" data-node="2156:34792">
+        <div class="post-in">
+          <div class="ph">
+            <div class="ph-l">
+              <div class="av" style="width:32px;height:32px">
+                <div class="av-c" style="left:2.1212120056152344px;top:1.683712124824524px;width:28.631576538085938px;height:28.631576538085938px"><div class="lgi lg-style"><img src="assets/1ccfc291-ae52-400e-b688-099255c24ede.svg" alt=""></div></div>
+                <img class="av-ring" src="assets/04e3237c-4656-4108-a084-e54efe67ab79.svg" alt="">
+              </div>
+              <p class="ph-name trim">Complex Style</p>
+              <div class="badge20"><div class="in"><img src="assets/4535895e-ff94-4dec-a2b3-2b50fe666218.svg" alt=""></div></div>
+            </div>
+            <p class="ph-time trim up">2h ago</p>
+          </div>
+          <div class="pc">
+            <p class="shop-title trim">Shop the latest KATSEYE albums</p>
+            <div class="shop-grid">
+              <div class="stile">
+                <div class="stile-img"><img src="assets/2459657d-a18b-489d-a3eb-1bb1d175db29.webp" alt=""></div>
+                <div class="stile-d">
+                  <div class="stile-c">
+                    <p class="stile-brand trim">Katseye</p>
+                    <p class="stile-name trim">Lara Hoodie</p>
+                  </div>
+                  <div class="stile-price"><span><p class="trim">$</p><p class="trim">130</p></span></div>
+                </div>
+              </div>
+              <div class="stile">
+                <div class="stile-img"><img src="assets/baa99b03-c41a-4c33-bf8a-96c5f73d9a49.webp" alt=""></div>
+                <div class="stile-d">
+                  <div class="stile-c">
+                    <p class="stile-brand trim">Katseye</p>
+                    <p class="stile-name trim">Daniela Hoodie</p>
+                  </div>
+                  <div class="stile-price"><span><p class="trim">$</p><p class="trim">130</p></span></div>
+                </div>
+              </div>
+              <div class="stile">
+                <div class="stile-img"><img src="assets/f1ec78d2-2d8d-4c85-b7ce-8c7418837aba.webp" alt=""></div>
+                <div class="stile-d">
+                  <div class="stile-c">
+                    <p class="stile-brand trim">Katseye</p>
+                    <p class="stile-name trim">Manon Hoodie</p>
+                  </div>
+                  <div class="stile-price"><span><p class="trim">$</p><p class="trim">130</p></span></div>
+                </div>
+              </div>
+              <div class="stile">
+                <div class="stile-img"><img src="assets/237ca3af-9de2-4270-8ae7-e81803682df8.webp" alt=""></div>
+                <div class="stile-d">
+                  <div class="stile-c">
+                    <p class="stile-brand trim">Katseye</p>
+                    <p class="stile-name trim">Yoonchae Full Zip Hoodie</p>
+                  </div>
+                  <div class="stile-price"><span><p class="trim">$</p><p class="trim">130</p></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="eng"><div class="eng-g">
+            <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
+            <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- Section 16: User post — Carlos Mendes (GUESS WHO MADE IT TO THE LIVE SHOW!!) -->
+      <div class="post" data-node="2154:974">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l" style="overflow:clip">
@@ -934,8 +1059,8 @@
             <p class="sub trim" style="height:10px">MEEEEEEEEEEEEEEEE!!!!!!!!</p>
             <div class="pimg">
               <img src="assets/667d3610-f624-4e58-941d-ffb7e67e90ce.webp" alt="">
-              <img src="assets/15e3e462-0e8b-4ff5-9983-df404929043e.webp" alt="">
-              <img src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
+              <img src="assets/71dd6713-d32a-4f2f-9a7e-cd202a71d1bf.webp" alt="">
+              <img src="assets/828acf77-fc1a-4c97-9e92-d58f87f158b4.webp" alt="">
               <img src="assets/4007590e-14f1-466a-85ca-d6c09f49673b.webp" alt="">
               <img src="assets/5dde9c16-bf76-4591-9982-6e469b7ee17a.webp" alt="">
               <img class="crop150" src="assets/21d8ce3e-92b4-4a82-a0b8-63089d441463.webp" alt="">
@@ -946,19 +1071,19 @@
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
 
-      <!-- Section 16: Feed post — Exclusive Interview (Complex Culture) -->
-      <div class="post pad20" data-node="1885:65738">
+      <!-- Section 17: Feed post — Exclusive Interview (Complex Culture) -->
+      <div class="post pad20" data-node="2154:1001">
         <div class="post-in">
           <div class="ph">
             <div class="ph-l">
               <div class="av">
                 <div class="av-c"><div class="lgi lg-pop"><img src="assets/3c6ca4ff-cf2a-483b-abad-cfbd48ece37d.svg" alt=""></div></div>
-                <img class="av-ring" src="assets/1bf59c76-f052-4874-b0ea-35f943a121c1.svg" alt="">
+                <img class="av-ring" src="assets/108bbdc7-fe5e-4bf3-bc5e-bf1553eb7678.svg" alt="">
               </div>
               <p class="ph-name trim">Complex Culture</p>
               <div class="badge20"><div class="in"><img src="assets/d4938cea-4f87-4b1c-a1f5-64701816adc1.svg" alt=""></div></div>
@@ -966,16 +1091,21 @@
             <p class="ph-time trim up">2h ago</p>
           </div>
           <div class="pc">
-            <p class="s13-title trim">Exclusive Interview</p>
+            <!-- Hard break after the colon: line 3 is longer than line 1, so Figma's break there
+                 is an explicit newline, not a soft wrap. Line 3 is then a knife-edge case in the
+                 other direction — Chrome shapes it at 350.641px inside the 350px node, so it
+                 would wrap "HEARTS'" onto a 4th line. Pinned nowrap to keep Figma's three lines;
+                 the 0.64px surplus is Chrome-vs-Figma shaping, not a layout difference. -->
+            <p class="s13-title trim">Exclusive Interview:<br>KATSEYE Drop First Trailer for<br><span class="nb">Upcoming Documentary &lsquo;WILD HEARTS&rsquo;</span></p>
             <div class="s13-video">
               <img src="assets/02f50550-89f9-4234-b789-630af7568de3.webp" alt="">
-              <img src="assets/b0f156ed-624d-4024-9104-8f43e7297eb0.webp" alt="">
+              <img src="assets/02c7aee2-94b3-4df4-9b85-3294d84ec194.webp" alt="">
             </div>
           </div>
           <div class="eng"><div class="eng-g">
             <div class="eact"><div class="i20"><div class="heart-in"><img src="assets/s1-smile-square.svg" alt=""></div></div><p class="ecnt trim up">13k</p></div>
             <div class="eact"><div class="chat16"><img src="assets/0309e855-df9f-4a04-979e-2ad9c61c00a4.svg" alt=""></div><p class="ecnt trim up">2.1K</p></div>
-            <div class="eact"><div class="i20"><div class="bm-in"><img src="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
+            <div class="eact save" role="button" tabindex="0" aria-pressed="false" aria-label="Save" data-on="assets/29e8c667-0834-4e79-868a-d1cf77a64f5f.svg" data-off="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg"><div class="i20"><div class="bm-in"><img src="assets/2cbd3bfb-148a-4e40-8597-2bf5993cda61.svg" alt=""></div></div><p class="ecnt trim up">Saved</p></div>
           </div></div>
         </div>
       </div>
@@ -1041,6 +1171,42 @@
         chosen: list.map(function (b) { return b.classList.contains('chosen'); })
       };
     };
+  });
+})();
+</script>
+
+<script>
+/* Save toggle. Posts start unsaved; Figma ships that state as the outline bookmark with no
+   label, so the label is hidden by CSS rather than reworded (qa/apply-unsaved-default.py).
+
+   Each button carries its own filled export in `data-on` and the outline in `data-off`, so a
+   post restores its own asset rather than a shared one. Plain two-state toggle: click saves,
+   click again un-saves. */
+(function () {
+  document.querySelectorAll('.eact.save').forEach(function (btn) {
+    var img = btn.querySelector('img');
+    function render() {
+      var on = btn.classList.contains('saved');
+      img.src = on ? btn.dataset.on : btn.dataset.off;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Saved' : 'Save');
+    }
+    function toggle(e) { e.stopPropagation(); btn.classList.toggle('saved'); render(); }
+    btn.addEventListener('click', toggle);
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); }
+    });
+    /* Read back by qa/test-save.py, which drives real clicks. */
+    btn.saveState = function () {
+      var label = btn.querySelector('.ecnt');
+      return {
+        saved: btn.classList.contains('saved'),
+        src: img.getAttribute('src'),
+        labelShown: getComputedStyle(label).display !== 'none',
+        label: label.textContent
+      };
+    };
+    render();
   });
 })();
 </script>

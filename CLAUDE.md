@@ -4,9 +4,10 @@ A standalone scrollytelling page that plays the 28-frame Figma storyboard
 ("Fandom x My Complex", file key `0Wn6kFfKuKalOCTev3uUjA`, canvas `1838:87183`)
 as one continuous scroll-scrubbed animation: Zack's cursor browses the Complex
 mobile site inside a phone mockup — following, reacting, commenting, earning XP,
-joining the Playboi Carti fandom — ending on the Complex I.D. gold card, which then
-plays out as the closing video: the encased card glows, morphs onto a real person at
-ComplexCon and pulls back over the crowd, scrubbed frame by frame like everything else.
+joining the KATSEYE fandom, shopping the drop, buying a hoodie and levelling up to Bronze
+(the s19.3 STATUS UNLOCKED sheet, where his I.D. card flips over) — ending on the Complex I.D.
+gold card, which then plays out as the closing video: the encased card glows, morphs onto a real person at
+ComplexCon, pulls back over the crowd and fades to black, scrubbed frame by frame like everything else.
 
 **The stage is black.** Only stage-level furniture is dark-themed (background,
 phone frame, callouts, s13/s14 slab, reaction tray); everything inside the phone
@@ -17,23 +18,54 @@ Figma's Scene 06 (`1898:70036`) is the reference frame for the dark treatment.
 ## Run
 
 ```bash
-python3 -m http.server 8321   # from this directory
+python3 tools/check-pages-sync.py   # FIRST — is pages/ still the All Hands build?
+python3 tools/serve.py              # from this directory — port 8321, no-store
 open http://localhost:8321
 ```
 
+**Run the sync check at the start of every session, before judging anything on screen.**
+`pages/` is generated from a local-only sibling folder that is edited *while* the prototype is
+being reviewed, and the import rewrites the markup, so `pages/` cannot be diffed against its
+source — staleness is invisible. If it reports STALE, re-run `tools/make-page-assets.py` before
+looking at anything, and re-run `tools/derive-page-offsets.py` **if the page geometry moved**
+(content-only revisions leave the offsets valid; a new or resized section does not). The same
+check runs from `.githooks/pre-push` and asks before publishing a stale prototype. Full
+reasoning and the failure modes: **`PAGES-SYNC.md`**.
+
 A server is REQUIRED — `file://` fails silently (the page fetches
 `assets/manifest.json`). Append `?debug` for a HUD (progress %, scene label,
-scroll px).
+scroll px) — optional, purely diagnostic.
+
+**Deep-link to a scene: `localhost:8321/#s19.2`.** Any timeline label works, and a bare label
+lands **75% through** the scene, where the beat has resolved — a label marks the frame *before*
+its scene has happened, so `+0` shows the thing you linked to as absent. `#s19.2+0.2` addresses
+an exact offset, the same (label, offset) pair `tools/scrub.py` takes. This exists because the
+page is one ~48,000px scroll and everything before ~66% is unchanged by most edits: "reload and
+scroll three quarters of the way down" read as the work not existing, twice, on 2026-07-30.
+
+**Use `tools/serve.py`, not `python3 -m http.server`.** `index.html` loads `main.js`
+and `styles.css` with no `?v=`, and the plain module sends `Last-Modified` and answers
+`If-Modified-Since` with a 304 — so Chrome will keep a tab running the *previous* build
+after an edit even through a hard refresh, and the iframes are worse because a reload
+need not revalidate a frame's document. That has already cost a review cycle
+(2026-07-30: two new scenes were reported as missing while the server was demonstrably
+serving them). `serve.py` sends `no-store` and strips `Last-Modified`, so what you see is
+what is on disk. **The `scroll x / N` denominator in the `?debug` HUD is the quickest
+check that a tab is current** — it is the timeline length, so it changes whenever a scene
+span does.
 
 ## Ship
 
 Origin is `github.com/daniiyalali/complex-scroll-animation` (**public**, `main`).
 Hosting is Vercel via its Git integration, so **every push to `main` redeploys** —
 there is no build step, `vercel.json` only sets cache headers. `.vercelignore`
-trims the 1.1 GB working directory to **262 files / ~17.9 MB** (`pages/` is 222 files / 8.56 MB
+trims the 1.1 GB working directory to **261 files / ~17.9 MB** (`pages/` is 221 files / 8.56 MB
 of it, `assets/` 31 / 8.98 MB — 2.96 MB of that is the s24 ending sprite sheet), of which
-**256 paths** are fetched by a real page load; it also
-keeps `CLAUDE.md`, `HANDOFF.md`, `tools/`, `Feedback/` and `assets/General/` off the served URL.
+**257 paths** are fetched by a real page load (that measured set predates s19.3 — since then
+`flip-frames.webp` ships, +1 file / +0.86 MB, and the two coded-flip faces it obsoleted never
+shipped; **re-derive at the next push**, the way the rule below says); it also
+keeps `CLAUDE.md`, `HANDOFF.md`, `PAGES-SYNC.md`, `tools/`, `.githooks/`, `Feedback/`,
+`assets/General/` and `assets/card animation/` off the served URL.
 
 If you change what the page loads, re-verify the deploy set the way it was
 derived in the first place — record a real page load's requests and diff them
@@ -76,27 +108,36 @@ need no token — the credential lives in the macOS Keychain and
 | `styles.css` | All positioning in 1920×1080 stage px, 1:1 with Figma coordinates. `.page` / `.page-1x` are the live-page frames |
 | `main.js` | Scene offsets (`POS`), cursor beats (`CUR`), page mounting + `prepare*()` prep, master GSAP timeline, Lenis wiring, loader |
 | `vendor/` | gsap 3.12.5, ScrollTrigger, lenis 1.1.14, and `inter-subset.woff2` — the product typeface. Needed by the coded s10 comments tray, and loaded by the `pages/` frames themselves (vendored, no CDN) |
-| `assets/` | WebP overlay art + `manifest.json` (asset → Figma node ID / source map). **Retired but kept in git** as source material, and excluded in `.vercelignore`: the four feed strips, three nav bars, `panel-rerank.webp`, `drawer.webp`, `xp-modal.webp` and `lanyard.webp`. Everything the live pages, the coded components or the two scrubbed videos replaced |
+| `assets/` | WebP overlay art + `manifest.json` (asset → Figma node ID / source map). **Retired but kept in git** as source material, and excluded in `.vercelignore`: the four feed strips, three nav bars, `panel-rerank.webp`, `drawer.webp`, `xp-modal.webp`, `lanyard.webp` and the two coded-flip faces `flip-regular/bronze.webp`. Everything the live pages, the coded components or the three scrubbed videos replaced |
+| `pages/product.html` | **Placeholder**, not generated — the s19.2 product-detail panel (Figma `Complex.com PDP [Mobile]` `2159:50283`). Carries the measured `.pdp-addbag` / `.pdp-shoppay` boxes so the 19.2 beat resolves today. `"product"` is already registered in `make-page-assets.py`, which **skips a page whose source is missing**, so importing the designed page later is a re-run rather than an edit |
 | `pages/` | The five live product pages + their assets, generated by `tools/make-page-assets.py`. **Committed on purpose**: the source folder is a local-only sibling, so a fresh clone cannot regenerate them (same reasoning as the s15 quiz captures) |
 | `Reference Projects/` | Full reference apps the user drops in (e.g. `4. Complex Quiz`, a Next.js prototype) — run them and capture real UI states when a scene needs product-true frames. **Gitignored** (~1.1 GB); local-only |
-| `Feedback/` | Reference renders and screenshots the user drops in when a scene should look different. `Scene 31.png` is the s19 layout reference — see HANDOFF for how to register one of these against the stage before measuring it |
+| `Feedback/` | Reference renders and screenshots the user drops in when a scene should look different. `Scene 31.png` is the s19 layout reference — see HANDOFF for how to register one of these against the stage before measuring it. **Gitignored AND `.vercelignore`d**: it is internal working material and `main` is a public repo, so it is local-only and a fresh clone loses nothing |
 | `../10. My Complex All Hands/` | **Sibling folder, not part of this repo.** The user's hand-built HTML of these same product pages (`scene*.html`, `all-scenes.html`). When a scene needs a product state the storyboard export doesn't have, check here first: it has the real markup, the real tokens and the real font, so it beats re-deriving them from Figma or the raster. `inter-subset.woff2` came from it, its `.chip` / `.chip.sel` rules drive the s8 picks, and — see `tools/make-jordan-av.py` — a change meant to survive the next import has to be written back into **this** folder, not just into `pages/` |
 | `tools/export-assets.md` | How to re-export assets when the design changes + export gotchas |
 | `tools/make-picker-dark.py` | Regenerates the s6 reaction tray (a composite — read the docstring before re-exporting it) |
 | `tools/make-react-wall.py` | Rebuilds the s6 animated reaction wall from the Scene 6 GIF |
-| `tools/make-toasts.py` | Rebuilds the four XP toasts. They are the one overlay group still carrying a **baked** shadow and are positioned by their 440×299 render box, so a rebuild must land on exactly that canvas; the script **centres** each pill in the 440px screen (the Figma nodes still share a left edge of x=85, which stopped being centre when the new coin widened them) |
+| `tools/make-toasts.py` | **Superseded for the current art** — the five pills are now built from the designer's `assets/General/Exp01–05.png`, not from Figma nodes. Still the reference for *why* the canvas is 440×299 and why the pill is centred in the 440px screen. Read it before any rebuild; then see the XP-toast note in Architecture for what actually ships |
 | `tools/make-gold-card.py` | Rebuilds `gold-card.webp` (the **encased** I.D.) from `assets/General/Jordan Rose Id Wrapped.png`, and derives the stage box that registers the case's inner card onto `#id-card` — which is what lets s23 wrap the card already on screen |
-| `tools/make-id-card.py` | Rebuilds `id-card.webp` from TWO sources — 2× pixels from `assets/General/Jordan Rose ID.png`, alpha from the MCP `contentsOnly` render (which only comes back at 1×). Also the record of why the card's stage box is the **video's first frame** rather than the Figma node box |
+| `tools/make-id-card.py` | **STALE — do not run as-is**: it still builds the retired black-strip card from `Scene 22/COMPLEX I.D No Shadow.png` via a two-source matte. `id-card.webp` is now the **gold** card, cropped from `assets/Scene 22/COMPLEX I.D - Gold - Big.png`'s opaque box and fitted to 2× the stage box (see the I.D. card note in Architecture). Update this script before the next rebuild. It remains the record of why the card's stage box is the **video's first frame** rather than the Figma node box |
+| `tools/make-flip-frames.py` | Turns the designer's card-flip video (`assets/card animation/Flip_Transition_Animation_Reversed.mp4`) into `assets/flip-frames.webp`, the sprite grid s19.3 scrubs. Same `<video>` warnings as the s11/s24 tools (rVFC capture at `playbackRate` 0.25, mediaTime sampling), plus its own: the frames' backdrop is normalised to **pure white** so the window fuses with the sheet panel it sits inside |
+| `tools/make-flip-cards.py` | **Superseded same-day** by the video above — it built the two coded-flip faces (`flip-regular/bronze.webp`, now retired). Kept as the record of the face-registration method, for if the flip ever goes back to flat art |
 | `tools/make-badges.py` | Rebuilds the eight s22 badges from the **rotated** Figma exports in `assets/General/Rotated/`. Read the docstring before re-exporting: the badges are rotated 8-30° in the design, the first exports had that rotation reset, and the node's `x/y` is **not** where a rotated node renders — the positions are measured off a render of Scene 21 |
+| `tools/make-satellites.py` | Rebuilds the four **upright** s19 satellites from `assets/Scene 19/*.png` (the two merch tiles are not here — their rotation is baked in). A 1:1 PNG→WebP re-encode, but it also owns the **stage boxes**: those are tuned, so the registration that survives an art change is `(width, centre)` — never the top edge — and height follows from the art's aspect. Run bare to check, `--write` to build. Needed because `#sats img` has no `object-fit`, so a stale box *stretches* a card |
 | `tools/make-xp-frames.py` | Turns the Scene 11 video into `assets/xp-frames.webp`, the sprite grid s11 scrubs. **Read its docstring before reaching for a `<video>`** — that file cannot be seeked |
 | `tools/make-ending-frames.py` | Turns the closing I.D. video into `assets/ending-frames.webp`, the full-bleed sprite grid s24 scrubs. Same `<video>` warning as above, plus its own: capture at `playbackRate` 0.25 or Chromium silently drops a third of the frames. `--measure` prints the size/memory table the 12 fps + 1024px cell was chosen from |
 | `tools/make-jordan-av.py` | Builds one fandom-page avatar. Writes a master back into the All Hands build as well as the served WebP, so the next `make-page-assets.py` run does not revert it |
 | `tools/make-page-assets.py` | Imports the five pages from the All Hands build into `pages/`, resizing every raster to 2× its on-stage size and re-encoding to WebP (101 MB → 6.75 MB). Re-run after the source pages change; `--report` measures without writing |
+| `tools/derive-page-offsets.py` | Solves `POS.<page>.<scene>` by registering the live page against the storyboard render of that scene. **Re-run after ANY change to a page's markup** — those offsets are the one set of numbers no Figma node gives you, and a new section dropped mid-feed moves every offset below it silently (2026-07-30: s20 was 2,512px out). Read the docstring before editing: screenshotting once per candidate offset is a trap, because `zoom` makes `scrollHeight` post-zoom while `scrollTo` is not |
+| `tools/serve.py` | The dev server to use — `no-store`, `Last-Modified` stripped. `python3 -m http.server` lets Chrome keep a tab on the previous build because `main.js`/`styles.css` carry no `?v=`; that has already been mistaken for work not existing |
 | `tools/scrub.py` | Playwright scrub harness: jump to any label ± offset and screenshot |
 | `tools/deploy-vercel.py` | Stdlib-only Vercel REST deploy, for when there's no CLI (needs `VERCEL_TOKEN`) |
 | `vercel.json` | Cache headers only — there is no build step |
 | `.vercelignore` | Deny-list that cuts the deploy to the ~17.9 MB the page fetches, and names every retired asset explicitly. Being a deny-list, it has now leaked internal material twice — re-derive the set after adding any directory |
-| `.gitignore` | Keeps `Reference Projects/` and `shots/` out; `assets/Scene */` masters are tracked **on purpose** (the `make-*.py` scripts read them) |
+| `.gitignore` | Keeps `Reference Projects/`, `shots/` and `Feedback/` out; `assets/Scene */` masters are tracked **on purpose** (the `make-*.py` scripts read them) |
+| `PAGES-SYNC.md` | How `pages/` stays in sync with the All Hands build — the session-start check, the pre-push hook, and when a re-import also needs the offsets re-solved. Read it before trusting anything on screen |
+| `.githooks/pre-push` | Runs the sync check before a push and **asks** before publishing a stale prototype. Installed with `git config core.hooksPath .githooks` — **not** carried by `git clone`, so re-run that on a fresh one or the guard silently does nothing |
+| `tools/check-pages-sync.py` | Answers "is `pages/` current?" by SHA-256 against `pages/.import-stamp.json`, which the importer writes. A hash not an mtime: the source is saved constantly and most saves change nothing that renders |
 | `HANDOFF.md` | Current state, verification results, known quirks, next steps |
 
 ## Architecture (read this before touching main.js)
@@ -106,7 +147,7 @@ need no token — the credential lives in the macOS Keychain and
 - **Scroll engine**: body height = `SCROLL_LEN + innerHeight` (spacer `#scroll-track`);
   one ScrollTrigger scrubs ONE master timeline. Lenis (lerp 0.09) smooths input and
   drives `ScrollTrigger.update`; GSAP ticker drives `lenis.raf`. Don't add per-scene
-  ScrollTriggers — everything hangs off the single timeline via labels `s1…s24` (plus `s13.1`).
+  ScrollTriggers — everything hangs off the single timeline via labels `s1…s24` (plus `s13.1`, `s19.1`, `s19.2`, `s19.3`).
 - **Pages, not strips** (rebuilt 2026-07-29). The phone and the two side slabs each hold a
   **live product page** in an iframe — the real HTML from the All Hands build, imported by
   `tools/make-page-assets.py` into `pages/`. The four flat strip exports and the three nav-bar
@@ -131,6 +172,14 @@ need no token — the credential lives in the macOS Keychain and
   - **Beats that aim inside a page name the ELEMENT, not a number** — `PAGE_TARGETS` +
     `resolvePageTargets()` in boot, and the `prepare*()` functions for the interactive ones.
     A copied coordinate rots silently when a page changes; a selector does not.
+    A target's `frac` puts the tip at a fraction of the element's own box instead of its centre,
+    for beats where the storyboard is deliberately off-centre on a big target — still a selector,
+    so it survives the page moving. Both s19 sub-beats need it, by 80px and 66px respectively.
+    **When checking a tip against a render, verify BOTH axes**: s19.2's y matched the button's
+    centre exactly, which made "dead centre" look true while the x was 66px out.
+  - **`.page` ships `visibility: hidden` and each scene reveals its own** (`gsap.set('#page-x',
+    {autoAlpha: 1})`, as s14 does for `#page-rerank` and s19.2 for `#page-product`). Skip it and
+    the panel slides in as an empty slab while its container looks fine.
   - z-index inside the screen is unchanged: scrim 10, xp-modal/stickers 11, toasts 12. The
     s19 satellites are still the one BELOW-phone layer (`#sats img { z-index: -1 }`) so they
     fly out from behind the mockup.
@@ -192,6 +241,33 @@ need no token — the credential lives in the macOS Keychain and
     15.5 is the retired asset's own radius, measured off its alpha.
   - There is no scale-pop on the container any more — the video opens with its own entrance, so
     popping the container too played the arrival twice. `assets/xp-modal.webp` is retired.
+- **XP toasts** (s12 / s13.1 / s14 / s15 / s19.2): five pills, rebuilt 2026-07-30 from the
+  designer's `assets/General/Exp01–05.png`. One family — same art, same 310×86 pill, all
+  **centred** on a shared slot in the 440×299 render box. The first award is **+10**, not +20
+  (`toast-20` was renamed `toast-10`).
+  - **The progress bar is real DOM, not part of the art.** `.tbar` is a rounded track with a
+    rounded `<b>` fill inside it, whole-pixel box (218, 111, 126×5, radius 2.5), `overflow:
+    hidden` so the fill's radius cannot poke past the track, and only the inner fill transforms.
+    It was briefly the track painted flat into each WebP with a bare div scaled over it at
+    fractional geometry — on a stage that is itself scaled to fit the window, half-pixels are
+    what read as **pixelation**.
+    **The bar is now gone from the art entirely.** A first attempt painted over only the grey
+    track's row band, but the baked white fill is ~1px taller on each side, so a white sliver
+    survived *outside* the CSS bar and showed as a stray line before the fill ran. The pills are
+    rebuilt from source with rows 218–238 inpainted across the bar's own columns only, by
+    interpolating the pill's vertical gradient between two clean rows — a flat fill would band,
+    and a wider x-window smears the XP coin (both were hit). Verified: no pixel over the
+    background threshold survives in that region, and the rendered bar is fill-then-track with
+    nothing beyond it.
+  - **The bar ACCUMULATES.** Each award animates from where the previous one left it, and the
+    pill *arrives* already showing the running total (a `set` at the same instant it drops), so
+    it never restarts from zero: 0 → 0.072 → 0.29 → 0.50 → 0.74 → 0.99. `FILL` in main.js is the
+    table. Four values are the designer's own, measured off the art; **+10's 7.25% is derived**,
+    because Exp04 and Exp05 were drawn with the same 29% fill and honouring both literally would
+    leave the +30 award moving the bar not at all. The shared checkpoint is split by the XP
+    awarded (10/40 × 29%). Safe to re-derive — the track is empty in the WebP.
+  - Every fill must finish before its own `toastOut`, or the bar freezes mid-way: s12's pill has
+    the tightest window and was stuck at 0.23 of 0.29 until its exit moved to s13+0.45.
 - **Comments tray** (s10): coded, not exported — `drawer.webp` is retired. It baked a
   pre-filled comment and character count into the composer, and patching over baked art was
   judged too fragile to keep (user's call). Structure and tokens come from the comment
@@ -263,8 +339,57 @@ need no token — the credential lives in the macOS Keychain and
   Then Zack clicks MY COMPLEX (`CUR.s7`, tab centre from Figma node `1838:87226`) and the
   nav swaps in place — a hard `set`, because the bar never left and the two arts differ
   only in which pill is filled.
-- **Scene order quirk**: canvas order is …19, 20, **22, 21**, 23, 24 — intentional in
-  the storyboard (small I.D. card appears before the expanded one).
+- **s19.1 / s19.2 — the shop beat.** 19.1 scrolls the fandom page to the Complex Style shop grid
+  and lands the cursor on the Daniela hoodie; 19.2 slides the product panel in over a dimmed
+  phone and presses shop Pay, which drops the +200 XP pill. The s19 satellite recede moved into
+  19.1 (the cards belong to the UGC beat); **19.3 clears the 19.2 panel and its pill**, and s20
+  clears what 19.3 leaves (the sheet and the scrim).
+  - `#panel-product` is Figma `Complex.com PDP [Mobile]` (`2159:50283`) — **388×858.3 at
+    (1154, 110.6)**, and `pages/product.html` is authored **388**, the frame's own width, so it
+    mounts **1:1** (`.page-1x`). No radius and no border on the container: the design's corners
+    are square and the page draws its own 0.995px inside stroke of #303338.
+  - Both cursor beats use `PAGE_TARGETS` with a **`frac`** — the storyboard is deliberately
+    off-centre on both targets, by 80px on the hoodie and 66px on shop Pay. Selectors, not
+    coordinates, so they survive the page moving.
+- **s19.3 — STATUS UNLOCKED, and the card flips to Bronze.** The +200 XP the buy just paid out
+  fills the pill's bar — that IS the level-up — so this sheet answers it in strict order
+  (user's spec, 2026-07-30): the PDP leaves first, then the pill floats back up and goes, and
+  only then does the coded `#status-modal` sheet pop in showing the **Regular** card, which
+  flips over and lands **Bronze**. **The page does not scroll anywhere under any of it** — the
+  level-up plays over the same frame the purchase happened on (there is deliberately no
+  `POS.fandom.s19_3`; Figma's 19.3 frames a different post and is not honoured — it solved at
+  −3665 if the design ever insists). The scrim stands from 19.2 straight through, and s20
+  holds the page still until the sheet has fully dismissed — the scroll to the profile is the
+  NEXT thing that happens, not something the level-up dissolves into.
+  - **The flip IS the designer's video, scrubbed** — `assets/card animation/
+    Flip_Transition_Animation_Reversed.mp4` as `assets/flip-frames.webp`, an 8×8 sprite grid
+    built by `tools/make-flip-frames.py` and swept by a proxy exactly like the s11 popup, for
+    the same reasons (that file cannot be seeked; the scrub must be deterministic and
+    reversible — read that tool's docstring before reaching for a `<video>` or re-extracting).
+    `ease: none` on the sweep: the video's own animation curve is baked into its frames, and
+    easing on top would double-ease the motion. 60 frames at 12 fps over 1.6 units.
+  - **The video stays INSIDE the white sheet** (user's spec: nothing bleeds past the white
+    frame, so the 3D illusion holds). The window `#sm-flip` is the panel's inner width at the
+    video's 4:3, and each frame's backdrop is normalised to **pure white** by the tool — the
+    ring-median gain left the vignette corners at ~253, which read as a faint window edge, so
+    the gain keys off the ring's 10th percentile instead. Deliberately NOT Figma's card box,
+    which overhangs the panel — an RGB video can't overhang anything. The card comes out ~10%
+    smaller than the Figma node; that is the price of containment.
+  - **History (all 2026-07-30, one afternoon):** coded 360° CSS-3D flip with a midpoint face
+    swap → coded 180° single turn → this video, each a user revision. The coded-flip
+    machinery (perspective/preserve-3d, registered faces, the CSS-grouping-flattens-3D
+    landmine) is in git history with `tools/make-flip-cards.py` as its record;
+    `flip-regular/bronze.webp` are retired.
+  - The cursor **stands aside first** (`CUR.s19_3`, Figma's own parked pose at 1677,905): the
+    press that caused this scene was 19.2's, so the sheet pops into a frame the arrow has
+    already left.
+- **Scene order quirk**: canvas order is …19, **19.1, 19.2, 19.3**, 20, **22, 21**, 23, 24 —
+  the 22-before-21 inversion is intentional in the storyboard (small I.D. card appears before the
+  expanded one). 19.1–19.3 were inserted 2026-07-30 and shifted every later frame's canvas x by
+  2020px per frame. 19.3 was a badge-unlock modal when it landed and is now the **STATUS
+  UNLOCKED card flip** (built — see its own bullet below); `assets/Scene 19/Badge Packet
+  Animation.mp4` was the old design's asset and is **orphaned**, kept only in case the beat
+  returns.
 - **The I.D. card is CAUSED by a click** (s20 → s22). Zack's cursor travels to the poster's
   profile picture on the fandom page — `PAGE_TARGETS.s20`, the live `.up-av`, not a
   coordinate — and presses it late in s20; s22's card opens 0.1 units later, as the finger
@@ -286,13 +411,19 @@ need no token — the credential lives in the macOS Keychain and
   have to coincide or the handover jumps. Measured on frame 0: the card including its vertical
   strip is 639×396 of that 1280×720 frame, and the video is exactly 16:9, so at full stage it is
   **466.5, 291, 958.5×594** — that is `#id-card`'s box now, not the old 460,260 1000×561.
-  - The art is Figma node `1878:63616` "Jordan Rose ID" (941×609, aspect 1.5452) fitted to that
-    box (1.6136), so it is stretched **+2.0% wide, −2.5% tall**. Deliberate: matching the box is
-    what makes the morph seamless, and the aspects differ because the video's card is the gold
-    5000-PTS variant. Two things do NOT match and are inherent to the two designs, not bugs: the
-    video's gold strip is **60** stage px wide against our black strip's **39**, so the white body
-    differs by ~21px; and the video's card sits inside a clear slab that extends well past it
-    (417,157.5 1080×778.5), which the video introduces as new content.
+  - **The card is the GOLD variant as of 2026-07-30**, cropped from `assets/Scene 22/COMPLEX I.D -
+    Gold - Big.png`'s opaque box (1023×609) and fitted to 2× the stage box. The supplied art
+    carries a **baked shadow** (34% soft alpha against the <1.5% that is only antialiasing), and
+    `#id-card` already has a CSS `drop-shadow` — so it is cropped to the card's own rectangle or
+    the two would double. Fit is ×1.874 / ×1.951, because the source aspect is 1.6798 against the
+    box's 1.6136. **Do not "fix" that by moving the box** — the box IS the ending video's frame 0.
+  - This closed most of the s23→s24 ghosting. The card used to be the 500-PTS Regular revision
+    while the video morphs the gold 5000-PTS one, so four lines ghosted through `END_XFADE`. Ours
+    now reads **5000 PTS / Gold / 1%**, all matching the video; only the date still differs
+    (05.22.2026 vs the video's 05.19.2023). The strip is gold too, so the old note that "the
+    video's gold strip is 60 stage px against our black strip's 39" no longer applies —
+    **re-measure before relying on it.** Still inherent: the video's card sits inside a clear slab
+    extending well past it (417,157.5 1080×778.5), which the video introduces as new content.
   - Built by `tools/make-id-card.py` from two sources, because neither is sufficient alone — read
     its docstring. The user's `Jordan Rose ID.png` is the **2×** render but has a baked grainy
     background and shadow; the MCP `contentsOnly` render has real alpha but returns **1× only**
@@ -357,6 +488,13 @@ need no token — the credential lives in the macOS Keychain and
     The motion that keeps the dissolve from reading dead-still comes from the *content*: the
     sweep starts ON the crossfade so the video's own glow is already rising through it. Any
     transform on `#ending` would break the registration.
+  - **The finale FADES TO BLACK from the video's 3.5s mark** (user's spec, 2026-07-30):
+    `#ending-fade`, a black overlay above `#ending`, ramps 0→1 from `END_FADE_FRAME` (42, =
+    3.5s × 12 fps) to the sweep's last frame, so the story closes on black and the page's
+    held bottom is black too. Scrubbed off the same frame→time mapping as the sweep — the two
+    cannot drift, and it reverses. This is **not** the dip-to-black the warning above forbids:
+    that seam is at frame 0, the other end of the sweep, and this fade never reaches it. An
+    overlay, not `#ending`'s own alpha — fading `#ending` would expose the s23 layers under it.
 - **The badges FALL and pile up** (s22, `BADGE_DROP` in main.js). They used to pop in place
   with `back.out(1.7)`. Now they drop in from above the screen under one gravity and stack up
   on the floor of the phone. Four things are load-bearing:
@@ -423,7 +561,8 @@ are animated (plus one small `clip-path` on the fandom nav).
 ## Tuning knobs
 
 - `PX_PER_UNIT` (main.js, currently 800) — total scroll length / overall pace.
-  At 53.79 timeline units that's a 43,032 px page.
+  At 60.29 timeline units that's a 48,232 px page. It moves with every scene span — re-measure
+  from the `?debug` HUD rather than trusting this line.
 - Per-scene durations — the `label('sN', dur)` second argument in `buildTimeline()`.
   A scene is a fixed span, so any span left over after its last tween is **dead scroll**
   where nothing moves; that reads as having to nudge the wheel. See the dead-scroll table
@@ -456,11 +595,18 @@ are animated (plus one small `clip-path` on the fandom nav).
   and the current peak is 3.8px; `SHAKE_FLOOR` (0.55) is the mass below which a badge does not
   move the phone at all, and dropping it below 0.35 would make even the paper stickers shake the
   device. `SHAKE_BEATS` (2) is a thud; raise it and metal starts to ring.
+- The s19.3 flip — the sweep's `duration` (1.6 units at s+1.1, in the scene block) is the only
+  pacing knob: 60 frames at ~21px of scroll each, `ease: none` because the video's own curve is
+  baked into the frames. Frame count and sharpness are a budget, not knobs — `OUT_FPS` /
+  `RETINA` in `tools/make-flip-frames.py`, re-run after reading its docstring.
 - The s24 ending — `END_SWEEP` (2.25) is how many timeline units the 5 seconds of video take,
   i.e. ~30px of scroll per frame at 60 frames; it is the only pacing knob the finale has, since
   nothing else in the scene may move (a transform on `#ending` breaks the registration the
   crossfade depends on). `END_XFADE` (0.3) is the handover dissolve — keep it short, because
-  the four lines whose text differs between the card revisions ghost for its duration. Frame
+  the four lines whose text differs between the card revisions ghost for its duration.
+  `END_FADE_FRAME` (42 = the video's 3.5s × 12 fps) is where the closing fade to black begins;
+  it always completes on the sweep's last frame, so moving it changes the fade's length, not
+  its end. Frame
   count and sharpness are **not** knobs here, they're a budget: change `OUT_FPS` / `CELL_W` in
   `tools/make-ending-frames.py` and re-run, after reading why 12 fps and 1024px were chosen.
 - Lenis `lerp` (0.09) — lower = floatier, higher = tighter.
@@ -476,7 +622,7 @@ are animated (plus one small `clip-path` on the fandom nav).
   filename, and **bump the `?v=` cache-buster** on that asset's URL (index.html /
   buildDom) — browsers cache same-name images across sessions. Several assets are NOT
   plain node exports (`picker.webp`, `react-wall.webp`, `xp-frames.webp`,
-  `ending-frames.webp`, `id-card.webp`, `gold-card.webp`, the four
+  `ending-frames.webp`, `flip-frames.webp`, `id-card.webp`, `gold-card.webp`, the five
   `toast-*.webp`, the eight `sticker-*.webp`); rebuild those with their `tools/make-*.py`
   script, and read the docstring first — `tools/export-assets.md` has the table and the reason for each.
 - Never give a `fromTo` visible `from` values — pre-start renders show them on

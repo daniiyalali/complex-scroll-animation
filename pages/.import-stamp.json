@@ -1,0 +1,29 @@
+{
+ "source": "10. My Complex All Hands",
+ "pages": {
+  "home-editorial": {
+   "sha256": "caf725804411e5bf2188ce253c3a33db5603fd9ddc64d17cd779187ae264196b",
+   "bytes": 70766
+  },
+  "home-feed": {
+   "sha256": "34a62126a462f327ddecaa2d8386abf5f091b3310f1eaa285e468095ce381e15",
+   "bytes": 68968
+  },
+  "article": {
+   "sha256": "55feeb014893ab5274a2ac97aeef6ed234dd752042ceca9157c5179d14adbfde",
+   "bytes": 135819
+  },
+  "rerank": {
+   "sha256": "d386cff495b197ccde164fa051e6e7c539b33598ae62bebd4dbc29aeefd8c8b0",
+   "bytes": 82502
+  },
+  "fandom": {
+   "sha256": "57cc003f4629fa830d1ef75c14139ff0369a605c4815ca05d8284fd590faafc4",
+   "bytes": 65923
+  },
+  "pdp": {
+   "sha256": "7d54955d21edcab1600c8af6b50d5b42f1b0455c50dee17017fb89213a78818f",
+   "bytes": 14362
+  }
+ }
+}

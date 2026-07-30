@@ -46,6 +46,10 @@ const SCREEN_X = 740, SCREEN_Y = 64;
    Both are 390x887 — the pages' own authored width — so they mount 1:1. */
 const PANEL_X = 277, PANEL_Y = 97;
 const RERANK_X = 1253, RERANK_Y = 97;
+/* s19.2's product panel (#panel-product). Figma `Complex.com PDP [Mobile]` 2159:50283 —
+   388x858.3, so unlike the two above it is NOT 1:1: the page is authored 390 and the frame
+   carries zoom 388/390. Beats inside it convert through these plus PAGE_Z['page-product']. */
+const PANEL_PRODUCT_X = 1154, PANEL_PRODUCT_Y = 110.6;
 
 /* Per-scene resting offsets — the translateY of the strip (or, for `latest`, of the live
    page wrapper) inside the screen. */
@@ -81,12 +85,29 @@ const POS = {
      than a strip crossfade — simpler, and what actually happens in the product.
      s16 solves for the Playboi Carti entry (page cy 5273) sitting under CUR.s16's tip. */
   fandom: {
-    /* the LIVE pages/fandom.html. Its nav (`.s01`) is 92 tall, not 159 — this page has no
-       tab row — so the old s17: 95 was one nav height, same pattern as the other two pages,
-       and the page's own top is 0. Below that the content differs again (live `.main3` is
-       6786 against the strip's 8301, ×0.817), so s18 frames the fandom tabs near the top of
-       the screen and s19/s20 carry the old deltas scaled by that ratio. */
-    s17: 0, s18: -649, s19: -1617, s20: -3118,
+    /* the LIVE pages/fandom.html, 7307 css px tall = 8244 stage px at the 1.128205 zoom.
+       **These are SOLVED, not scaled.** They used to be the old strip's deltas multiplied by
+       a height ratio and then checked by eye, which survived exactly until the page changed:
+       the 2026-07-30 revision dropped a 743px shop-grid section into the middle of the feed
+       and s20 ended up 2,512px off — pointing at an ad instead of at the post whose profile
+       picture it clicks. `tools/derive-page-offsets.py` now solves each one by registering
+       the live page against the storyboard render of that scene, the same match-against-a-
+       render method the s22 badges use. Re-run it after ANY change to fandom.html.
+       Independently confirmed: the Figma frames' own fandom-node offsets are 0 / -972 / -977 /
+       -5632, and the solver returns 0 / -941 / -977 / -5630 — agreeing to 2px on three of the
+       four. s18 is the one that differs, and the render is right: at -972 the post sits 31px
+       high of the reference, at -941 it lands on it (verified by eye, 2026-07-30). */
+    s17: 0, s18: -941, s19: -977, s20: -5630,
+    /* s19.1 frames the new Complex Style shop grid; s19.2 is the SAME offset because the
+       product panel slides over a page that does not move (Figma's 19.1 and 19.2 carry an
+       identical fandom-node y, which is the independent check). Both solved by
+       tools/derive-page-offsets.py — 19.1 scored 0.975 and re-confirmed at -6090 after the
+       page's 17:45 revision, whose geometry turned out identical. */
+    s19_1: -6090, s19_2: -6090,
+    /* No s19_3: the page does not move under the STATUS UNLOCKED sheet — the level-up
+       answers the purchase, so it happens over the same frame the purchase happened on
+       (user's call, 2026-07-30). Figma's 19.3 frames a different post behind the sheet;
+       deliberately not honoured — its offset solved at -3665 if the design ever insists. */
   },
 };
 
@@ -98,7 +119,7 @@ const POS = {
    strips `.sel` off every chip and stacks a picked twin over the three Zack chooses, which
    the timeline then fades in on each press. Matching by LABEL, not index: the page is free
    to reorder them. */
-const PICKS = ['Sneakers', 'Sports', 'ComplexCon'];
+const PICKS = ['Sneaker', 'Sports', 'ComplexCon'];   /* the page's own wording — 'Sneaker' since 2026-07-30 */
 
 /* what Zack types in the s10 comment box. Kept here rather than in the markup because the
    timeline reveals it a character at a time. */
@@ -114,6 +135,15 @@ const COMMENT_TEXT = 'This is freaking awesome!! \u{1F525}\u{1F525}';
 const XP_FRAMES = 63, XP_COLS = 8;
 const XP_CELL_W = 358, XP_CELL_H = 358 * 1504 / 1120;
 
+/* ── s19.3: the card flip, played frame by frame ──
+   `assets/flip-frames.webp` is the designer's Flip_Transition_Animation_Reversed.mp4 as a
+   sprite grid, built by tools/make-flip-frames.py — same machinery and reasoning as the s11
+   popup (that video cannot be seeked; the scrub must be deterministic and reversible). The
+   cell is the video's 4:3 frame at the sheet panel's inner width; frames ship with their
+   backdrop normalised to pure white so the window fuses with the panel. */
+const FLIP_FRAMES = 60, FLIP_COLS = 8;
+const FLIP_CELL_W = 391.2, FLIP_CELL_H = 391.2 * 834 / 1112;
+
 /* ── s24: the ending, played frame by frame ──
    `assets/ending-frames.webp` is the closing Jordan Rose I.D. video as a sprite grid, built by
    tools/make-ending-frames.py — same reasoning as the s11 popup above (a <video> cannot be
@@ -126,6 +156,10 @@ const XP_CELL_W = 358, XP_CELL_H = 358 * 1504 / 1120;
 const END_FRAMES = 60, END_COLS = 8;
 const END_CELL_W = 1920, END_CELL_H = 1080;
 const END_SWEEP = 2.25;
+/* the frame the fade to black starts on: the video's 3.5s mark exactly (user's spec,
+   2026-07-30), at the sheet's 12 fps sampling. The fade completes on the LAST frame and the
+   page ends black — see #ending-fade in the s24 block. */
+const END_FADE_FRAME = 3.5 * 12;
 
 /* ── How s24 hands the card over to the video, and the two dead ends before it ──
    The video opens on the same subject the reader is already looking at: the encased card, still,
@@ -209,6 +243,10 @@ const CUR = {
      The DP Zack clicks to open the Complex I.D.: `.up-av` on the UGC post the page rests
      on at s20, measured tip (776.1, 200.2). Flipped for the same reason s12 is — at this
      x the tag would otherwise sit straight over the name it belongs to. */
+  /* parked clear of the STATUS UNLOCKED sheet while the card flips — Figma 19.3's own
+     cursor pose (node 2126:11870, arrow at 1677,905, tag on the right). Not a target:
+     the press that caused this scene was 19.2's, so the cursor just stands aside. */
+  s19_3: { x: 1677, y: 905 },
   s20: { x: 721.1, y: 198.2, flip: true, click: true },
   s22: { x: 752,  y: 572, flip: true },
   s21: { x: 1400, y: 783 },
@@ -455,8 +493,21 @@ function prepareChips() {
   const all = [...d.querySelectorAll('.chip')];
   all.forEach((c) => c.classList.remove('sel'));      /* nobody starts picked */
   const norm = (e) => (e.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  /* Singular/plural tolerant, because an exact match is not as safe as it looks: the page
+     renamed "Sneakers" to "Sneaker" on 2026-07-30 and that pick silently stopped happening —
+     Zack picked two chips instead of three and still pressed Continue, which reads as a bug in
+     the animation rather than a content change. Exact match still wins; the fallback only runs
+     when nothing matched, and it WARNS when it fires so a drift is visible rather than absorbed.
+     Matching by label is still right (index would break on a reorder) — it just needs to
+     survive a plural. */
+  const stem = (s) => s.toLowerCase().replace(/s$/, '');
   for (const lbl of PICKS) {
-    const c = all.find((k) => norm(k) === lbl.toLowerCase());
+    let c = all.find((k) => norm(k) === lbl.toLowerCase());
+    if (!c) {
+      c = all.find((k) => stem(norm(k)) === stem(lbl));
+      if (c) console.warn(`s8: chip "${lbl}" now reads "${norm(c)}" — matched on stem. `
+                          + 'Update PICKS to the page\'s wording.');
+    }
     if (!c) { console.warn('s8: chip not found:', lbl); continue; }
     CHIPS.box[lbl] = c.getBoundingClientRect();
     c.style.position = 'relative';
@@ -702,6 +753,36 @@ const PAGE_TARGETS = {
       return y > 0 && y < 952;
     }),
   },
+  /* s19.1: the Daniela hoodie in the Complex Style shop grid — the tile Zack opens. Matched by
+     LABEL, like the s8 chips, so the grid can reorder. The target is `.stile-img` (the product
+     shot) and NOT the whole `.stile`, because the tile includes the brand/price block whose
+     height would drag the centre down.
+     `frac` 0.75/0.75 is the storyboard's own tip, not a taste choice: Figma's 19.1 has the tip
+     at stage (1110, 450), and this box solves to (958.5, 262.4) 200.5x250.6, which puts that
+     point at 0.755 across and 0.749 down. Rounded to three-quarters it lands within 1.2px of
+     the render — worth keeping as the clean fraction rather than the noisy one. The element's
+     centre would be 80px up and to the left, which reads as a different beat. */
+  s19_1: {
+    page: 'page-fandom', at: () => POS.fandom.s19_1, click: true, frac: [0.75, 0.75],
+    find: (d) => [...d.querySelectorAll('.stile')]
+      .find((e) => /Daniela/i.test(e.textContent || ''))?.querySelector('.stile-img'),
+  },
+  /* s19.2: shop Pay on the product panel. `origin` is the PANEL's top-left, not the screen's,
+     and `at` is 0 because the panel does not scroll — it is a fixed 858.3px viewport onto an
+     863px page.
+     Figma's tip is stage (1282.3, 929.3). The button measures stage x 1169.9..1526.1,
+     y 906..953.2, so the storyboard presses the VERTICAL centre (0.494) but sits well left of
+     the horizontal one — 0.315 across, not 0.5. Centring it put the tip 66px right of the
+     render, which is most of an arrow width, so this fraction is doing real work.
+     Re-solved against the DESIGNED page (2026-07-30), which is why the numbers moved slightly:
+     the button now measures stage x 1169.92..1526.08, y 906.48..951.14, so the storyboard's tip
+     sits at 0.3155 across and 0.5096 down. The earlier pair was a fraction of the placeholder's
+     button, whose 16px inset was a guess — worth 3.7px of vertical error. */
+  s19_2: {
+    page: 'page-product', origin: [PANEL_PRODUCT_X, PANEL_PRODUCT_Y], at: () => 0,
+    flip: true, click: true, frac: [0.3155, 0.5096],
+    find: (d) => d.querySelector('.btn-pay'),
+  },
 };
 
 /* arrow top-left that puts the TIP on a stage point. Flipped, the arrow turns 90° and its
@@ -735,8 +816,13 @@ function resolvePageTargets() {
     const r = el.getBoundingClientRect();
     const z = PAGE_Z[t.page] ?? PAGE_ZOOM;
     const [ox, oy] = t.origin || [SCREEN_X, SCREEN_Y];
-    const cx = ox + (r.left + r.width / 2) * z;
-    const cy = oy + (r.top + r.height / 2) * z + t.at();
+    /* `frac` puts the tip somewhere other than the element's centre, as a fraction of its own
+       box — for beats where the storyboard's cursor is deliberately off-centre on a big target.
+       Still a SELECTOR, so it survives the page moving; a fraction of the element is not a
+       copied coordinate. Defaults to the centre, which is what every older beat wants. */
+    const [fx, fy] = t.frac || [0.5, 0.5];
+    const cx = ox + (r.left + r.width * fx) * z;
+    const cy = oy + (r.top + r.height * fy) * z + t.at();
     CUR[beat] = beatOnTip([cx, cy], { flip: t.flip, rot: t.rot, click: t.click });
   }
 }
@@ -849,12 +935,42 @@ function hoverWindow(segs, box, from, to, dt = 0.0005) {
   return enter === null ? null : { enter, exit: exit + dt };
 }
 
-/* Toast in/out (in-screen, slides from above the nav) */
+/* Toast in/out (in-screen, slides from above the nav).
+   The pill and its progress fill travel together — the fill is a separate element because the
+   track has to animate, and animating it means it cannot be baked into the art.
+   The bar ACCUMULATES: each award animates from where the previous one left the reader, not
+   from zero, so the five pills read as one running total across the whole story rather than
+   five independent bars (user's call, 2026-07-30).
+
+   `FILL` is where each award LEAVES the bar, and the start of each is simply the entry before
+   it. Four of the five values are the designer's own, measured off the art: 29 / 50 / 74 / 99%.
+   The fifth is derived, and this is the one judgement call in the table — Exp04 and Exp05 were
+   drawn with the SAME 29% fill, so honouring both literally would leave the +30 award moving
+   the bar not at all. So the shared checkpoint is split by the XP actually awarded:
+   +10 then +30 is 40 points to reach 29%, and 10/40 of that is 7.25%. Every award now advances
+   the bar, and every checkpoint the designer drew distinctly is still hit exactly.
+   Safe to re-derive from the art: the track is empty in the WebP now, so nothing in the
+   bitmap can contradict this table. */
+const FILL = { 10: 0.0725, 30: 0.29, 80: 0.50, 120: 0.74, 200: 0.99 };
+const FILL_ORDER = [10, 30, 80, 120, 200];
+const fillStart = (n) => FILL[FILL_ORDER[FILL_ORDER.indexOf(+n) - 1]] ?? 0;
+
 function toastIn(tl, id, at) {
-  tl.fromTo(id, { autoAlpha: 0, y: -170 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'back.out(1.4)' }, at);
+  const n = id.replace('#toast-', '');
+  const bar = '#tbar-' + n;
+  tl.set(bar + ' > b', { scaleX: fillStart(n) }, at);   /* arrives showing the running total */
+  tl.fromTo([id, bar], { autoAlpha: 0, y: -170 },
+    { autoAlpha: 1, y: 0, duration: 0.35, ease: 'back.out(1.4)' }, at);
+  /* Starts as the pill settles, not before: the drop is the arrival, the fill is the reward.
+     0.22 + 0.35 is bounded by the SHORTEST toast window, not by taste — s12's pill is pulled
+     out at s13+0.1, which left the first bar frozen at 0.23 of its 0.29 when the fill ran
+     0.3 + 0.45. Every fill must finish before its own toastOut or it reads as a stuck bar. */
+  tl.fromTo(bar + ' > b', { scaleX: fillStart(n) },
+    { scaleX: FILL[n] ?? 0, duration: 0.35, ease: 'power2.out' }, at + 0.22);
 }
 function toastOut(tl, id, at) {
-  tl.to(id, { autoAlpha: 0, y: -170, duration: 0.28, ease: 'power2.in' }, at);
+  const bar = '#tbar-' + id.replace('#toast-', '');
+  tl.to([id, bar], { autoAlpha: 0, y: -170, duration: 0.28, ease: 'power2.in' }, at);
 }
 
 /* ═══════════════ Timeline ═══════════════ */
@@ -1174,7 +1290,7 @@ function buildTimeline() {
     const applyVote = () => applyPoll(vote.v > 0.5);
     applyVote();
     tl.to(vote, { v: 1, duration: 0.06, ease: 'none', onUpdate: applyVote }, at + 0.13);
-    toastIn(tl, '#toast-20', at + 0.38);
+    toastIn(tl, '#toast-10', at + 0.38);
   }
 
   /* ── Scene 13: pause on the WNBA article card, and the article opens beside the phone ──
@@ -1186,7 +1302,10 @@ function buildTimeline() {
     /* autoAlpha too: `.page` starts hidden, and #gray-panel's own fade only reveals the
        slab, not the frame inside it */
     gsap.set('#page-article', { y: ART.park, autoAlpha: 1 });
-    toastOut(tl, '#toast-20', s + 0.1);
+    /* +0.45, not +0.1: s12's pill has the tightest window of the five and its bar was still
+       mid-fill (0.23 of 0.29) when this pulled it out. The toast lingering a little into
+       s13 is normal — the fill finishing is not optional. */
+    toastOut(tl, '#toast-10', s + 0.45);
     tl.to('#page-myc', { y: POS.myc.s13, duration: 1.5, ease: 'power2.inOut' }, s);
     /* toast-30 ("You List Voted!") is NOT here — it is the reward for the vote, so it drops
        in s13.1 once Zack has actually pressed UNDERRATED. It used to land here, a whole
@@ -1354,6 +1473,106 @@ function buildTimeline() {
     cursorTo(tl, CUR.s19, s + 0.7, 0.6);
   }
 
+  /* ── Scene 19.1: down to the Complex Style shop grid ── SKELETON, 2026-07-30
+     The satellites are already gone (s19's fan is pulled in by 19.1's own recede below), the
+     page runs on down to the four KATSEYE x GAP hoodies, and Zack's cursor arrives on the
+     Daniela one — the camo hoodie the storyboard has him open. The scroll offset is SOLVED
+     (see POS.fandom.s19_1) and the tip is a selector plus the storyboard's own 0.75/0.75
+     fraction (see PAGE_TARGETS.s19_1), so neither is a copied coordinate.
+     Still to come in the full build: this is where the tile's own press/hover state should go
+     once the design says what it is — right now the cursor arrives and clicks with the tile
+     unchanged underneath it. ── */
+  {
+    const s = label('s19.1', 1.5);
+    /* the s19 fan retires here rather than in s20: the cards belong to the UGC beat, and 19.1
+       is already a different subject. Same converging recede s20 used to do, so the vectors and
+       the reasoning are unchanged — just moved earlier. */
+    document.querySelectorAll('#sats img').forEach((el, i) => {
+      const dx = 960 - (el.offsetLeft + el.offsetWidth / 2);
+      const dy = 540 - (el.offsetTop + el.offsetHeight / 2);
+      tl.to(el, { autoAlpha: 0, x: dx * 0.5, y: dy * 0.5, scale: 0.55, duration: 0.6,
+                  ease: 'power2.in' }, s + i * 0.06);
+    });
+    tl.to('#page-fandom', { y: POS.fandom.s19_1, duration: 1.0, ease: 'power2.inOut' }, s + 0.15);
+    /* arrives late, and the press is what 19.2 answers — the panel opens 0.1 units behind it,
+       the same cause-and-effect the s20 -> s22 card press uses */
+    if (CUR.s19_1) cursorTo(tl, CUR.s19_1, s + 0.8, 0.6);
+  }
+
+  /* ── Scene 19.2: the product panel, and ADD TO BAG ── SKELETON, 2026-07-30
+     The PDP slides in from the right over a dimmed phone and Zack goes for shop Pay. The panel
+     is a real `.page` frame (#panel-product) so that when the designed page lands it is a file
+     swap and nothing here changes — `pages/product.html` is a measured placeholder today.
+     Slide + scrim are the s14 rerank panel's own language (x 460, power3.out, 0.7) because it is
+     the same gesture: a full-width sheet arriving over the feed.
+     **The buy is rewarded**: once the cursor presses shop Pay, the +200 XP "You Copped a Drop"
+     pill drops in from above the nav — the fifth toast, reusing `toastIn` and the `.toast` box
+     so it arrives with exactly the language the other four do (user's call, 2026-07-30). It is
+     the reward for the press, so it lands AFTER it, never alongside — the same ordering s12's
+     poll and s13.1's vote already follow. That is also what the scene's trailing hold was for.
+     Still open: the tile -> panel transition. The panel simply arrives; the storyboard may want
+     it to grow out of the tile Zack just pressed. ── */
+  {
+    /* 2.1, not 1.8: the press lands at s+1.45 and the toast needs 0.35 to arrive, so at 1.8 it
+       would finish exactly on the scene boundary — and a toast that starts too near the end
+       never appears at all (the s13.1 lesson). 2.1 leaves a quarter-unit to read it. */
+    const s = label('s19.2', 2.1);
+    /* `.page` starts `visibility: hidden` — same as #page-rerank at s14. Without this the
+       panel slides in as an empty white slab, which is exactly how it first rendered. It is a
+       plain `set`, not a tween: the wrapper's own visibility is not the reveal, #panel-product's
+       fade below is, and animating both would double the dissolve. */
+    gsap.set('#page-product', { autoAlpha: 1 });
+    tl.to('#screen-scrim', { autoAlpha: 1, duration: 0.35 }, s);
+    /* fromTo, and the `from` is off-stage and invisible: a visible `from` would render on any
+       pre-start scrub, which is the rule the whole timeline follows */
+    tl.fromTo('#panel-product', { autoAlpha: 0, x: 460 },
+      { autoAlpha: 1, x: 0, duration: 0.7, ease: 'power3.out' }, s + 0.1);
+    if (CUR.s19_2) cursorTo(tl, CUR.s19_2, s + 0.85, 0.6);
+    /* the cursor lands at s+1.45; the pill answers the press rather than accompanying it */
+    toastIn(tl, '#toast-200', s + 1.5);
+  }
+
+  /* ── Scene 19.3: STATUS UNLOCKED — the card flips to Bronze ──
+     The +200 the buy just paid out fills the pill's bar at the end of 19.2 — that IS the
+     level-up — so this sheet answers it in place: the PDP leaves, the pill floats back up
+     and goes, and the STATUS UNLOCKED sheet pops in showing the REGULAR card, all over a
+     page that does not move, behind the scrim 19.2 raised and this scene keeps. (Figma's
+     19.3 frames a different post; deliberately not honoured — see the POS note.)
+     The reveal IS the designer's flip video, played frame by frame — a proxy sweeps the
+     sprite grid exactly the way s11's popup does, so it is deterministic, reverses, and
+     touches nothing but transform. `ease: none`, unlike the coded flips this replaced: the
+     video's own animation curve is baked into its frames, and easing the sweep on top of it
+     would double-ease the motion. (History, all 2026-07-30: coded 360° rotateY with a
+     half-turn face swap → coded 180° single turn → this video, each a user revision. The
+     coded-flip machinery is in git history if art without a video ever comes back.) ── */
+  {
+    const s = label('s19.3', 2.9);
+    /* The order is the story (user's spec, 2026-07-30): the pill's bar has just FILLED at the
+       end of 19.2 — that is the level-up — so first the PDP goes out the way it came (the s15
+       #panel-rerank exit language), then the pill that triggered all this floats back up and
+       leaves, and only then does the sheet arrive. The page does NOT scroll anywhere under any
+       of it: the level-up happens over the same frame the purchase happened on. */
+    tl.to('#panel-product', { autoAlpha: 0, x: 460, duration: 0.4, ease: 'power2.in' }, s);
+    toastOut(tl, '#toast-200', s + 0.2);
+    /* the cursor stands aside first — the sheet pops into a frame the arrow has already
+       left, so the pop reads as the purchase's consequence, not the cursor's */
+    cursorTo(tl, CUR.s19_3, s + 0.15, 0.6);
+    /* the sheet arrives only once the panel and the pill are both gone */
+    tl.fromTo('#status-modal', { autoAlpha: 0, scale: 0.88, transformOrigin: '50% 50%' },
+      { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(1.4)' }, s + 0.55);
+    /* the flip: a beat after the sheet settles, the video's 60 frames over 1.6 units —
+       ~21px of scroll per frame, the s11 sweep's own cadence */
+    const sheet = $('#sm-sheet');
+    const flip = { f: 0 };
+    const fframe = () => {
+      const i = Math.max(0, Math.min(FLIP_FRAMES - 1, Math.round(flip.f)));
+      gsap.set(sheet, { x: -(i % FLIP_COLS) * FLIP_CELL_W,
+                        y: -Math.floor(i / FLIP_COLS) * FLIP_CELL_H });
+    };
+    fframe();
+    tl.to(flip, { f: FLIP_FRAMES - 1, duration: 1.6, ease: 'none', onUpdate: fframe }, s + 1.1);
+  }
+
   /* ── Scene 20: cards recede, and Zack goes for the profile picture ──
      The cursor used to fade OUT here and get teleported back in during s22, after the I.D.
      card had already appeared — so the card arrived with nothing having caused it, and the
@@ -1361,12 +1580,14 @@ function buildTimeline() {
      DP, and the press at the end of this scene is what s22 answers. ── */
   {
     const s = label('s20', 1.7);
-    document.querySelectorAll('#sats img').forEach((el, i) => {
-      const dx = 960 - (el.offsetLeft + el.offsetWidth / 2);
-      const dy = 540 - (el.offsetTop + el.offsetHeight / 2);
-      tl.to(el, { autoAlpha: 0, x: dx * 0.5, y: dy * 0.5, scale: 0.55, duration: 0.6, ease: 'power2.in' }, s + i * 0.06);
-    });
-    tl.to('#page-fandom', { y: POS.fandom.s20, duration: 1.1, ease: 'power2.inOut' }, s + 0.3);
+    /* The 19.2 panel and its pill are gone (19.3 took them), so what s20 clears now is the
+       STATUS UNLOCKED sheet and the scrim that has stood since 19.2. The sheet dismisses in
+       place — a sheet, unlike the PDP, has no edge it arrived from — and the page holds
+       still until it has fully gone: the scroll to the profile is the NEXT thing that
+       happens, not something the level-up dissolves into (user's spec, 2026-07-30). */
+    tl.to('#status-modal', { autoAlpha: 0, scale: 0.94, duration: 0.35, ease: 'power2.in' }, s);
+    tl.to('#screen-scrim', { autoAlpha: 0, duration: 0.3 }, s);
+    tl.to('#page-fandom', { y: POS.fandom.s20, duration: 1.1, ease: 'power2.inOut' }, s + 0.4);
     /* starts while the page is still settling and lands late in the scene, so the press sits
        right on the s20/s22 boundary — the card is 0.13 units behind it, not most of a scene */
     cursorTo(tl, CUR.s20, s + 1.0, 0.6);
@@ -1515,8 +1736,8 @@ function buildTimeline() {
     tl.to('#gold-card', { autoAlpha: 0, duration: END_XFADE, ease: 'power1.inOut' }, s + 0.45);
     /* The frame sweep — 60 frames over END_SWEEP units, ~30px of scroll each. Starts on the
        crossfade (see above), so ~8 frames of glow build while the card is handing over. It ends
-       0.25 units before the scene does and the `end` label holds after that, so the ComplexCon
-       wide shot RESTS at the bottom of the page instead of landing on the last pixel of scroll. */
+       0.25 units before the scene does and the `end` label holds after that, so the page's
+       bottom is a held rest rather than the last pixel of scroll. */
     const sheet = $('#ending-sheet');
     const end = { f: 0 };
     const frame = () => {
@@ -1526,6 +1747,16 @@ function buildTimeline() {
     };
     frame();
     tl.to(end, { f: END_FRAMES - 1, duration: END_SWEEP, ease: 'none', onUpdate: frame }, s + 0.45);
+    /* The fade to black — from the video's 3.5s mark (END_FADE_FRAME) to its last frame, so
+       the story closes on black and the rest at the page's bottom is black too (user's spec).
+       SCRUBBED with the sweep, not wall-clock: the fade's position derives from the same
+       frame->time mapping the sweep uses, so the two cannot drift and it reverses for free.
+       An overlay over #ending, ease none, linear with the scroll — NOT a dip that covers
+       anything: the frame-0 handover seam this scene's header warns about is at the OTHER end
+       of the sweep, long resolved by registration, and this fade never touches it. */
+    const fadeAt = s + 0.45 + (END_FADE_FRAME / (END_FRAMES - 1)) * END_SWEEP;
+    tl.fromTo('#ending-fade', { autoAlpha: 0 },
+      { autoAlpha: 1, duration: s + 0.45 + END_SWEEP - fadeAt, ease: 'none' }, fadeAt);
   }
 
   label('end', 0.6);
@@ -1595,6 +1826,45 @@ function buildTimeline() {
   window.__auto = AUTO;
   window.__CUR = CUR;        /* resolved beats, for tools/scrub.py and the probes */
 
+  /* ── Deep-link to a scene: /#s19.1 ──
+     The page is one 45,000px scroll, so "look at the new scene" has meant "reload and then
+     hand-scroll three quarters of the way down while everything before it looks identical to
+     the last build". That is a genuinely bad way to review a change, and on 2026-07-30 it read
+     twice as the work not existing at all.
+     Any timeline label works — `#s19.2`, `#s13.1`, `#end`. `#s19.1+0.5` offsets into it, the
+     same (label, offset) pair tools/scrub.py takes, so a probe and a link can address the same
+     frame. Unknown labels are ignored rather than throwing, and the list is logged so a typo
+     tells you what was available.
+     **A bare label lands at 75% THROUGH the scene, not at its start.** A label marks the moment
+     a scene begins, which is the frame before any of it has happened — `#s19.2` at +0 shows the
+     shop grid with no panel, i.e. the thing you linked to, absent. Three quarters in, the
+     cursor has arrived and the beat is resting. Pass an explicit offset when you want the
+     entrance itself. */
+  const bare = !/[+-]\d/.test(decodeURIComponent(location.hash));
+  const gotoHash = () => {
+    const raw = decodeURIComponent(location.hash.slice(1)).trim();
+    if (!raw) return;
+    const [name, off] = raw.split(/(?=[+-]\d)/);
+    const at = tl.labels[name];
+    if (at === undefined) {
+      console.warn(`no such scene "${name}". Labels:`,
+                   Object.keys(tl.labels).join(' '));
+      return;
+    }
+    let t = at + (parseFloat(off) || 0);
+    if (off === undefined && bare) {
+      const next = Object.values(tl.labels).filter((v) => v > at).sort((a, b) => a - b)[0];
+      if (next !== undefined) t = at + (next - at) * 0.75;
+    }
+    /* clamped: `#end` resolves past the last scrollable pixel, and Lenis would sit one frame
+       short of the label forever */
+    const px = Math.min(SCROLL_LEN, Math.max(0, (t / tl.duration()) * SCROLL_LEN));
+    lenis.scrollTo(px, { immediate: true });
+    ScrollTrigger.update();
+  };
+  gotoHash();
+  window.addEventListener('hashchange', gotoHash);
+
   /* HUD (?debug) */
   if (location.search.includes('debug')) {
     const hud = $('#hud');
@@ -1606,10 +1876,6 @@ function buildTimeline() {
       hud.textContent = `progress ${(p * 100).toFixed(1)}%\nscene    ${cur ? cur[0] : '-'}\nscroll   ${Math.round(lenis.scroll)} / ${SCROLL_LEN}`;
     });
   }
-
-  /* Scroll hint fades on first movement */
-  const hint = $('#scroll-hint');
-  lenis.on('scroll', () => { if (lenis.scroll > 40) hint.style.opacity = 0; });
 
   /* Intro: reveal */
   $('#loader').classList.add('done');

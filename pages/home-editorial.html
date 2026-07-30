@@ -408,13 +408,17 @@
   .s08-btn.outline { box-shadow: inset 0 0 0 1px #000; color: #000; }
   .s08-btn.solid { background: #000; color: #fff; }
 
-  /* ================= Section 09: Trending Fandoms — 1838:77097 — 390x571 ================= */
+  /* ================= Section 09: Trending Fandoms — 2163:58360 — 390x550.75 =================
+     Rebuilt in the 2026-07-30 pass: it now uses the same card component as Home Feed's Fandoms
+     row — 3 cards instead of 4, a 20/24 heading instead of 28/34, py32 instead of py24, and a
+     bottom hairline. */
   .s09 {
     background: var(--bg-b1-inv);
-    display: flex; flex-direction: column; gap: 32px; align-items: flex-start; justify-content: center;
-    padding: 24px 16px; height: 571px; width: 100%;
+    box-shadow: inset 0 -1px 0 var(--border-primary);
+    display: flex; flex-direction: column; gap: 20px; align-items: center;
+    padding: 32px 16px; width: 100%;
   }
-  .s09-head { font-size: 28px; line-height: 34px; font-weight: 600; color: #fff; white-space: nowrap; height: 20px; }
+  .s09-head { font-size: 20px; line-height: 24px; font-weight: 700; color: #fff; white-space: nowrap; height: 15px; }
   .fan-row { display: flex; gap: 16px; align-items: center; width: 358px; }
   .fan-card { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 267px; flex: none; }
   .fan-img { aspect-ratio: 4 / 5; border-radius: 8px; width: 100%; position: relative; }
@@ -423,8 +427,11 @@
   .fan-img .clip img { position: absolute; inset: auto; height: 100%; left: -49.51%; top: -0.09%; width: 221.2%; max-width: none; object-fit: fill; }
   .fan-info { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; justify-content: center; width: 100%; }
   .fan-text { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; color: #fff; white-space: nowrap; }
-  .fan-tag { font-size: 10px; line-height: 12px; font-weight: 700; }
-  .fan-name { font-size: 24px; line-height: 28px; font-weight: 600; }
+  /* Chrome's cap-trim rounds these to 7.281 / 17.469 where Figma has 7 / 17, which pushed the
+     hug-height section 0.75px tall. Pinned, same as Home Feed's .fnd-kicker / .fnd-name.
+     (Only §09 uses these — §10's cards use .s10-title.) */
+  .fan-tag { font-size: 10px; line-height: 12px; font-weight: 700; height: 7px; }
+  .fan-name { font-size: 24px; line-height: 28px; font-weight: 600; height: 17px; }
   .pill-btn {
     display: flex; align-items: center; justify-content: center;
     height: 36px; padding: 12px 16px; border-radius: 4px; overflow: clip;
@@ -1049,52 +1056,42 @@
       </div>
     </div>
 
-    <!-- Section 09: Trending Fandoms -->
-    <div class="s09" data-node="1838:77097">
+    <!-- Section 09: Trending Fandoms — same card component as Home Feed's Fandoms row -->
+    <div class="s09" data-node="2163:58360">
       <div style="display:flex;flex-direction:column;align-items:flex-start;width:100%">
         <p class="s09-head trim">Trending Fandoms</p>
       </div>
       <div class="fan-row">
         <div class="fan-card">
-          <div class="fan-img"><img src="assets/8a4d234e-81df-48a0-84c1-e64dd11983de.webp" alt=""></div>
-          <div class="fan-info">
-            <div class="fan-text">
-              <p class="fan-tag trim up">Artist</p>
-              <p class="fan-name trim up">SHINee</p>
-            </div>
-            <div class="pill-btn inv"><span class="trim up">Follow</span></div>
-          </div>
-        </div>
-        <div class="fan-card">
           <div class="fan-img">
-            <img src="assets/8a4d234e-81df-48a0-84c1-e64dd11983de.webp" alt="">
-            <img src="assets/7813e035-e31d-4e0b-8b22-d7a50260e2cf.webp" alt="">
-            <div class="clip"><img src="assets/336dfc94-56b7-4862-8362-7a494215395d.webp" alt=""></div>
+            <img src="assets/b2a8e77f-8489-477c-8760-1d3f375946a8.webp" alt="">
+            <img src="assets/97b1f8ac-557c-4728-b892-306b701130aa.webp" alt="">
+            <img src="assets/096945de-c21e-4e71-9f46-30257e9f2e02.webp" alt="">
           </div>
           <div class="fan-info">
             <div class="fan-text">
-              <p class="fan-tag trim up">SPORTS</p>
+              <p class="fan-tag trim up">Music</p>
+              <p class="fan-name trim up">Katseye</p>
+            </div>
+            <div class="pill-btn inv"><span class="trim up">Follow</span></div>
+          </div>
+        </div>
+        <div class="fan-card">
+          <div class="fan-img"><img src="assets/ea37c8de-85cf-4982-916b-c46103212de3.webp" alt=""></div>
+          <div class="fan-info">
+            <div class="fan-text">
+              <p class="fan-tag trim up">Style</p>
+              <p class="fan-name trim up">Sneakers</p>
+            </div>
+            <div class="pill-btn inv"><span class="trim up">Follow</span></div>
+          </div>
+        </div>
+        <div class="fan-card">
+          <div class="fan-img"><img src="assets/642f26d8-48ff-4417-9584-feda002bce7a.webp" alt=""></div>
+          <div class="fan-info">
+            <div class="fan-text">
+              <p class="fan-tag trim up">Style</p>
               <p class="fan-name trim up">RONALDO</p>
-            </div>
-            <div class="pill-btn inv"><span class="trim up">Follow</span></div>
-          </div>
-        </div>
-        <div class="fan-card">
-          <div class="fan-img"><img src="assets/8a4d234e-81df-48a0-84c1-e64dd11983de.webp" alt=""></div>
-          <div class="fan-info">
-            <div class="fan-text">
-              <p class="fan-tag trim up">Artist</p>
-              <p class="fan-name trim up">SHINee</p>
-            </div>
-            <div class="pill-btn inv"><span class="trim up">Follow</span></div>
-          </div>
-        </div>
-        <div class="fan-card">
-          <div class="fan-img"><img src="assets/8a4d234e-81df-48a0-84c1-e64dd11983de.webp" alt=""></div>
-          <div class="fan-info">
-            <div class="fan-text">
-              <p class="fan-tag trim up">Artist</p>
-              <p class="fan-name trim up">SHINee</p>
             </div>
             <div class="pill-btn inv"><span class="trim up">Follow</span></div>
           </div>
